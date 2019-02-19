@@ -16,7 +16,6 @@
  */
 
 import com.virtenio.driver.device.ADT7410;
-import com.virtenio.driver.i2c.I2C;
 import com.virtenio.driver.i2c.NativeI2C;
 
 /**
@@ -28,51 +27,31 @@ import com.virtenio.driver.i2c.NativeI2C;
  * http://www.analog.com/static/imported-files/data_sheets/ADT7410.pdf</a>
  * (Stand: 29.03.2011)
  */
-public class TemperatureSensor {
-	private NativeI2C i2c;
+public class TemperatureSensorA {
 	private ADT7410 temperatureSensor;
 	
-//	private int counter;
-	private float tempData[];
+	private boolean isInit = false;
+	private String temp;
 	
-	private void init(int i) throws Exception {
-		tempData= new float[i];
-		System.out.println("I2C(Init)");
-		i2c = NativeI2C.getInstance(1);
-		i2c.open(I2C.DATA_RATE_400);
-
-		System.out.println("ADT7410(Init)");
+	public void init(NativeI2C i2c) throws Exception {
 		temperatureSensor = new ADT7410(i2c, ADT7410.ADDR_0, null, null);
 		temperatureSensor.open();
 		temperatureSensor.setMode(ADT7410.CONFIG_MODE_CONTINUOUS);
 
-		System.out.println("Done(Init)");
+		isInit = true;
 	}
 
-	public void run() throws Exception {
-		int counter=0;
-		int arrayLength = tempData.length;
-		init(arrayLength);
-		while (arrayLength>0) {
-			try {
-				int raw = temperatureSensor.getTemperatureRaw();
-				float celsius = temperatureSensor.getTemperatureCelsius();
-				System.out.println("ADT7410: raw=" + raw + "; " + celsius + " [°C]");
-				tempData[counter] = celsius;
-				Thread.sleep(1000);
-				counter++;
-			} catch (Exception e) {
-				System.out.println("ADT7410 error");
-			}
-			arrayLength--;
+	public void run(NativeI2C i2c) throws Exception {
+		if(isInit == false) {
+			init(i2c);
+		}
+		else {
+			float celsius = temperatureSensor.getTemperatureCelsius();
+			temp = "Temperature : " + celsius + " [°C]";
 		}
 	}
-	public float getTemperature(int i) {
-		return (tempData[i]); 
+	
+	public String getTemp() {
+		return this.temp;
 	}
-
-
-//	public static void main(String[] args) throws Exception {
-//		new TemperatureSensor().run();
-//	}
 }

@@ -25,48 +25,43 @@ import com.virtenio.driver.spi.NativeSPI;
 /**
  * Example for the Triple Axis Accelerometer sensor ADXL345
  */
-public class AccelerationSensor {
+public class AccelerationSensorA {
 	private ADXL345 accelerationSensor;
-	private GPIO accelIrqPin1;
-	private GPIO accelIrqPin2;
+//	private GPIO accelIrqPin1;
+//	private GPIO accelIrqPin2;
 	private GPIO accelCs;
 
-	private void init() throws Exception {
-		System.out.println("GPIO(Init)");
-
-		accelIrqPin1 = NativeGPIO.getInstance(37);
-		accelIrqPin2 = NativeGPIO.getInstance(25);
+	private boolean isInit = false;
+	private String temp = "";
+	
+	public void init() throws Exception {
+//		accelIrqPin1 = NativeGPIO.getInstance(37);
+//		accelIrqPin2 = NativeGPIO.getInstance(25);
 		accelCs = NativeGPIO.getInstance(20);
 
-		System.out.println("SPI(Init)");
 		NativeSPI spi = NativeSPI.getInstance(0);
 		spi.open(ADXL345.SPI_MODE, ADXL345.SPI_BIT_ORDER, ADXL345.SPI_MAX_SPEED);
 
-		System.out.println("ADXL345(Init)");
 		accelerationSensor = new ADXL345(spi, accelCs);
 		accelerationSensor.open();
 		accelerationSensor.setDataFormat(ADXL345.DATA_FORMAT_RANGE_2G);
 		accelerationSensor.setDataRate(ADXL345.DATA_RATE_3200HZ);
 		accelerationSensor.setPowerControl(ADXL345.POWER_CONTROL_MEASURE);
-
-		System.out.println("Done(Init)");
+		
+		isInit = true;
 	}
 
 	public void run() throws Exception {
-		init();
-		short[] values = new short[3];
-		while (true) {
-			try {
-				accelerationSensor.getValuesRaw(values, 0);
-				System.out.println("ADXL345: " + Arrays.toString(values));
-			} catch (Exception e) {
-				System.out.println("ADXL345 error");
-			}
-			Thread.sleep(500);
+		if(isInit == false) {
+			init();	
+		}
+		else {
+			short[] values = new short[3];	
+			accelerationSensor.getValuesRaw(values, 0);
+			temp = ("Acceleration: " + Arrays.toString(values));
 		}
 	}
-
-	public static void main(String[] args) throws Exception {
-		new AccelerationSensor().run();
+	public String getTemp(){
+		return this.temp;
 	}
 }

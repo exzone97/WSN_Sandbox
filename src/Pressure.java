@@ -15,7 +15,6 @@
  * Für andere Formen der Lizenz nehmen Sie bitte Kontakt mit info@virtenio.de auf.
  */
 
-
 import com.virtenio.driver.device.MPL115A2;
 import com.virtenio.driver.gpio.GPIO;
 import com.virtenio.driver.gpio.NativeGPIO;
@@ -32,7 +31,7 @@ import com.virtenio.driver.i2c.NativeI2C;
  * http://cache.freescale.com/files/sensors/doc/data_sheet/MPL115A2.pdf</a>
  * (Stand: 24.08.2011)
  */
-public class PressureSensor {
+public class Pressure {
 	private NativeI2C i2c;
 	private MPL115A2 pressureSensor;
 
@@ -75,6 +74,6 @@ public class PressureSensor {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new PressureSensor().run();
+		new Pressure().run();
 	}
 }
