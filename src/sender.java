@@ -1,10 +1,17 @@
 //import com.virtenio.preon32.examples.common.Misc;
 import com.virtenio.preon32.examples.common.RadioInit;
 import com.virtenio.radio.ieee_802_15_4.Frame;
+
+import sensors.AccelerationSensor;
+import sensors.HumiditySensor;
+import sensors.PressureSensor;
+import sensors.TemperatureSensor;
+
 import com.virtenio.io.Console;
 import com.virtenio.driver.device.at86rf231.*;
 import com.virtenio.driver.i2c.I2C;
 import com.virtenio.driver.i2c.NativeI2C;
+
 
 public class sender extends Thread{
 
@@ -14,10 +21,10 @@ public class sender extends Thread{
 	private int ADDR_NODE2 = 0xBABE; //receiver
 	
 //	import 4 sensor
-	TemperatureSensorA TSA;
-	AccelerationSensorA ASA;
-	PressureSensorA PSA;
-	HumiditySensorA HSA;
+	TemperatureSensor TS;
+	AccelerationSensor AS;
+	PressureSensor PS;
+	HumiditySensor HS;
 	
 //	Inisialisasi NativeI2C yg dipake di Temperature, Humidity, dan Pressure
 	NativeI2C i2c;
@@ -28,10 +35,10 @@ public class sender extends Thread{
 		i2c.open(I2C.DATA_RATE_400);
 		
 		
-		TSA = new TemperatureSensorA();
-		PSA = new PressureSensorA();
-		ASA = new AccelerationSensorA();
-		HSA = new HumiditySensorA();
+		TS = new TemperatureSensor();
+		PS = new PressureSensor();
+		AS = new AccelerationSensor();
+		HS = new HumiditySensor();
 		
 //		final Shuttle shuttle = Shuttle.getInstance();
 		
@@ -44,10 +51,10 @@ public class sender extends Thread{
 		
 		int i = 1;
 
-		TSA.init(i2c);
-		PSA.init(i2c);
-		ASA.init();
-		HSA.init(i2c);
+		TS.init(i2c);
+		PS.init(i2c);
+		AS.init();
+		HS.init(i2c);
 		
 		while(true) {
 			String msg = console.readLine("How Many Sense");
@@ -56,49 +63,31 @@ public class sender extends Thread{
 			while(temp>0) {
 				boolean isOK = false;
 				while(!isOK) {
-//					try {
-						TSA.run(i2c);
-						PSA.run(i2c);
-						ASA.run();
-						HSA.run(i2c);
+						TS.run(i2c);
+						PS.run(i2c);
+						AS.run();
+						HS.run(i2c);
 						
-						String message = i + TSA.getTemp();
-						message += ASA.getTemp();
-						message += HSA.getTemp();
-						message += PSA.getTemp();
-						System.out.println("a");
-//						String message = i + "=" + TSA.getTemp() +  " | "  + "|" + ASA.getTemp() + " | "+ HSA.getTemp();
+						String message = i + TS.getTemp();
+						message += AS.getTemp();
+						message += HS.getTemp();
+						message += PS.getTemp();
+						
 						Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
 								| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-						System.out.println("b");
 						frame.setSrcAddr(ADDR_NODE1);
-						System.out.println("c");
 						frame.setSrcPanId(COMMON_PANID);
-						System.out.println("d");
 						frame.setDestAddr(ADDR_NODE2);
-						System.out.println("e");
 						frame.setDestPanId(COMMON_PANID);
-						System.out.println("f");
 						radio.setState(AT86RF231.STATE_TX_ARET_ON);
-						System.out.println("g");
 						
 						frame.setPayload(message.getBytes()); //ngasih paket ke frame
-						System.out.println("h");
 						radio.transmitFrame(frame);
-						System.out.println("i");
-//						System.out.println("(" + i + ") SEND = " + TSA.getTemp() +  " | "  + PSA.getTemp()+ "|" + ASA.getTemp() + " | "+ HSA.getTemp());
-//						System.out.println(TSA.getTemp() + HSA.getTemp() + ASA.getTemp() );
-						System.out.println(TSA.getTemp()+PSA.getTemp()+HSA.getTemp() + ASA.getTemp());
-						System.out.println("j");
+						
+						System.out.println(TS.getTemp()+PS.getTemp()+HS.getTemp() + AS.getTemp());
 						isOK = true;
-						System.out.println("k");
-	
+						
 						i++;
-//					}
-//					catch(Exception e) {
-//						System.out.println("(" + i + ") ERROR: no receiver");
-//					}
-	
 				}
 				
 				Frame f = null;

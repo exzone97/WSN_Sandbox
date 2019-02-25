@@ -1,36 +1,11 @@
-/*
- * Copyright (c) 2011., Virtenio GmbH
- * All rights reserved.
- *
- * Commercial software license.
- * Only for test and evaluation purposes.
- * Use in commercial products prohibited.
- * No distribution without permission by Virtenio.
- * Ask Virtenio for other type of license at info@virtenio.de
- *
- * Kommerzielle Softwarelizenz.
- * Nur zum Test und Evaluierung zu verwenden.
- * Der Einsatz in kommerziellen Produkten ist verboten.
- * Ein Vertrieb oder eine Veröffentlichung in jeglicher Form ist nicht ohne Zustimmung von Virtenio erlaubt.
- * Für andere Formen der Lizenz nehmen Sie bitte Kontakt mit info@virtenio.de auf.
- */
-
+package sensors;
 
 import com.virtenio.driver.device.MPL115A2;
 import com.virtenio.driver.gpio.GPIO;
 import com.virtenio.driver.gpio.NativeGPIO;
 import com.virtenio.driver.i2c.NativeI2C;
-/**
- * Test den Zugriff auf den Sensor MPL115A2 von Freescale über I2C.
- * 
- * <p/>
- * <b> Datenblatt des Sensors: </b> <a href=
- * "http://cache.freescale.com/files/sensors/doc/data_sheet/MPL115A2.pdf"
- * target="_blank">
- * http://cache.freescale.com/files/sensors/doc/data_sheet/MPL115A2.pdf</a>
- * (Stand: 24.08.2011)
- */
-public class PressureSensorA {
+
+public class PressureSensor {
 	private MPL115A2 pressureSensor;
 	
 	private boolean isInit = false;
@@ -57,7 +32,7 @@ public class PressureSensorA {
 			int pressurePr = pressureSensor.getPressureRaw();
 			int tempRaw = pressureSensor.getTemperatureRaw();
 			float pressure = pressureSensor.compensate(pressurePr, tempRaw);
-			temp = "Preasure =" + pressure;
+			temp = "P: " + pressure;
 			Thread.sleep(1000 - MPL115A2.BOTH_CONVERSION_TIME);
 		}
 	}
