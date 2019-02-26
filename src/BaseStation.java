@@ -40,29 +40,31 @@ public class BaseStation extends Thread{
 		int temp = Integer.parseInt(mode);
 		while(temp != 1 | temp !=2) {
 			if(temp == 1) {
+				for(int j=0; j<jumlahNode; j++) {
+					boolean isOK = false;
+					while(!isOK) {
+						try {
+							String message = "ON";
+							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+									| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+							frame.setSrcAddr(ADDR_NODE1);
+							frame.setSrcPanId(COMMON_PANID);
+							frame.setDestAddr(ADDR_NODE2[j]);
+							frame.setDestPanId(COMMON_PANID);
+							radio.setState(AT86RF231.STATE_TX_ARET_ON);
+							frame.setPayload(message.getBytes());
+							radio.transmitFrame(frame);
+							System.out.println("SEND: " + message);
+							isOK = true;
+						}
+						catch(Exception e) {
+							
+						}
+					}
+				}
 				Thread reader = new Thread() {
 					public void run() {				
-						for(int j=0; j<jumlahNode; j++) {
-							boolean isOK = false;
-							while(!isOK) {
-								try {
-									String message = "ON";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE1);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(ADDR_NODE2[j]);
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
-									frame.setPayload(message.getBytes());
-									radio.transmitFrame(frame);
-									System.out.println("SEND: " + message);
-									isOK = true;
-								}
-								catch(Exception e) {
-									
-								}
-							}
+						while(true) {
 							Frame f = null;
 							try {
 								f = new Frame();
@@ -84,20 +86,47 @@ public class BaseStation extends Thread{
 				reader.start();
 			}
 			else {
-//				String numberOfSense = console.readLine("How Many Sense?");
-//				for(int j = 0; j<jumlahNode;j++) {
-//					String message = numberOfSense + " sensing";
-//					Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-//							| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-//					frame.setSrcAddr(ADDR_NODE1);
-//					frame.setSrcPanId(COMMON_PANID);
-//					frame.setDestAddr(ADDR_NODE2[j]);
-//					frame.setDestPanId(COMMON_PANID);
-//					radio.setState(AT86RF231.STATE_TX_ARET_ON);
-//					frame.setPayload(message.getBytes());
-//					radio.transmitFrame(frame);
-////					System.out.println("SEND: " + message);
-//				}
+				String numberOfSense = console.readLine("How Many Sense?");
+				for(int j = 0; j<jumlahNode;j++) {
+					boolean isOK = false;
+					while(!isOK) {
+						String message = numberOfSense;
+						Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+								| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+						frame.setSrcAddr(ADDR_NODE1);
+						frame.setSrcPanId(COMMON_PANID);
+						frame.setDestAddr(ADDR_NODE2[j]);
+						frame.setDestPanId(COMMON_PANID);
+						radio.setState(AT86RF231.STATE_TX_ARET_ON);
+						frame.setPayload(message.getBytes());
+						radio.transmitFrame(frame);
+//						System.out.println("SEND: " + message);
+						isOK = true;
+					}
+				}
+				Thread reader = new Thread() {
+					public void run() {				
+						while(true) {
+							Frame f = null;
+							try {
+								f = new Frame();
+								radio.setState(AT86RF231.STATE_RX_AACK_ON);
+								radio.waitForFrame(f);
+							}
+							catch(Exception e) {
+								
+							}
+							if(f!=null) {
+								byte[] dg = f.getPayload();
+								String str = new String(dg, 0, dg.length);
+								String hex_addr = Integer.toHexString((int) f.getSrcAddr());
+								System.out.println("FROM(" + hex_addr + "): " + str);
+							}
+						}
+					}
+				};	
+				reader.start();
+				
 			}
 		}
 	}

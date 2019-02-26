@@ -4,22 +4,30 @@ import com.virtenio.preon32.examples.common.RadioInit;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.driver.device.at86rf231.*;
 
-public class receiverDAAB {
+public class nodeSensor {
 
+	/**
+	 * NODE LIST :
+	 * 0xAFFE = BS - COMx
+	 * 0xDAAA = Node 1 - COMx
+	 * 0xDAAB = Node 2 - COMx
+	 */
+	
 	private int COMMON_CHANNEL = 24;
 	private int COMMON_PANID = 0xCAFE;
-	private int ADDR_NODE1 = 0xAFFE; //Base Station
-	private int ADDR_NODE2 = 0xDAAB; //receiver
+	private int [] node_list  = new int [] {0xAFFE, 0xDAAA, 0xDAAB};
+	
+	private int ADDR_NODE1 = node_list[0]; //NODE DIATASNYA
+	private int ADDR_NODE2 = node_list[1]; //NODE DIRINYA
+//	private int ADDR_NODE3; //NODE DIBAWAHNYA
 	
 	public void pReceiver() throws Exception{
-//		final Shuttle shuttle = Shuttle.getInstance();
-		
+
 		final AT86RF231 radio = RadioInit.initRadio();
 		radio.setChannel(COMMON_CHANNEL);
 		radio.setPANId(COMMON_PANID);
 		radio.setShortAddress(ADDR_NODE2); //receiver
 		
-		System.out.println("ON DAAA");
 		Thread reader = new Thread() {
 			@Override
 			public void run() {
@@ -37,13 +45,9 @@ public class receiverDAAB {
 						//RECEIVE THE MESSAGE			
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-						String hex_addr = Integer.toHexString((int) f.getSrcAddr());
+//						String hex_addr = Integer.toHexString((int) f.getSrcAddr());
 //						System.out.println("FROM(" + hex_addr + "): " + str);
 						
-			
-						//Bikin If Else klo str == 1 ini buat check online
-						//str == 2 manggil method sense aja
-						System.out.println(str);
 						if(str.equals("ON")) {
 							boolean isOK = false;
 							while(!isOK) {
@@ -53,7 +57,7 @@ public class receiverDAAB {
 											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 									frame.setSrcAddr(ADDR_NODE2);
 									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(ADDR_NODE1);
+									frame.setDestAddr(ADDR_NODE1); //TUJUAN
 									frame.setDestPanId(COMMON_PANID);
 									radio.setState(AT86RF231.STATE_TX_ARET_ON);
 									frame.setPayload(message.getBytes());
@@ -67,7 +71,13 @@ public class receiverDAAB {
 							}
 						}
 						else {
-							
+							int numberOfSense = Integer.parseInt(str);
+							sensing s = new sensing();
+							try {
+								s.sense(COMMON_CHANNEL, COMMON_PANID, ADDR_NODE1, ADDR_NODE2, numberOfSense);
+							} catch (Exception e) {
+
+							}
 						}
 						
 					}
@@ -78,7 +88,7 @@ public class receiverDAAB {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		new receiverDAAA().pReceiver();
+		new nodeSensor().pReceiver();
 	}
 	
 }

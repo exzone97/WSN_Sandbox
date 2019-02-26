@@ -36,7 +36,7 @@ public class AccelerationSensor {
 		else {
 			short[] values = new short[3];	
 			accelerationSensor.getValuesRaw(values, 0);
-			temp = ("A: " + Arrays.toString(values));
+			temp = "A: " + Arrays.toString(values);
 		}
 	}
 	public String getTemp(){
