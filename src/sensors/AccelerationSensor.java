@@ -11,33 +11,31 @@ public class AccelerationSensor {
 	private ADXL345 accelerationSensor;
 	private GPIO accelCs;
 
-	private boolean isInit = false;
 	private String temp = "";
-	
-	public void init() throws Exception {
-		accelCs = NativeGPIO.getInstance(20);
-
-		NativeSPI spi = NativeSPI.getInstance(0);
-		spi.open(ADXL345.SPI_MODE, ADXL345.SPI_BIT_ORDER, ADXL345.SPI_MAX_SPEED);
-
-		accelerationSensor = new ADXL345(spi, accelCs);
-		accelerationSensor.open();
-		accelerationSensor.setDataFormat(ADXL345.DATA_FORMAT_RANGE_2G);
-		accelerationSensor.setDataRate(ADXL345.DATA_RATE_3200HZ);
-		accelerationSensor.setPowerControl(ADXL345.POWER_CONTROL_MEASURE);
-		
-		isInit = true;
-	}
 
 	public void run() throws Exception {
-		if(isInit == false) {
-			init();	
+		accelCs = NativeGPIO.getInstance(20);
+		NativeSPI spi = NativeSPI.getInstance(0);
+		if(spi.isOpened()) {
+			
 		}
 		else {
-			short[] values = new short[3];	
-			accelerationSensor.getValuesRaw(values, 0);
-			temp = "A: " + Arrays.toString(values);
+			spi.open(ADXL345.SPI_MODE, ADXL345.SPI_BIT_ORDER, ADXL345.SPI_MAX_SPEED);
 		}
+		accelerationSensor = new ADXL345(spi, accelCs);
+		if(accelerationSensor.isOpened()) {
+			
+		}
+		else {
+			accelerationSensor.open();
+			accelerationSensor.setDataFormat(ADXL345.DATA_FORMAT_RANGE_2G);
+			accelerationSensor.setDataRate(ADXL345.DATA_RATE_3200HZ);
+			accelerationSensor.setPowerControl(ADXL345.POWER_CONTROL_MEASURE);
+		}
+		short[] values = new short[3];	
+		accelerationSensor.getValuesRaw(values, 0);
+		temp = "A:"+Arrays.toString(values);
+		
 	}
 	public String getTemp(){
 		return this.temp;

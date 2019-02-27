@@ -8,18 +8,19 @@ public class nodeSensor {
 
 	/**
 	 * NODE LIST :
-	 * 0xAFFE = BS - COMx
-	 * 0xDAAA = Node 1 - COMx
-	 * 0xDAAB = Node 2 - COMx
+	 * 0xAFFE = BS - COM3
+	 * 0xDAAA = Node 1 - COM6
+	 * 0xDAAB = Node 2 - COM5
 	 */
 	
 	private int COMMON_CHANNEL = 24;
-	private int COMMON_PANID = 0xCAFE;
-	private int [] node_list  = new int [] {0xAFFE, 0xDAAA, 0xDAAB};
+	private int COMMON_PANID = 0xCAFF;
+	private int [] node_list  = new int [] {0xABFE, 0xDAAA, 0xDAAB};
 	
 	private int ADDR_NODE1 = node_list[0]; //NODE DIATASNYA
 	private int ADDR_NODE2 = node_list[1]; //NODE DIRINYA
 //	private int ADDR_NODE3; //NODE DIBAWAHNYA
+	private sensing s = new sensing();
 	
 	public void pReceiver() throws Exception{
 
@@ -41,18 +42,14 @@ public class nodeSensor {
 					catch(Exception e) {
 						
 					}
-					if(f!=null) {
-						//RECEIVE THE MESSAGE			
+					if(f!=null) {		
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-//						String hex_addr = Integer.toHexString((int) f.getSrcAddr());
-//						System.out.println("FROM(" + hex_addr + "): " + str);
-						
-						if(str.equals("ON")) {
+						if(str.equalsIgnoreCase("1")) {
 							boolean isOK = false;
 							while(!isOK) {
 								try {
-									String message = ADDR_NODE2 + " ONLINE";
+									String message = Integer.toHexString(ADDR_NODE2) + " ONLINE";
 									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
 											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 									frame.setSrcAddr(ADDR_NODE2);
@@ -66,17 +63,15 @@ public class nodeSensor {
 									isOK = true;
 								}
 								catch(Exception e) {
-									System.out.println("ERROR: no receiver");
+									
 								}
 							}
 						}
 						else {
-							int numberOfSense = Integer.parseInt(str);
-							sensing s = new sensing();
 							try {
-								s.sense(COMMON_CHANNEL, COMMON_PANID, ADDR_NODE1, ADDR_NODE2, numberOfSense);
+								s.sense(COMMON_CHANNEL, COMMON_PANID, ADDR_NODE1, ADDR_NODE2);
 							} catch (Exception e) {
-
+								e.printStackTrace();
 							}
 						}
 						

@@ -581,6 +581,12 @@
 	5		hasMoreElements()Z
 	5		nextElement()Ljava/lang/Object;
 
+401		BaseStation
+	339		pSender()V
+	52		pReceiver()V
+	6		<init>()V
+	4		main([Ljava/lang/String;)V
+
 395		com/virtenio/preon32/node/Node
 	141		getInstance()Lcom/virtenio/preon32/node/Node;
 	119		getTransceiver(I)Lcom/virtenio/driver/device/at86rf231/AT86RF231;
@@ -628,10 +634,6 @@
 	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
 	15		<init>(Ljava/io/InputStream;)V
 	10		isOpen()Z
-
-282		BaseStation$1
-	264		run()V
-	18		<init>(LBaseStation;ILcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
@@ -704,14 +706,6 @@
 	8		getType()I
 	6		<init>()V
 
-191		BaseStation
-	119		pSender()V
-	49		<init>()V
-	11		main([Ljava/lang/String;)V
-	4		access$000(LBaseStation;)I
-	4		access$100(LBaseStation;)I
-	4		access$200(LBaseStation;)[I
-
 179		java/util/AbstractList$SimpleListIterator
 	83		remove()V
 	56		next()Ljava/lang/Object;
@@ -735,6 +729,14 @@
 	54		read()I
 	18		<init>(Lcom/virtenio/driver/flash/Flash;II)V
 	2		getAddress()I
+
+129		BaseStation$2
+	119		run()V
+	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+
+129		BaseStation$1
+	119		run()V
+	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 122		com/virtenio/driver/flash/FlashOutputStream
 	52		write([BII)V
