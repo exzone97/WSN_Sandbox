@@ -9,17 +9,6 @@ public class PressureSensor {
 	private MPL115A2 pressureSensor;
 	
 	private String temp;
-	
-//	public void init(NativeI2C i2c) throws Exception {
-//		GPIO resetPin = NativeGPIO.getInstance(24);
-//		GPIO shutDownPin = NativeGPIO.getInstance(12);
-//		pressureSensor = new MPL115A2(i2c, resetPin, shutDownPin);
-//
-//		pressureSensor.open();
-//		pressureSensor.setReset(false);
-//		pressureSensor.setShutdown(false);
-//		isInit = true;
-//	}
 
 	public void run(NativeI2C i2c) throws Exception {
 		GPIO resetPin = NativeGPIO.getInstance(24);

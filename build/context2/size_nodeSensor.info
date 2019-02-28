@@ -683,8 +683,8 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
-383		sensing
-	330		sense(IIII)V
+377		sensing
+	324		sense(IIII)V
 	53		<init>()V
 
 371		com/virtenio/driver/device/SHT21
@@ -724,8 +724,8 @@
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
 
-302		nodeSensor$1
-	288		run()V
+317		nodeSensor$1
+	303		run()V
 	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 256		com/virtenio/driver/i2c/NativeI2C
@@ -838,9 +838,9 @@
 	7		nextIndex()I
 	6		set(Ljava/lang/Object;)V
 
-146		nodeSensor
+150		nodeSensor
 	75		<init>()V
-	40		pReceiver()V
+	44		pReceiver()V
 	11		main([Ljava/lang/String;)V
 	4		access$000(LnodeSensor;)I
 	4		access$100(LnodeSensor;)I

@@ -25,6 +25,7 @@ public class nodeSensor {
 	public void pReceiver() throws Exception{
 
 		final AT86RF231 radio = RadioInit.initRadio();
+		radio.reset();
 		radio.setChannel(COMMON_CHANNEL);
 		radio.setPANId(COMMON_PANID);
 		radio.setShortAddress(ADDR_NODE2); //receiver
@@ -40,18 +41,18 @@ public class nodeSensor {
 						radio.waitForFrame(f);
 					}
 					catch(Exception e) {
-						
 					}
 					if(f!=null) {		
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-						if(str.equalsIgnoreCase("1")) {
+						if(str.equalsIgnoreCase("ON")) {
 							boolean isOK = false;
 							while(!isOK) {
 								try {
 									String message = Integer.toHexString(ADDR_NODE2) + " ONLINE";
 									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
 											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+									frame.setSequenceNumber(0);
 									frame.setSrcAddr(ADDR_NODE2);
 									frame.setSrcPanId(COMMON_PANID);
 									frame.setDestAddr(ADDR_NODE1); //TUJUAN
@@ -59,20 +60,27 @@ public class nodeSensor {
 									radio.setState(AT86RF231.STATE_TX_ARET_ON);
 									frame.setPayload(message.getBytes());
 									radio.transmitFrame(frame);
-									System.out.println("SEND RETURN: " + message);
+//									System.out.println("SEND RETURN: " + message);
+									frame.setSequenceNumber(frame.getSequenceNumber()+1);
 									isOK = true;
 								}
 								catch(Exception e) {
-									
 								}
 							}
 						}
-						else {
+						else if(str.equalsIgnoreCase("SENSE")){
+//							MSKIN KE FLASH MEMORY
 							try {
 								s.sense(COMMON_CHANNEL, COMMON_PANID, ADDR_NODE1, ADDR_NODE2);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+						}
+						else {
+//							CEK ACK / NACK
+//							ADA TIMER, KALO ADA GA DPT ACK / NACK = SEND LG DR FLASH MEMORY.
+//							KLO DPT ACK = FLASHNYA DI APUS.
+//							KLO DPT NACK = KIRIM LAGI DR FLASH MEMORY
 						}
 						
 					}
