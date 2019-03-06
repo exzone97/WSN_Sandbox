@@ -21,8 +21,8 @@ public class PressureSensor {
 			pressureSensor.open();
 			pressureSensor.setReset(false);
 			pressureSensor.setShutdown(false);
+			pressureSensor.startBothConversion();
 		}
-		pressureSensor.startBothConversion();
 		Thread.sleep(MPL115A2.BOTH_CONVERSION_TIME);
 		int pressurePr = pressureSensor.getPressureRaw();
 		int tempRaw = pressureSensor.getTemperatureRaw();

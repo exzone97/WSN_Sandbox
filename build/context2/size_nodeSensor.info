@@ -422,6 +422,42 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
+1091		java/util/HashMap
+	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
+	120		putImpl(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	89		containsValue(Ljava/lang/Object;)Z
+	84		rehash(I)V
+	64		removeEntry(Ljava/util/HashMap$Entry;)V
+	62		calculateCapacity(I)I
+	58		putAllImpl(Ljava/util/Map;)V
+	56		<init>(IF)V
+	42		clone()Ljava/lang/Object;
+	36		getEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
+	34		findNonNullKeyEntry(Ljava/lang/Object;II)Ljava/util/HashMap$Entry;
+	24		createEntry(Ljava/lang/Object;ILjava/lang/Object;)Ljava/util/HashMap$Entry;
+	24		createHashedEntry(Ljava/lang/Object;II)Ljava/util/HashMap$Entry;
+	23		findNullKeyEntry()Ljava/util/HashMap$Entry;
+	22		clear()V
+	19		areEqualKeys(Ljava/lang/Object;Ljava/lang/Object;)Z
+	19		areEqualValues(Ljava/lang/Object;Ljava/lang/Object;)Z
+	17		<init>(Ljava/util/Map;)V
+	17		keySet()Ljava/util/Set;
+	17		values()Ljava/util/Collection;
+	16		containsKey(Ljava/lang/Object;)Z
+	16		get(Ljava/lang/Object;)Ljava/lang/Object;
+	16		remove(Ljava/lang/Object;)Ljava/lang/Object;
+	13		putAll(Ljava/util/Map;)V
+	12		computeThreshold()V
+	11		<init>(I)V
+	10		isEmpty()Z
+	9		entrySet()Ljava/util/Set;
+	9		rehash()V
+	7		<init>()V
+	7		put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	6		newElementArray(I)[Ljava/util/HashMap$Entry;
+	5		computeHashCode(Ljava/lang/Object;)I
+	2		size()I
+
 1058		com/virtenio/driver/device/ADXL345
 	122		reset()V
 	83		getValuesRaw([SI)V
@@ -482,6 +518,24 @@
 	5		open()V
 	5		close()V
 	2		getConversionScale()F
+
+807		java/util/AbstractMap
+	178		equals(Ljava/lang/Object;)Z
+	158		toString()Ljava/lang/String;
+	88		remove(Ljava/lang/Object;)Ljava/lang/Object;
+	80		get(Ljava/lang/Object;)Ljava/lang/Object;
+	64		containsKey(Ljava/lang/Object;)Z
+	64		containsValue(Ljava/lang/Object;)Z
+	41		putAll(Ljava/util/Map;)V
+	36		hashCode()I
+	20		clone()Ljava/lang/Object;
+	17		keySet()Ljava/util/Set;
+	17		values()Ljava/util/Collection;
+	13		isEmpty()Z
+	9		put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	8		clear()V
+	8		size()I
+	6		<init>()V
 
 740		com/virtenio/misc/PropertyHelper
 	122		makeKey(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
@@ -573,6 +627,10 @@
 	10		toString()Ljava/lang/String;
 	6		getBytes()[B
 	3		size()I
+
+591		nodeSensor$1
+	577		run()V
+	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 578		com/virtenio/vm/event/AsyncEvents
 	91		run()V
@@ -683,10 +741,6 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
-377		sensing
-	324		sense(IIII)V
-	53		<init>()V
-
 371		com/virtenio/driver/device/SHT21
 	60		getValueRaw()I
 	54		setRegister(I)V
@@ -708,11 +762,6 @@
 	5		isOpened()Z
 	1		close()V
 
-339		com/virtenio/preon32/examples/common/RadioInit
-	184		<init>()V
-	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
-	37		prepareFrame(III)Lcom/virtenio/radio/ieee_802_15_4/Frame;
-
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
 	61		get(I)Ljava/lang/Object;
@@ -724,9 +773,10 @@
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
 
-317		nodeSensor$1
-	303		run()V
-	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+339		com/virtenio/preon32/examples/common/RadioInit
+	184		<init>()V
+	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
+	37		prepareFrame(III)Lcom/virtenio/radio/ieee_802_15_4/Frame;
 
 256		com/virtenio/driver/i2c/NativeI2C
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
@@ -762,6 +812,13 @@
 	9		unbindTo(I)V
 	8		unbind()V
 
+242		java/util/HashMap$AbstractMapIterator
+	84		remove()V
+	81		makeNext()V
+	37		hasNext()Z
+	24		<init>(Ljava/util/HashMap;)V
+	16		checkConcurrentMod()V
+
 235		java/util/AbstractList$FullListIterator
 	76		add(Ljava/lang/Object;)V
 	56		previous()Ljava/lang/Object;
@@ -770,6 +827,10 @@
 	10		hasPrevious()Z
 	4		nextIndex()I
 	2		previousIndex()I
+
+226		sensing
+	173		sense()Ljava/lang/String;
+	53		<init>()V
 
 226		com/virtenio/driver/gpio/NativeGPIO
 	39		open(II)V
@@ -820,11 +881,61 @@
 	8		getType()I
 	6		<init>()V
 
+191		java/util/AbstractSet
+	86		removeAll(Ljava/util/Collection;)Z
+	61		equals(Ljava/lang/Object;)Z
+	39		hashCode()I
+	5		<init>()V
+
+190		java/util/MapEntry
+	79		equals(Ljava/lang/Object;)Z
+	30		toString()Ljava/lang/String;
+	26		hashCode()I
+	19		clone()Ljava/lang/Object;
+	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
+	10		<init>(Ljava/lang/Object;)V
+	8		setValue(Ljava/lang/Object;)Ljava/lang/Object;
+	2		getKey()Ljava/lang/Object;
+	2		getValue()Ljava/lang/Object;
+
+182		java/util/AbstractMap$SimpleImmutableEntry
+	79		equals(Ljava/lang/Object;)Z
+	30		toString()Ljava/lang/String;
+	26		hashCode()I
+	20		<init>(Ljava/util/Map$Entry;)V
+	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
+	9		setValue(Ljava/lang/Object;)Ljava/lang/Object;
+	2		getKey()Ljava/lang/Object;
+	2		getValue()Ljava/lang/Object;
+
+181		java/util/AbstractMap$SimpleEntry
+	79		equals(Ljava/lang/Object;)Z
+	30		toString()Ljava/lang/String;
+	26		hashCode()I
+	20		<init>(Ljava/util/Map$Entry;)V
+	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
+	8		setValue(Ljava/lang/Object;)Ljava/lang/Object;
+	2		getKey()Ljava/lang/Object;
+	2		getValue()Ljava/lang/Object;
+
 179		java/util/AbstractList$SimpleListIterator
 	83		remove()V
 	56		next()Ljava/lang/Object;
 	24		<init>(Ljava/util/AbstractList;)V
 	16		hasNext()Z
+
+176		nodeSensor
+	79		<init>()V
+	44		receiver_sender()V
+	11		main([Ljava/lang/String;)V
+	10		access$508(LnodeSensor;)I
+	7		access$402(Ljava/util/HashMap;)Ljava/util/HashMap;
+	5		access$400()Ljava/util/HashMap;
+	4		access$000(LnodeSensor;)I
+	4		access$100(LnodeSensor;)I
+	4		access$200(LnodeSensor;)I
+	4		access$300(LnodeSensor;)Lsensing;
+	4		access$500(LnodeSensor;)I
 
 164		java/util/AbstractList$SubAbstractList$SubAbstractListIterator
 	26		<init>(Ljava/util/ListIterator;Ljava/util/AbstractList$SubAbstractList;II)V
@@ -838,15 +949,15 @@
 	7		nextIndex()I
 	6		set(Ljava/lang/Object;)V
 
-150		nodeSensor
-	75		<init>()V
-	44		pReceiver()V
-	11		main([Ljava/lang/String;)V
-	4		access$000(LnodeSensor;)I
-	4		access$100(LnodeSensor;)I
-	4		access$200(LnodeSensor;)I
-	4		access$300(LnodeSensor;)I
-	4		access$400(LnodeSensor;)Lsensing;
+139		java/util/HashMap$HashMapEntrySet
+	40		remove(Ljava/lang/Object;)Z
+	39		valuesEq(Ljava/util/HashMap$Entry;Ljava/util/Map$Entry;)Z
+	31		contains(Ljava/lang/Object;)Z
+	9		<init>(Ljava/util/HashMap;)V
+	9		iterator()Ljava/util/Iterator;
+	5		clear()V
+	4		size()I
+	2		hashMap()Ljava/util/HashMap;
 
 134		sensors/AccelerationSensor
 	120		run()V
@@ -939,6 +1050,11 @@
 	26		read()I
 	10		<init>(Lcom/virtenio/driver/spi/SPI;)V
 
+61		java/util/HashMap$Entry
+	28		clone()Ljava/lang/Object;
+	22		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
+	11		<init>(Ljava/lang/Object;I)V
+
 58		com/virtenio/driver/spi/SPIChipSelector
 	14		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
 	14		open()V
@@ -963,6 +1079,33 @@
 	44		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
 	6		eraseSector(I)V
 
+50		java/util/HashMap$1
+	16		remove(Ljava/lang/Object;)Z
+	9		<init>(Ljava/util/HashMap;)V
+	9		iterator()Ljava/util/Iterator;
+	6		contains(Ljava/lang/Object;)Z
+	5		size()I
+	5		clear()V
+
+46		java/util/AbstractMap$2$1
+	24		<init>(Ljava/util/AbstractMap$2;)V
+	12		next()Ljava/lang/Object;
+	5		hasNext()Z
+	5		remove()V
+
+46		java/util/AbstractMap$1$1
+	24		<init>(Ljava/util/AbstractMap$1;)V
+	12		next()Ljava/lang/Object;
+	5		hasNext()Z
+	5		remove()V
+
+34		java/util/HashMap$2
+	9		<init>(Ljava/util/HashMap;)V
+	9		iterator()Ljava/util/Iterator;
+	6		contains(Ljava/lang/Object;)Z
+	5		size()I
+	5		clear()V
+
 30		com/virtenio/driver/NativeDeviceDriver
 	10		<init>(I)V
 	6		<init>()V
@@ -970,6 +1113,18 @@
 	5		clearLastError()V
 	2		getInstanceId()I
 	2		getLastError()I
+
+29		java/util/AbstractMap$2
+	9		<init>(Ljava/util/AbstractMap;)V
+	9		iterator()Ljava/util/Iterator;
+	6		contains(Ljava/lang/Object;)Z
+	5		size()I
+
+29		java/util/AbstractMap$1
+	9		<init>(Ljava/util/AbstractMap;)V
+	9		iterator()Ljava/util/Iterator;
+	6		contains(Ljava/lang/Object;)Z
+	5		size()I
 
 28		com/virtenio/misc/CRC16
 	11		compute(I[BI)I
@@ -984,8 +1139,8 @@
 	6		createInstance(I)Ljava/lang/Object;
 	5		<init>()V
 
-27		com/virtenio/driver/irq/NativeIRQ$1
-	10		createInstance(I)Lcom/virtenio/driver/irq/NativeIRQ;
+27		com/virtenio/driver/i2c/NativeI2C$1
+	10		createInstance(I)Lcom/virtenio/driver/i2c/NativeI2C;
 	6		getInstanceCount()I
 	6		createInstance(I)Ljava/lang/Object;
 	5		<init>()V
@@ -996,8 +1151,8 @@
 	6		createInstance(I)Ljava/lang/Object;
 	5		<init>()V
 
-27		com/virtenio/driver/i2c/NativeI2C$1
-	10		createInstance(I)Lcom/virtenio/driver/i2c/NativeI2C;
+27		com/virtenio/driver/irq/NativeIRQ$1
+	10		createInstance(I)Lcom/virtenio/driver/irq/NativeIRQ;
 	6		getInstanceCount()I
 	6		createInstance(I)Ljava/lang/Object;
 	5		<init>()V
@@ -1024,11 +1179,24 @@
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 
+17		java/util/HashMap$EntryIterator
+	6		<init>(Ljava/util/HashMap;)V
+	6		next()Ljava/util/Map$Entry;
+	5		next()Ljava/lang/Object;
+
 16		com/virtenio/preon32/node/Node14
 	16		<init>(Ljava/lang/String;)V
 
 16		com/virtenio/preon32/node/Node13
 	16		<init>(Ljava/lang/String;)V
+
+14		java/util/HashMap$ValueIterator
+	8		next()Ljava/lang/Object;
+	6		<init>(Ljava/util/HashMap;)V
+
+14		java/util/HashMap$KeyIterator
+	8		next()Ljava/lang/Object;
+	6		<init>(Ljava/util/HashMap;)V
 
 13		java/util/ConcurrentModificationException
 	7		<init>(Ljava/lang/String;)V
@@ -1046,6 +1214,10 @@
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 
+12		com/virtenio/driver/spi/SPIException
+	6		<init>(I)V
+	6		<init>(Ljava/lang/Throwable;)V
+
 12		com/virtenio/driver/cpu/CPUException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
@@ -1055,10 +1227,6 @@
 	6		<init>(Ljava/lang/Throwable;)V
 
 12		com/virtenio/driver/flash/FlashException
-	6		<init>(I)V
-	6		<init>(Ljava/lang/Throwable;)V
-
-12		com/virtenio/driver/spi/SPIException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 

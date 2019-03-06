@@ -4,7 +4,7 @@ import com.virtenio.io.Console;
 import java.util.HashMap;
 import com.virtenio.driver.device.at86rf231.*;
 
-public class BaseStation extends Thread{
+public class BaseStationBU extends Thread{
 
 	private static int COMMON_CHANNEL = 24;
 	private static int COMMON_PANID = 0xCAFF;
@@ -15,8 +15,8 @@ public class BaseStation extends Thread{
  //	private static int BROADCAST = 0xFFFF;
 	
 	private static HashMap<Long, Integer> hmap = new HashMap<Long, Integer>();
-	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
 	private static boolean isSensing = false;
+	private static int howManySense = 0;
 	
 	public static void pSender() throws Exception{
 		final AT86RF231 radio = RadioInit.initRadio();
@@ -26,12 +26,12 @@ public class BaseStation extends Thread{
 		radio.setShortAddress(ADDR_NODE2);
 		
 		Console console = new Console();
-		
 		while(true) {
 			String mode = console.readLine(
 					"1. Check Online Node\n"
 					+ "2. Sense\n"
-					+ "3. Get Data\n");
+					+ "3. Check Data\n"
+					+ "4. Get Data\n");
 			int temp = Integer.parseInt(mode);
 			if(temp == 1) {
 				for(int i = 1;i<node_list.length;i++) {
@@ -56,39 +56,88 @@ public class BaseStation extends Thread{
 				}
 			}
 			else if(temp == 2) {
-				if(isSensing == false) {
-					for(int i = 1;i<node_list.length;i++) {
-						boolean isOK = false;
-						while(!isOK) {
-							try {
-								String message = "SENSE";
-								Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-										| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-								frame.setSrcAddr(ADDR_NODE2);
-								frame.setSrcPanId(COMMON_PANID);
-								frame.setDestAddr(node_list[i]);
-								frame.setDestPanId(COMMON_PANID);
-								radio.setState(AT86RF231.STATE_TX_ARET_ON);
-								frame.setPayload(message.getBytes());
-								radio.transmitFrame(frame);
-								isOK = true;
-							}
-							catch(Exception e) {
-								e.printStackTrace();
-							}
+				for(int i = 1;i<node_list.length;i++) {
+					boolean isOK = false;
+					while(!isOK) {
+						try {
+							String message = "SENSE";
+							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+									| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+							frame.setSrcAddr(ADDR_NODE2);
+							frame.setSrcPanId(COMMON_PANID);
+							frame.setDestAddr(node_list[i]);
+							frame.setDestPanId(COMMON_PANID);
+							radio.setState(AT86RF231.STATE_TX_ARET_ON);
+							frame.setPayload(message.getBytes());
+							radio.transmitFrame(frame);
+							isOK = true;
+						}
+						catch(Exception e) {
+							e.printStackTrace();
 						}
 					}
-					isSensing = true;
+				}
+				isSensing = true;
+				howManySense++;
+			}
+			else if(temp==3){
+				if(isSensing == true) {
+//				if belum sense maka akan error;
+					for(int i = 1;i<node_list.length;i++) {
+						if(hmap.get((long)node_list[i])==(20*howManySense)) {
+							boolean isOK = false;
+							while(!isOK) {
+								try {
+									String message = "ACK";
+									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+									frame.setSrcAddr(ADDR_NODE2);
+									frame.setSrcPanId(COMMON_PANID);
+									frame.setDestAddr(node_list[i]);
+									frame.setDestPanId(COMMON_PANID);
+									radio.setState(AT86RF231.STATE_TX_ARET_ON);
+									frame.setPayload(message.getBytes());
+									radio.transmitFrame(frame);
+									isOK = true;
+								}
+								catch(Exception e) {
+									e.printStackTrace();
+								}
+							}
+							System.out.println(Integer.toHexString(node_list[i])+" Lengkap, Kirim ACK");
+							hmap.put((long)node_list[i], 0);
+						}
+						else {
+							boolean isOK = false;
+							while(!isOK) {
+								try {
+									String message = "NACK";
+									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+									frame.setSrcAddr(ADDR_NODE2);
+									frame.setSrcPanId(COMMON_PANID);
+									frame.setDestAddr(node_list[i]);
+									frame.setDestPanId(COMMON_PANID);
+									radio.setState(AT86RF231.STATE_TX_ARET_ON);
+									frame.setPayload(message.getBytes());
+									radio.transmitFrame(frame);
+									isOK = true;
+								}
+								catch(Exception e) {
+									e.printStackTrace();
+								}
+							}
+							System.out.println(Integer.toHexString(node_list[i])+" Belum Lengkap, Kirim NACK");
+						}
+					}
 				}
 				else {
-					System.out.println("Sudah Pernah Sensing, Silahkan Ambil Data");
+					System.out.println("Belum Pernah Sensing!");
 				}
-				
 			}
-			else{
-//			ambil data	
+			else {
+//				print ke txt
 			}
-			
 			pReceiver();
 		}
 	}
@@ -119,66 +168,21 @@ public class BaseStation extends Thread{
 						if(str.charAt(str.length()-1)=='E') {
 							System.out.println("Node "+ hex_addr +" is Online");
 						}
+						
 						if(str.charAt(0)=='S') {
 							System.out.println("FROM " + hex_addr + " : " + f.getSequenceNumber()+"|"+str);
 							hmap.put(f.getSrcAddr(), hmap.get(f.getSrcAddr())+1);
-						}
-						if(str.charAt(0)=='E' && hmap.get(f.getSrcAddr())==20) {
-							boolean isOK = false;
-							while(!isOK) {
-								try {
-									String message = "ACK";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(f.getSrcAddr());
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
-									frame.setPayload(message.getBytes());
-									radio.transmitFrame(frame);
-									isOK = true;
-								}
-								catch(Exception e) {
-									e.printStackTrace();
-								}
-							}
-							System.out.println(Long.toHexString(f.getSrcAddr())+" Lengkap, Kirim ACK");
-							hmap.put(f.getSrcAddr(), 0);
-							hmapACK.put(f.getSrcAddr(), true);
-						}
-						else if(str.charAt(0)=='E' && hmap.get(f.getSrcAddr())!=20) {
-							boolean isOK = false;
-							while(!isOK) {
-								try {
-									String message = "NACK";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-											| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(f.getSrcAddr());
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
-									frame.setPayload(message.getBytes());
-									radio.transmitFrame(frame);
-									isOK = true;
-								}
-								catch(Exception e) {
-									e.printStackTrace();
-								}
-							}
 						}
 					}
 				}
 			}
 		};	
-		reader.start();	
+		reader.start();
 	}
 	
 	public static void main(String[] args) throws Exception{
 		for(int i = 1;i<node_list.length;i++) {
 			hmap.put((long) node_list[i],0);
-			hmapACK.put((long) node_list[i],false);
 		}
 		pSender();
 	}
