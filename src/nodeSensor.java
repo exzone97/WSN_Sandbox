@@ -171,5 +171,4 @@ public class nodeSensor {
 	public static void main(String[] args) throws Exception{
 		new nodeSensor().receiver_sender();
 	}
-	
 }

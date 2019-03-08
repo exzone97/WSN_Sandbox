@@ -1,6 +1,10 @@
 import com.virtenio.preon32.examples.common.RadioInit;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.io.Console;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import com.virtenio.driver.device.at86rf231.*;
 
@@ -85,10 +89,37 @@ public class BaseStation extends Thread{
 				}
 				
 			}
-			else{
-//			ambil data	
+			else{	
+//				Print to TXT
+				boolean allClear = false;
+				for(int i = 0;i<hmapACK.size();i++) {
+					if(hmapACK.get((long)node_list[i])==true) {
+						allClear = true;
+					}
+					else {
+						allClear = false;
+					}
+				}
+				if(allClear == true) {
+					try {
+						File file = new File("data.txt");
+						FileOutputStream fos = new FileOutputStream(file);
+						ObjectOutputStream oos = new ObjectOutputStream(fos);
+						oos.writeObject(hmap);
+						oos.flush();
+						oos.close();
+						fos.close();
+					}catch(Exception e) {
+						
+					}
+					isSensing = false;
+					hmap = new HashMap<>();
+					hmapACK = new HashMap<>();
+				}	
+				else {
+					System.out.println("Ada data yang belum lengkap");
+				}
 			}
-			
 			pReceiver();
 		}
 	}
