@@ -6,7 +6,7 @@ import sensors.TemperatureSensor;
 import com.virtenio.driver.i2c.I2C;
 import com.virtenio.driver.i2c.NativeI2C;
 
-public class sensing extends Thread{
+public class sensing extends Thread {
 
 	private TemperatureSensor TS = new TemperatureSensor();
 	private AccelerationSensor AS = new AccelerationSensor();
@@ -14,7 +14,7 @@ public class sensing extends Thread{
 	private HumiditySensor HS = new HumiditySensor();
 
 	private NativeI2C i2c = NativeI2C.getInstance(1);
-	
+
 	public String sense() throws Exception{
 		if(i2c.isOpened()) {
 			

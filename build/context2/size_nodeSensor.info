@@ -554,6 +554,10 @@
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 
+657		nodeSensor$1
+	643		run()V
+	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+
 650		com/virtenio/driver/device/ADT7410
 	121		readValue(II)I
 	74		writeValue(III)V
@@ -627,10 +631,6 @@
 	10		toString()Ljava/lang/String;
 	6		getBytes()[B
 	3		size()I
-
-591		nodeSensor$1
-	577		run()V
-	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 578		com/virtenio/vm/event/AsyncEvents
 	91		run()V
@@ -761,6 +761,23 @@
 	8		getTemperatureCelsius()F
 	5		isOpened()Z
 	1		close()V
+
+364		nodeSensor
+	205		receiver_sender()V
+	83		<init>()V
+	11		main([Ljava/lang/String;)V
+	10		access$708(LnodeSensor;)I
+	7		access$302(LnodeSensor;J)J
+	7		access$602(Ljava/util/HashMap;)Ljava/util/HashMap;
+	6		access$402(LnodeSensor;Ljava/lang/String;)Ljava/lang/String;
+	6		access$802(LnodeSensor;Z)Z
+	5		access$600()Ljava/util/HashMap;
+	4		access$000(LnodeSensor;)I
+	4		access$100(LnodeSensor;)I
+	4		access$200(LnodeSensor;)I
+	4		access$500(LnodeSensor;)Lsensing;
+	4		access$400(LnodeSensor;)Ljava/lang/String;
+	4		access$700(LnodeSensor;)I
 
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
@@ -923,19 +940,6 @@
 	56		next()Ljava/lang/Object;
 	24		<init>(Ljava/util/AbstractList;)V
 	16		hasNext()Z
-
-176		nodeSensor
-	79		<init>()V
-	44		receiver_sender()V
-	11		main([Ljava/lang/String;)V
-	10		access$508(LnodeSensor;)I
-	7		access$402(Ljava/util/HashMap;)Ljava/util/HashMap;
-	5		access$400()Ljava/util/HashMap;
-	4		access$000(LnodeSensor;)I
-	4		access$100(LnodeSensor;)I
-	4		access$200(LnodeSensor;)I
-	4		access$300(LnodeSensor;)Lsensing;
-	4		access$500(LnodeSensor;)I
 
 164		java/util/AbstractList$SubAbstractList$SubAbstractListIterator
 	26		<init>(Ljava/util/ListIterator;Ljava/util/AbstractList$SubAbstractList;II)V

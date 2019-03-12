@@ -5,11 +5,11 @@ import com.virtenio.io.Console;
 import java.util.HashMap;
 import com.virtenio.driver.device.at86rf231.*;
 
-public class BaseStation extends Thread {
+public class BaseStationH extends Thread {
 
 	private static int COMMON_CHANNEL = 24;
 	private static int COMMON_PANID = 0xCAFF;
-	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE };
+	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE, 0xEAAA, 0xEAAB };
 
 //	private int ADDR_NODE1 = node_list[1]; //NODE DIBAWAHNYA
 	private static int ADDR_NODE2 = node_list[0]; // NODE DIRINYA (BS)
@@ -18,13 +18,13 @@ public class BaseStation extends Thread {
 	private static String message;
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
+//	buat ch1
 	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
+//	buat ch2
 	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
 	private static boolean isSensing = false;
-	private static int a,b,c,d,e = 1;
+	private static int a,b,c = 1;
 
 	public static void pSender() throws Exception {
 		final AT86RF231 radio = RadioInit.initRadio();
@@ -39,7 +39,7 @@ public class BaseStation extends Thread {
 			String mode = console.readLine("1. Check Online Node\n" + "2. Sense\n" + "3. Get Data\n");
 			int temp = Integer.parseInt(mode);
 			if (temp == 1) {
-				for (int i = 1; i < node_list.length; i++) {
+				for (int i = 6; i < node_list.length; i++) {
 					boolean isOK = false;
 					while (!isOK) {
 						try {
@@ -60,7 +60,7 @@ public class BaseStation extends Thread {
 				}
 			} else if (temp == 2) {
 				if (isSensing == false) {
-					for (int i = 1; i < node_list.length; i++) {
+					for (int i = 6; i < node_list.length; i++) {
 						boolean isOK = false;
 						while (!isOK) {
 							try {
@@ -144,18 +144,11 @@ public class BaseStation extends Thread {
 								hmap2.put(b, str);
 								b++;
 							}
-							else if(f.getSrcAddr()==node_list[3]) {
+							else{
 								hmap3.put(c, str);
 								c++;
 							}
-							else if(f.getSrcAddr()==node_list[4]) {
-								hmap4.put(d, str);
-								d++;
-							}
-							else {
-								hmap5.put(e, str);
-								e++;
-							}
+							
 						}
 						if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) == 15) {
 							boolean isOK = false;
@@ -204,14 +197,8 @@ public class BaseStation extends Thread {
 							else if(f.getSrcAddr()==node_list[2]) {
 								b=0;
 							}
-							else if(f.getSrcAddr()==node_list[3]) {
-								c=0;
-							}
-							else if(f.getSrcAddr()==node_list[4]) {
-								d=0;
-							}
 							else {
-								e=0;
+								c=0;
 							}
 						}
 					}
