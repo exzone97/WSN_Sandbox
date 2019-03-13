@@ -18,11 +18,16 @@ public class BaseStation extends Thread {
 	private static String message;
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
-	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
+	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, Frame> hmap2 = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, Frame> hmap3 = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, Frame> hmap4 = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, Frame> hmap5 = new HashMap<Integer, Frame>();
 	private static boolean isSensing = false;
 	private static int a,b,c,d,e = 1;
 
@@ -137,23 +142,28 @@ public class BaseStation extends Thread {
 							System.out.println("FROM " + hex_addr + " : " + str);
 							hmapCOUNT.put(f.getSrcAddr(), hmapCOUNT.get(f.getSrcAddr()) + 1);
 							if(f.getSrcAddr()==node_list[1]) {
-								hmap1.put(a, str);
+//								hmap1.put(a, str);
+								hmap1.put(a, f);
 								a++;
 							}
 							else if(f.getSrcAddr()==node_list[2]) {
-								hmap2.put(b, str);
+//								hmap2.put(b, str);
+								hmap2.put(b, f);
 								b++;
 							}
 							else if(f.getSrcAddr()==node_list[3]) {
-								hmap3.put(c, str);
+//								hmap3.put(c, str);
+								hmap3.put(c, f);
 								c++;
 							}
 							else if(f.getSrcAddr()==node_list[4]) {
-								hmap4.put(d, str);
+//								hmap4.put(d, str);
+								hmap4.put(d, f);
 								d++;
 							}
 							else {
-								hmap5.put(e, str);
+//								hmap5.put(e, str);
+								hmap5.put(e, f);
 								e++;
 							}
 						}

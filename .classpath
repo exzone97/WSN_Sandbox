@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="targets/Preon32/tools/commander/jna.jar"/>
 	<classpathentry kind="lib" path="targets/Preon32/tools/commander/purejavacomm.jar"/>
 	<classpathentry kind="lib" path="targets/Preon32/tools/proguard.jar"/>
+	<classpathentry kind="lib" path="E:/Sandbox/targets/Preon32_1.5/tools/commander/Commander.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

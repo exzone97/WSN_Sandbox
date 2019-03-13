@@ -18,7 +18,8 @@ public class nodeSensor {
 //	private int ADDR_NODE3; //NODE DIBAWAHNYA
 	private sensing s = new sensing();
 	private int sn = 1;
-	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
+//	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
+	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
 	private String message;
 	private long end;
 	private boolean isSensing = false;
@@ -72,19 +73,20 @@ public class nodeSensor {
 										if (i == 15) {
 											message = "END";
 										} else {
-											message = "SENSE " + sn + " | " +Integer.toHexString(ADDR_NODE2)+" "+ s.sense();
+											message = "SENSE " + " | " +Integer.toHexString(ADDR_NODE2)+" "+ s.sense();
 										}
-										hmap.put(i, message);
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
+										frame.setSequenceNumber(sn);
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE1);
 										frame.setDestPanId(COMMON_PANID);
 										radio.setState(AT86RF231.STATE_TX_ARET_ON);
 										frame.setPayload(message.getBytes());
+//										hmap.put(i, message);
+										hmap.put(i, frame);
 										radio.transmitFrame(frame);
-//										System.out.println("SEND RETURN: " + message);
 										isOK = true;
 									} catch (Exception e) {
 									}
@@ -95,7 +97,8 @@ public class nodeSensor {
 							}
 						} else {
 							if (str.equalsIgnoreCase("ACK")) {
-								hmap = new HashMap<Integer, String>();
+//								hmap = new HashMap<Integer, String>();
+								hmap = new HashMap<Integer, Frame>();
 								System.out.println("Data Lengkap.. Mengosongkan Memory..");
 								isSensing = false;
 							} else {
@@ -103,15 +106,16 @@ public class nodeSensor {
 									boolean isOK = false;
 									while (!isOK) {
 										try {
-											message = hmap.get(j);
-											Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
-													| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-											frame.setSrcAddr(ADDR_NODE2);
-											frame.setSrcPanId(COMMON_PANID);
-											frame.setDestAddr(ADDR_NODE1);
-											frame.setDestPanId(COMMON_PANID);
+//											message = hmap.get(j);
+											Frame frame = hmap.get(j);
+//											Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
+//													| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+//											frame.setSrcAddr(ADDR_NODE2);
+//											frame.setSrcPanId(COMMON_PANID);
+//											frame.setDestAddr(ADDR_NODE1);
+//											frame.setDestPanId(COMMON_PANID);
 											radio.setState(AT86RF231.STATE_TX_ARET_ON);
-											frame.setPayload(message.getBytes());
+//											frame.setPayload(message.getBytes());
 											radio.transmitFrame(frame);
 											isOK = true;
 										} catch (Exception e) {
@@ -133,15 +137,16 @@ public class nodeSensor {
 						boolean isOK = false;
 						while (!isOK) {
 							try {
-								message = hmap.get(i);
-								Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-										| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-								frame.setSrcAddr(ADDR_NODE2);
-								frame.setSrcPanId(COMMON_PANID);
-								frame.setDestAddr(ADDR_NODE1);
-								frame.setDestPanId(COMMON_PANID);
+//								message = hmap.get(i);
+								Frame frame = hmap.get(i);
+//								Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
+//										| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+//								frame.setSrcAddr(ADDR_NODE2);
+//								frame.setSrcPanId(COMMON_PANID);
+//								frame.setDestAddr(ADDR_NODE1);
+//								frame.setDestPanId(COMMON_PANID);
 								radio.setState(AT86RF231.STATE_TX_ARET_ON);
-								frame.setPayload(message.getBytes());
+//								frame.setPayload(message.getBytes());
 								radio.transmitFrame(frame);
 								isOK = true;
 							} catch (Exception e) {
