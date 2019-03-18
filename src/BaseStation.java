@@ -1,9 +1,19 @@
 import com.virtenio.preon32.examples.common.RadioInit;
+import com.virtenio.preon32.examples.common.USARTConstants;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.io.Console;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import com.virtenio.driver.device.at86rf231.*;
+import com.virtenio.driver.usart.NativeUSART;
+import com.virtenio.driver.usart.USART;
+import com.virtenio.driver.usart.USARTException;
+import com.virtenio.driver.usart.USARTParams;
 
 public class BaseStation extends Thread {
 
@@ -11,18 +21,12 @@ public class BaseStation extends Thread {
 	private static int COMMON_PANID = 0xCAFF;
 	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE };
 
-//	private int ADDR_NODE1 = node_list[1]; //NODE DIBAWAHNYA
 	private static int ADDR_NODE2 = node_list[0]; // NODE DIRINYA (BS)
 	// private static int BROADCAST = 0xFFFF;
 	
 	private static String message;
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
-//	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
-//	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
-//	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
-//	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
-//	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
 	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
 	private static HashMap<Integer, Frame> hmap2 = new HashMap<Integer, Frame>();
 	private static HashMap<Integer, Frame> hmap3 = new HashMap<Integer, Frame>();
@@ -30,20 +34,25 @@ public class BaseStation extends Thread {
 	private static HashMap<Integer, Frame> hmap5 = new HashMap<Integer, Frame>();
 	private static boolean isSensing = false;
 	private static int a,b,c,d,e = 1;
-
-	public static void pSender() throws Exception {
+	private static USART usart;
+	private static OutputStream out;
+	private static int choice;
+	private static boolean exit;
+	
+		public static void pSender(int input) throws Exception {
 		final AT86RF231 radio = RadioInit.initRadio();
 		radio.reset();
 		radio.setChannel(COMMON_CHANNEL);
 		radio.setPANId(COMMON_PANID);
 		radio.setShortAddress(ADDR_NODE2);
-
-		Console console = new Console();
-
-		while (true) {
-			String mode = console.readLine("1. Check Online Node\n" + "2. Sense\n" + "3. Get Data\n");
-			int temp = Integer.parseInt(mode);
-			if (temp == 1) {
+		
+		
+		while (input !=0 ) {
+			if(input == 0) {
+				exit = true;
+				break;
+			}
+			else if (input == 1) {
 				for (int i = 1; i < node_list.length; i++) {
 					boolean isOK = false;
 					while (!isOK) {
@@ -55,7 +64,7 @@ public class BaseStation extends Thread {
 							frame.setSrcPanId(COMMON_PANID);
 							frame.setDestAddr(node_list[i]);
 							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ARET_ON);
+							radio.setState(AT86RF231.STATE_TX_ON);
 							frame.setPayload(message.getBytes());
 							radio.transmitFrame(frame);
 							isOK = true;
@@ -63,7 +72,8 @@ public class BaseStation extends Thread {
 						}
 					}
 				}
-			} else if (temp == 2) {
+				break;
+			} else if (input == 2) {
 				if (isSensing == false) {
 					for (int i = 1; i < node_list.length; i++) {
 						boolean isOK = false;
@@ -76,7 +86,7 @@ public class BaseStation extends Thread {
 								frame.setSrcPanId(COMMON_PANID);
 								frame.setDestAddr(node_list[i]);
 								frame.setDestPanId(COMMON_PANID);
-								radio.setState(AT86RF231.STATE_TX_ARET_ON);
+								radio.setState(AT86RF231.STATE_TX_ON);
 								frame.setPayload(message.getBytes());
 								radio.transmitFrame(frame);
 								isOK = true;
@@ -86,34 +96,38 @@ public class BaseStation extends Thread {
 						}
 					}
 					isSensing = true;
-				} else {
-					System.out.println("Sudah Pernah Sensing, Silahkan Ambil Data");
 				}
-
-			} else {
-				boolean allClear = true;
-				for (int i = 1; i < node_list.length; i++) {
-					if (hmapACK.get((long) node_list[i]) == false) {
-						allClear = false;
-					}
-				}
-				if (allClear == true) {
-					try {
-//						Print to TXT smua hasil hmap 1-5 klo buat yg flat.
-					} catch (Exception e) {
-					}
-					isSensing = false;
-					hmapCOUNT = new HashMap<Long, Integer>();
-					hmapACK = new HashMap<Long, Boolean>();
-				} else {
-					System.out.println("Ada data yang belum lengkap");
-				}
+				break;
+			} 
+			else if(input == 3) {
+//				boolean allClear = true;
+//				for (int i = 1; i < node_list.length; i++) {
+//					if (hmapACK.get((long) node_list[i]) == false) {
+//						allClear = false;
+//					}
+//				}
+//				if (allClear == true) {
+//					try {
+////						Print to TXT smua hasil hmap 1-5 klo buat yg flat.
+//					} catch (Exception e) {
+//					}
+//					isSensing = false;
+//					hmapCOUNT = new HashMap<Long, Integer>();
+//					hmapACK = new HashMap<Long, Boolean>();
+//				} else {
+//					System.out.println("Ada data yang belum lengkap");
+//				}
+			}
+			else {
+				
 			}
 			pReceiver();
 		}
 	}
 
 	public static void pReceiver() throws Exception {
+		out = new BufferedOutputStream(usart.getOutputStream());
+		
 		final AT86RF231 radio = RadioInit.initRadio();
 		radio.reset();
 		radio.setChannel(COMMON_CHANNEL);
@@ -136,33 +150,34 @@ public class BaseStation extends Thread {
 						String str = new String(dg, 0, dg.length);
 						String hex_addr = Integer.toHexString((int) f.getSrcAddr());
 						if (str.charAt(str.length() - 1) == 'E') {
-							System.out.println(str);
+//							System.out.println(str);
+							try {
+								out.write(str.getBytes(),0,str.length());
+							}
+							catch(IOException e) {
+								e.printStackTrace();
+							}
 						}
 						if (str.charAt(0) == 'S') {
 							System.out.println("FROM " + hex_addr + " : " + str);
 							hmapCOUNT.put(f.getSrcAddr(), hmapCOUNT.get(f.getSrcAddr()) + 1);
 							if(f.getSrcAddr()==node_list[1]) {
-//								hmap1.put(a, str);
 								hmap1.put(a, f);
 								a++;
 							}
 							else if(f.getSrcAddr()==node_list[2]) {
-//								hmap2.put(b, str);
 								hmap2.put(b, f);
 								b++;
 							}
 							else if(f.getSrcAddr()==node_list[3]) {
-//								hmap3.put(c, str);
 								hmap3.put(c, f);
 								c++;
 							}
 							else if(f.getSrcAddr()==node_list[4]) {
-//								hmap4.put(d, str);
 								hmap4.put(d, f);
 								d++;
 							}
 							else {
-//								hmap5.put(e, str);
 								hmap5.put(e, f);
 								e++;
 							}
@@ -178,7 +193,7 @@ public class BaseStation extends Thread {
 									frame.setSrcPanId(COMMON_PANID);
 									frame.setDestAddr(f.getSrcAddr());
 									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
+									radio.setState(AT86RF231.STATE_TX_ON);
 									frame.setPayload(message.getBytes());
 									radio.transmitFrame(frame);
 									isOK = true;
@@ -186,7 +201,6 @@ public class BaseStation extends Thread {
 									e.printStackTrace();
 								}
 							}
-							System.out.println(Long.toHexString(f.getSrcAddr()) + " Lengkap, Kirim ACK");
 							hmapCOUNT.put(f.getSrcAddr(), 0);
 							hmapACK.put(f.getSrcAddr(), true);
 						} else if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) != 15) {
@@ -200,7 +214,7 @@ public class BaseStation extends Thread {
 									frame.setSrcPanId(COMMON_PANID);
 									frame.setDestAddr(f.getSrcAddr());
 									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
+									radio.setState(AT86RF231.STATE_TX_ON);
 									frame.setPayload(message.getBytes());
 									radio.transmitFrame(frame);
 									isOK = true;
@@ -230,12 +244,65 @@ public class BaseStation extends Thread {
 		};
 		reader.start();
 	}
-
-	public static void main(String[] args) throws Exception {
-		for (int i = 1; i < node_list.length; i++) {
-			hmapCOUNT.put((long) node_list[i], 0);
-			hmapACK.put((long) node_list[i], false);
+		
+	private static USART configUSART() {
+		USARTParams params = USARTConstants.PARAMS_115200;
+		NativeUSART usart = NativeUSART.getInstance(0);
+		try {
+			usart.close();
+			usart.open(params);
+			return usart;
+		} catch (Exception e) {
+			return null;
 		}
-		pSender();
+	}
+	
+	private void startUSART() {
+		usart = configUSART();
+	}
+	
+	public void reader() throws Exception {
+		startUSART();
+		out = usart.getOutputStream();
+		if (usart != null) {
+			choice = usart.read();
+//			pSender(choice);
+			
+			if(choice == 1) {
+				String msg = "#AAA AAAAAAAAAAAAAAAAAAAAAAAAAAA#";
+				try {
+					out.write(msg.getBytes(),0,msg.length());
+					usart.flush();
+				}
+				catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void run() {
+		
+		new Thread() {
+			public void run() {
+				try {
+					reader();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+		
+//		System.out.flush();
+	}
+	
+	public static void main(String[] args){
+//		for (int i = 1; i < node_list.length; i++) {
+//			hmapCOUNT.put((long) node_list[i], 0);
+//			hmapACK.put((long) node_list[i], false);
+//		}
+//		pSender();
+		
+		new BaseStation().run();
 	}
 }

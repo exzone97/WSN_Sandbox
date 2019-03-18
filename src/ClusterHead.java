@@ -50,7 +50,6 @@ public class ClusterHead extends Thread {
 					if (f != null) {
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-//						String hex_addr = Integer.toHexString((int) f.getSrcAddr());
 						if (str.equalsIgnoreCase("ON")) {
 //							Dpt "ON" dari BS, Send ke BS dirinya ON
 							boolean isOK = false;
@@ -63,7 +62,7 @@ public class ClusterHead extends Thread {
 									frame.setSrcPanId(COMMON_PANID);
 									frame.setDestAddr(ADDR_NODE1);
 									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
+									radio.setState(AT86RF231.STATE_TX_ON);
 									frame.setPayload(message.getBytes());
 									radio.transmitFrame(frame);
 									isOK = true;
@@ -82,7 +81,7 @@ public class ClusterHead extends Thread {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE3[i]);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
+										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK2 = true;
@@ -114,7 +113,7 @@ public class ClusterHead extends Thread {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE3[i]);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
+										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK2 = true;
@@ -136,7 +135,7 @@ public class ClusterHead extends Thread {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE1);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
+										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK = true;
@@ -162,7 +161,7 @@ public class ClusterHead extends Thread {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(f.getSrcAddr());
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
+										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK = true;
@@ -183,7 +182,7 @@ public class ClusterHead extends Thread {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(f.getSrcAddr());
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
+										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK = true;
@@ -210,7 +209,7 @@ public class ClusterHead extends Thread {
 											frame.setSrcPanId(COMMON_PANID);
 											frame.setDestAddr(ADDR_NODE1);
 											frame.setDestPanId(COMMON_PANID);
-											radio.setState(AT86RF231.STATE_TX_ARET_ON);
+											radio.setState(AT86RF231.STATE_TX_ON);
 											frame.setPayload(message.getBytes());
 											radio.transmitFrame(frame);
 											isOK = true;
@@ -245,7 +244,7 @@ public class ClusterHead extends Thread {
 							frame.setSrcPanId(COMMON_PANID);
 							frame.setDestAddr(ADDR_NODE1);
 							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ARET_ON);
+							radio.setState(AT86RF231.STATE_TX_ON);
 							frame.setPayload(message.getBytes());
 							radio.transmitFrame(frame);
 							isOK = true;
@@ -270,7 +269,7 @@ public class ClusterHead extends Thread {
 								frame.setSrcPanId(COMMON_PANID);
 								frame.setDestAddr(ADDR_NODE1); // TUJUAN
 								frame.setDestPanId(COMMON_PANID);
-								radio.setState(AT86RF231.STATE_TX_ARET_ON);
+								radio.setState(AT86RF231.STATE_TX_ON);
 								frame.setPayload(message.getBytes());
 								radio.transmitFrame(frame);
 								isOK = true;

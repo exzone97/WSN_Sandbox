@@ -24,6 +24,7 @@ import com.virtenio.driver.usart.USARTParams;
 import com.virtenio.io.Console;
 import com.virtenio.preon32.examples.common.USARTConstants;
 
+
 /**
  * Testet die Ansteuerung der Universal Asynchronous Receiver Transmitter (UART)
  * Schnittstelle.
