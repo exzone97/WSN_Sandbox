@@ -17,15 +17,11 @@ public class HumiditySensor {
 			sht21.open();
 			sht21.setResolution(SHT21.RESOLUTION_RH12_T14);
 		}
-		
 		sht21.startRelativeHumidityConversion();
 		Thread.sleep(100);
 		int rawRH = sht21.getRelativeHumidityRaw();
 		float rh = SHT21.convertRawRHToRHw(rawRH);
-
 		this.temp = "H: "+ rh;
-
-	
 	}
 	
 	public String getTemp() {

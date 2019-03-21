@@ -58,7 +58,7 @@ public class nodeSensor {
 								}
 							}
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = System.currentTimeMillis() + 23000;
+							end = System.currentTimeMillis() + 17000;
 							int i = 0;
 							while (i <= 15) {
 								boolean isOK = false;
@@ -91,7 +91,6 @@ public class nodeSensor {
 						} else {
 							if (str.equalsIgnoreCase("ACK")) {
 								hmap = new HashMap<Integer, Frame>();
-//								System.out.println("Data Lengkap.. Mengosongkan Memory..");
 								isSensing = false;
 							} else {
 								for (int j = 0; j < hmap.size() ; j++) {
@@ -116,7 +115,6 @@ public class nodeSensor {
 		while (reader.isAlive()) {
 			if (isSensing == true) {
 				if (System.currentTimeMillis() > end) {
-					System.out.println("TIME OUT NO ACK !! RESEND !");
 					for (int i = 0; i <hmap.size(); i++) {
 						boolean isOK = false;
 						while (!isOK) {
