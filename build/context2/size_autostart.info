@@ -582,8 +582,8 @@
 	7		getConfiguration()I
 	7		getStatus()I
 
-643		nodeSensor$1
-	629		run()V
+644		nodeSensor$1
+	630		run()V
 	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 639		com/virtenio/misc/StringUtils
@@ -778,6 +778,21 @@
 	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
 	37		prepareFrame(III)Lcom/virtenio/radio/ieee_802_15_4/Frame;
 
+315		nodeSensor
+	141		receiver_sender()V
+	108		<init>()V
+	11		main([Ljava/lang/String;)V
+	10		access$408(LnodeSensor;)I
+	7		access$302(LnodeSensor;J)J
+	7		access$602(Ljava/util/HashMap;)Ljava/util/HashMap;
+	6		access$702(LnodeSensor;Z)Z
+	5		access$600()Ljava/util/HashMap;
+	4		access$000(LnodeSensor;)I
+	4		access$100(LnodeSensor;)I
+	4		access$200(LnodeSensor;)I
+	4		access$400(LnodeSensor;)I
+	4		access$500(LnodeSensor;)Lsensing;
+
 256		com/virtenio/driver/i2c/NativeI2C
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
 	26		read(I[BII)I
@@ -827,22 +842,6 @@
 	10		hasPrevious()Z
 	4		nextIndex()I
 	2		previousIndex()I
-
-233		nodeSensor
-	84		receiver_sender()V
-	79		<init>()V
-	11		main([Ljava/lang/String;)V
-	10		access$708(LnodeSensor;)I
-	7		access$302(LnodeSensor;J)J
-	7		access$602(Ljava/util/HashMap;)Ljava/util/HashMap;
-	6		access$402(LnodeSensor;Ljava/lang/String;)Ljava/lang/String;
-	5		access$600()Ljava/util/HashMap;
-	4		access$000(LnodeSensor;)I
-	4		access$100(LnodeSensor;)I
-	4		access$200(LnodeSensor;)I
-	4		access$500(LnodeSensor;)Lsensing;
-	4		access$400(LnodeSensor;)Ljava/lang/String;
-	4		access$700(LnodeSensor;)I
 
 226		sensing
 	173		sense()Ljava/lang/String;

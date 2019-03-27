@@ -5,7 +5,7 @@ import com.virtenio.driver.device.at86rf231.*;
 
 public class nodeSensor {
 
-	private int COMMON_CHANNEL = 24;
+	private int COMMON_CHANNEL = 16;
 	private int COMMON_PANID = 0xCAFF;
 	private int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE };
 
@@ -14,11 +14,12 @@ public class nodeSensor {
 	private sensing s = new sensing();
 	private int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
-	private String message;
+//	private String message;
 	private long end;
 	private boolean isSensing = false;
 
 	public void receiver_sender() throws Exception {
+		System.out.println("A1");
 		final AT86RF231 radio = RadioInit.initRadio();
 		radio.reset();
 		radio.setChannel(COMMON_CHANNEL);
@@ -40,18 +41,20 @@ public class nodeSensor {
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
 						if (str.equalsIgnoreCase("ON")) {
+							System.out.println(str);
 							boolean isOK = false;
 							while (!isOK) {
 								try {
-									message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
+									String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
 									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 									frame.setSrcAddr(ADDR_NODE2);
 									frame.setSrcPanId(COMMON_PANID);
 									frame.setDestAddr(ADDR_NODE1);
 									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ON);
+									radio.setState(AT86RF231.STATE_TX_ARET_ON);
 									frame.setPayload(message.getBytes());
+									System.out.println(message);
 									radio.transmitFrame(frame);
 									isOK = true;
 								} catch (Exception e) {
@@ -60,6 +63,9 @@ public class nodeSensor {
 						} else if (str.equalsIgnoreCase("DETECT")) {
 							end = System.currentTimeMillis() + 17000;
 							int i = 0;
+							System.out.println(str);
+
+							String message = "";
 							while (i <= 15) {
 								boolean isOK = false;
 								while (!isOK) {
@@ -67,7 +73,7 @@ public class nodeSensor {
 										if (i == 15) {
 											message = "END";
 										} else {
-											message = "SENSE " + " | " +Integer.toHexString(ADDR_NODE2)+" "+ s.sense();
+											message = "SENSE " +Integer.toHexString(ADDR_NODE2)+" "+ sn +" "+ s.sense();
 										}
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
@@ -76,20 +82,25 @@ public class nodeSensor {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE1);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ON);
+										radio.setState(AT86RF231.STATE_TX_ARET_ON);
 										frame.setPayload(message.getBytes());
 										hmap.put(i, frame);
+										System.out.println(message);
 										radio.transmitFrame(frame);
 										isOK = true;
 									} catch (Exception e) {
+										e.printStackTrace();
 									}
 								}
 								sn++;
 								i++;
 								isSensing = true;
 							}
+							i=0;
 						} else {
+							System.out.println(str);
 							if (str.equalsIgnoreCase("ACK")) {
+								System.out.println("ACK");
 								hmap = new HashMap<Integer, Frame>();
 								isSensing = false;
 							} else {

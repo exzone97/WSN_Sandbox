@@ -386,9 +386,21 @@
 	7		<init>()V
 	2		size()I
 
-1425		BaseStation$1
-	1415		run()V
-	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+1532		java/io/BufferedReader
+	475		readLine()Ljava/lang/String;
+	226		skip(J)J
+	221		read([CII)I
+	155		fillBuf()I
+	86		read()I
+	74		mark(I)V
+	72		reset()V
+	66		ready()Z
+	50		close()V
+	38		<init>(Ljava/io/Reader;I)V
+	30		chompNewline()V
+	27		<init>(Ljava/io/Reader;)V
+	10		isClosed()Z
+	2		markSupported()Z
 
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
@@ -462,46 +474,6 @@
 	5		computeHashCode(Ljava/lang/Object;)I
 	2		size()I
 
-822		BaseStation
-	304		pSender(I)V
-	113		reader()V
-	83		main([Ljava/lang/String;)V
-	64		pReceiver()V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	12		run()V
-	12		access$508()I
-	12		access$708()I
-	12		access$908()I
-	12		access$1108()I
-	12		access$1308()I
-	8		startUSART()V
-	7		access$102(Ljava/io/OutputStream;)Ljava/io/OutputStream;
-	7		access$1502(Ljava/lang/String;)Ljava/lang/String;
-	7		access$502(I)I
-	7		access$702(I)I
-	7		access$902(I)I
-	7		access$1102(I)I
-	7		access$1302(I)I
-	6		<init>()V
-	5		access$200()Lcom/virtenio/driver/usart/USART;
-	5		access$100()Ljava/io/OutputStream;
-	5		access$300()Ljava/util/HashMap;
-	5		access$400()[I
-	5		access$500()I
-	5		access$600()Ljava/util/HashMap;
-	5		access$700()I
-	5		access$800()Ljava/util/HashMap;
-	5		access$900()I
-	5		access$1000()Ljava/util/HashMap;
-	5		access$1100()I
-	5		access$1200()Ljava/util/HashMap;
-	5		access$1300()I
-	5		access$1400()Ljava/util/HashMap;
-	5		access$1600()I
-	5		access$1700()I
-	5		access$1500()Ljava/lang/String;
-	4		access$000()V
-
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
 	158		toString()Ljava/lang/String;
@@ -536,6 +508,17 @@
 	16		getInt(Ljava/lang/String;I)I
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
+
+699		BaseStation
+	302		sender()V
+	178		receive()V
+	136		singleNodeSense(I)V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	25		main([Ljava/lang/String;)V
+	8		startUSART()V
+	6		<init>()V
+	5		access$000()Ljava/io/OutputStream;
+	5		access$100()Lcom/virtenio/driver/usart/USART;
 
 639		com/virtenio/misc/StringUtils
 	116		split(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
@@ -700,6 +683,19 @@
 	2		getReceiveTimeout()I
 	0		command(Lcom/virtenio/driver/usart/NativeUSART;I)I
 
+341		com/virtenio/io/Console
+	77		readLong(Ljava/lang/String;)J
+	67		readLine(Ljava/lang/String;)Ljava/lang/String;
+	37		<init>(Ljava/io/Reader;Ljava/io/PrintStream;)V
+	34		<init>()V
+	30		readInt(Ljava/lang/String;II)I
+	29		readLong(Ljava/lang/String;JJ)J
+	27		readBool(Ljava/lang/String;)Z
+	21		readLine(Ljava/lang/String;Z)Ljava/lang/String;
+	7		readInt(Ljava/lang/String;)I
+	6		print(Ljava/lang/String;)V
+	6		println(Ljava/lang/String;)V
+
 339		com/virtenio/preon32/examples/common/RadioInit
 	184		<init>()V
 	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
@@ -716,14 +712,18 @@
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
 
-268		java/io/BufferedOutputStream
-	111		write([BII)V
-	46		write(I)V
-	45		close()V
-	26		<init>(Ljava/io/OutputStream;I)V
-	16		flushInternal()V
-	15		<init>(Ljava/io/OutputStream;)V
-	9		flush()V
+283		java/io/InputStreamReader
+	78		read()I
+	55		read([CII)I
+	49		ready()Z
+	47		close()V
+	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
+	15		<init>(Ljava/io/InputStream;)V
+	10		isOpen()Z
+
+273		BaseStation$1
+	263		run()V
+	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
@@ -1022,10 +1022,6 @@
 	6		contains(Ljava/lang/Object;)Z
 	5		size()I
 	5		clear()V
-
-34		BaseStation$2
-	24		run()V
-	10		<init>(LBaseStation;)V
 
 30		com/virtenio/driver/NativeDeviceDriver
 	10		<init>(I)V

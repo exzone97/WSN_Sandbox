@@ -22,12 +22,17 @@ public class ClusterHead extends Thread {
 	private static int sn = 1;
 	private static int count = 1;
 	private static long end;
-	private static boolean isSensing = false;
+	private static boolean firstSense = false;
 	private static boolean isSend = false;
+	private static boolean exit = false;
 
 	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
+	
+	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, Frame> hmap2 = new HashMap<Integer, Frame>();
+//	private static HashMap<Integer, Frame> hmap3 = new HashMap<Integer, Frame>();
 	
 	public static void receive_send() throws Exception {
 		final AT86RF231 radio = RadioInit.initRadio();
@@ -50,8 +55,11 @@ public class ClusterHead extends Thread {
 					if (f != null) {
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-						if (str.equalsIgnoreCase("ON")) {
-//							Dpt "ON" dari BS, Send ke BS dirinya ON
+						if(str.equalsIgnoreCase("0")) {
+							exit = true;
+							break;
+						}
+						else if (str.equalsIgnoreCase("ON") && exit == false) {
 							boolean isOK = false;
 							while (!isOK) {
 								try {
@@ -69,7 +77,6 @@ public class ClusterHead extends Thread {
 								} catch (Exception e) {
 								}
 							}
-//							Nerusin "ON" ke node dibawahnya
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
 								boolean isOK2 = false;
 								while (!isOK2) {
@@ -89,9 +96,10 @@ public class ClusterHead extends Thread {
 									}
 								}
 							}
-						} else if (str.equalsIgnoreCase("DETECT")) {
+						} else if (str.equalsIgnoreCase("DETECT") && exit == false && firstSense == false) {
 							end = System.currentTimeMillis()+30000;
 //							Sense Cluster Head 15x dan Simpan di HashMap
+//							QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
 							for (int i = 0; i < 15; i++) {
 								try {
 									message = "SENSE " + sn + " | " +Integer.toHexString(ADDR_NODE2)+" "+ s.sense();
@@ -121,7 +129,7 @@ public class ClusterHead extends Thread {
 									}
 								}
 							}
-							isSensing = true;
+							firstSense = true;
 						} else {
 //							Kalau dapat Str akhiran "E" berarti dpt dari node sensor di bawahnya yang ONLINE, langsung kirim ke BS
 							if (str.charAt(str.length() - 1) == 'E') {
@@ -149,6 +157,10 @@ public class ClusterHead extends Thread {
 								hmapCOUNT.put(f.getSrcAddr(), hmapCOUNT.get(f.getSrcAddr()) + 1);
 								hmap.put(count, str);
 								count++;
+//								!!!!!!!!
+//								if(f.addres)
+//								hmap1.put(arg0, arg1);
+//								hmap2.put();
 							}
 							if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) == 15) {
 								boolean isOK = false;
@@ -195,7 +207,7 @@ public class ClusterHead extends Thread {
 							if (str.equalsIgnoreCase("ACK")) {
 								hmap = new HashMap<Integer, String>();
 								hmapACK = new HashMap<Long, Boolean>();
-								isSensing = false;
+								
 								isSend = false;
 							} else {
 								for (int i = 1; i <= hmap.size(); i++) {
@@ -255,30 +267,30 @@ public class ClusterHead extends Thread {
 				isSend = true;
 			}
 //			TIMEOUT
-			if (isSensing == true) {
-				if (System.currentTimeMillis() > end) {
-//					System.out.println("TIME OUT NO ACK !! RESEND !");
-					for (int i = 1; i <= hmap.size(); i++) {
-						boolean isOK = false;
-						while (!isOK) {
-							try {
-								message = hmap.get(i);
-								Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-										| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-								frame.setSrcAddr(ADDR_NODE2);
-								frame.setSrcPanId(COMMON_PANID);
-								frame.setDestAddr(ADDR_NODE1); // TUJUAN
-								frame.setDestPanId(COMMON_PANID);
-								radio.setState(AT86RF231.STATE_TX_ON);
-								frame.setPayload(message.getBytes());
-								radio.transmitFrame(frame);
-								isOK = true;
-							} catch (Exception e) {
-							}
-						}
-					}
-				}
-			}
+//			if (isSensing == true) {
+//				if (System.currentTimeMillis() > end) {
+////					System.out.println("TIME OUT NO ACK !! RESEND !");
+//					for (int i = 1; i <= hmap.size(); i++) {
+//						boolean isOK = false;
+//						while (!isOK) {
+//							try {
+//								message = hmap.get(i);
+//								Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
+//										| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
+//								frame.setSrcAddr(ADDR_NODE2);
+//								frame.setSrcPanId(COMMON_PANID);
+//								frame.setDestAddr(ADDR_NODE1); // TUJUAN
+//								frame.setDestPanId(COMMON_PANID);
+//								radio.setState(AT86RF231.STATE_TX_ON);
+//								frame.setPayload(message.getBytes());
+//								radio.transmitFrame(frame);
+//								isOK = true;
+//							} catch (Exception e) {
+//							}
+//						}
+//					}
+//				}
+//			}
 		}
 	}
 

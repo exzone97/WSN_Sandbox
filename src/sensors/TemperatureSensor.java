@@ -18,7 +18,7 @@ public class TemperatureSensor {
 			temperatureSensor.setMode(ADT7410.CONFIG_MODE_CONTINUOUS);
 		}
 		float celsius = temperatureSensor.getTemperatureCelsius();
-		temp = "T: " + celsius + " [°C]";
+		temp = "T: " + celsius + " [C]";
 	}
 	
 	public String getTemp() {
