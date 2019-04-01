@@ -1,26 +1,25 @@
 import com.virtenio.preon32.examples.common.RadioInit;
 import com.virtenio.radio.ieee_802_15_4.Frame;
+import com.virtenio.vm.Time;
 
 import java.util.HashMap;
 import com.virtenio.driver.device.at86rf231.*;
 
 public class ClusterHead extends Thread {
-	private static int COMMON_CHANNEL = 24;
+	private static int COMMON_CHANNEL = 16;
 	private static int COMMON_PANID = 0xCAFF;
-	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE, 0xEAAA };
+	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xEAAA, 0xDAAB, 0xDAAC, 0xEAAB };
 
 	private static int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
 	private static int ADDR_NODE2 = node_list[6]; // NODE DIRINYA
 	
-//	CH1
-	private static int[] ADDR_NODE3 = new int[] { 0xDAAA, 0xDAAB }; // NODE DIBAWAHNYA
-//	CH2
-//	private static int ADDR_NODE3 = 0xDAAC; //NODE DIBAWAHNYA
-	
-	private static String message;
+//	Node dibwh CH1
+	private static int[] ADDR_NODE3 = new int[] { 0xDAAB, 0xDAAC }; // NODE DIBAWAHNYA
+//	Node dibwh CH2
+//	private static int ADDR_NODE3 = 0xEAAB; //NODE DIBAWAHNYA
+
 	private static sensing s = new sensing();
 	private static int sn = 1;
-	private static int count = 1;
 	private static long end;
 	private static boolean firstSense = false;
 	private static boolean isSend = false;
@@ -28,11 +27,17 @@ public class ClusterHead extends Thread {
 
 	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
-	private static HashMap<Long, Boolean> hmapACK = new HashMap<Long, Boolean>();
 	
 	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
 	private static HashMap<Integer, Frame> hmap2 = new HashMap<Integer, Frame>();
+	
 //	private static HashMap<Integer, Frame> hmap3 = new HashMap<Integer, Frame>();
+	
+//	Count SN untuk node dibwh CH
+	private static int a = 1;
+	private static int b = 1;
+//	private static int c = 1;
+
 	
 	public static void receive_send() throws Exception {
 		final AT86RF231 radio = RadioInit.initRadio();
@@ -55,15 +60,21 @@ public class ClusterHead extends Thread {
 					if (f != null) {
 						byte[] dg = f.getPayload();
 						String str = new String(dg, 0, dg.length);
-						if(str.equalsIgnoreCase("0")) {
+						if(str.equalsIgnoreCase("EXIT")) {
 							exit = true;
+							hmapCOUNT.clear();
+							a = 1;
+							b = 1;
+							hmap.clear();
+							hmap1.clear();
+							hmap2.clear();
 							break;
 						}
 						else if (str.equalsIgnoreCase("ON") && exit == false) {
 							boolean isOK = false;
 							while (!isOK) {
 								try {
-									message = "Node " + Integer.toHexString(ADDR_NODE2) + "ONLINE";
+									String message = "Node " + Integer.toHexString(ADDR_NODE2) + "ONLINE";
 									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 									frame.setSrcAddr(ADDR_NODE2);
@@ -81,7 +92,7 @@ public class ClusterHead extends Thread {
 								boolean isOK2 = false;
 								while (!isOK2) {
 									try {
-										message = "ON";
+										String message = "ON";
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
@@ -98,23 +109,22 @@ public class ClusterHead extends Thread {
 							}
 						} else if (str.equalsIgnoreCase("DETECT") && exit == false && firstSense == false) {
 							end = System.currentTimeMillis()+30000;
+							
 //							Sense Cluster Head 15x dan Simpan di HashMap
-//							QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
 							for (int i = 0; i < 15; i++) {
 								try {
-									message = "SENSE " + sn + " | " +Integer.toHexString(ADDR_NODE2)+" "+ s.sense();
-									hmap.put(count, message);
+									String message = "SENSE " +Integer.toHexString(ADDR_NODE2)+" "+ sn +" "+Time.currentTimeMillis()+" "+ s.sense();
+									hmap.put(i, message);
 								} catch (Exception e) {
 								}
 								sn++;
-								count++;
 							}
 //							Nerusin "DETECT" ke node dibawahnya
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								boolean isOK2 = false;
-								while (!isOK2) {
+								boolean isOK = false;
+								while (!isOK) {
 									try {
-										message = "DETECT";
+										String message = "DETECT";
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
@@ -124,7 +134,7 @@ public class ClusterHead extends Thread {
 										radio.setState(AT86RF231.STATE_TX_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
-										isOK2 = true;
+										isOK = true;
 									} catch (Exception e) {
 									}
 								}
@@ -136,14 +146,15 @@ public class ClusterHead extends Thread {
 								boolean isOK = false;
 								while (!isOK) {
 									try {
-										message = str;
+										String message = str;
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE1);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ON);
+//										radio.setState(AT86RF231.STATE_TX_ON);
+										radio.setState(AT86RF231.STATE_TX_ARET_ON);
 										frame.setPayload(message.getBytes());
 										radio.transmitFrame(frame);
 										isOK = true;
@@ -154,19 +165,27 @@ public class ClusterHead extends Thread {
 //							Kalau dapat str awalan 'S' Berarti dpt hasil sense dr node di bwhnya mskin ke hmap buat cadangan
 							if (str.charAt(0) == 'S') {
 //								buat ngitung berapa kali sensing yang udah dilakuin sama node sensornya
-								hmapCOUNT.put(f.getSrcAddr(), hmapCOUNT.get(f.getSrcAddr()) + 1);
-								hmap.put(count, str);
-								count++;
-//								!!!!!!!!
-//								if(f.addres)
-//								hmap1.put(arg0, arg1);
-//								hmap2.put();
+								if(f.getSrcAddr() == node_list[3]) {
+									hmapCOUNT.put(f.getSrcAddr(), a);
+									hmap1.put(a, f);
+									a++;
+								}
+								else if(f.getSrcAddr() == node_list[4]) {
+									hmapCOUNT.put(f.getSrcAddr(),b);
+									hmap2.put(b, f);
+									b++;
+								}
+//								else if(f.getSrcAddr() == node_list[5]) {
+//									hmapCOUNT.put(f.getSrcAddr(),c);
+//									hmap3.put(c, f);
+//									c++;
+//								}
 							}
 							if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) == 15) {
 								boolean isOK = false;
 								while (!isOK) {
 									try {
-										message = "ACK";
+										String message = "ACK";
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
@@ -181,13 +200,12 @@ public class ClusterHead extends Thread {
 										e.printStackTrace();
 									}
 								}
-								hmapACK.put(f.getSrcAddr(),true);
 							}
 							else if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) != 15) {
 								boolean isOK = false;
 								while (!isOK) {
 									try {
-										message = "NACK";
+										String message = "NACK";
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 										frame.setSrcAddr(ADDR_NODE2);
@@ -202,19 +220,25 @@ public class ClusterHead extends Thread {
 										e.printStackTrace();
 									}
 								}
+								if (f.getSrcAddr() == ADDR_NODE3[0]) {
+									a = 1;
+								} else if (f.getSrcAddr() == ADDR_NODE3[1]) {
+									b = 1;
+								}
 							}
 //							dpt ack/nack dr bs
 							if (str.equalsIgnoreCase("ACK")) {
-								hmap = new HashMap<Integer, String>();
-								hmapACK = new HashMap<Long, Boolean>();
-								
+								hmap.clear();
+								hmap1.clear();
+								hmap2.clear();
+//								hmap3.clear();
 								isSend = false;
 							} else {
 								for (int i = 1; i <= hmap.size(); i++) {
 									boolean isOK = false;
 									while (!isOK) {
 										try {
-											message = hmap.get(i);
+											String message = hmap.get(i);
 											Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
 													| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 											frame.setSrcAddr(ADDR_NODE2);
@@ -240,7 +264,7 @@ public class ClusterHead extends Thread {
 //			Kalau semua data udah ada di hashmap, kirim ke BS.
 			boolean AllClear = true;
 			for(int i = 0;i<ADDR_NODE3.length;i++) {
-				if(hmapACK.get(ADDR_NODE3[i])==false) {
+				if(hmapCOUNT.get(ADDR_NODE3[i])!=15) {
 					AllClear = false;
 				}
 			}
@@ -249,7 +273,7 @@ public class ClusterHead extends Thread {
 					boolean isOK = false;
 					while (!isOK) {
 						try {
-							message = hmap.get(i);
+							String message = hmap.get(i);
 							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST
 									| Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
 							frame.setSrcAddr(ADDR_NODE2);
@@ -265,6 +289,7 @@ public class ClusterHead extends Thread {
 					}
 				}
 				isSend = true;
+				hmapCOUNT.clear();
 			}
 //			TIMEOUT
 //			if (isSensing == true) {

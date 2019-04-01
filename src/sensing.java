@@ -27,9 +27,9 @@ public class sensing extends Thread {
 		AS.run();
 		HS.run(i2c);
 		
-		String message = TS.getTemp()+";";
-		message += AS.getTemp()+";";
-		message += HS.getTemp()+";";
+		String message = TS.getTemp()+"; ";
+		message += AS.getTemp()+"; ";
+		message += HS.getTemp()+"; ";
 		message += PS.getTemp();
 		return message;
 	}

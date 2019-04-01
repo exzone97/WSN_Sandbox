@@ -386,6 +386,10 @@
 	7		<init>()V
 	2		size()I
 
+1537		BaseStation$1
+	1527		run()V
+	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+
 1532		java/io/BufferedReader
 	475		readLine()Ljava/lang/String;
 	226		skip(J)J
@@ -474,6 +478,41 @@
 	5		computeHashCode(Ljava/lang/Object;)I
 	2		size()I
 
+946		BaseStation
+	384		sender()V
+	178		receive()V
+	136		singleNodeSense(I)V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	25		main([Ljava/lang/String;)V
+	12		access$108()I
+	12		access$408()I
+	12		access$608()I
+	12		access$808()I
+	12		access$1008()I
+	8		startUSART()V
+	7		access$102(I)I
+	7		access$402(I)I
+	7		access$602(I)I
+	7		access$802(I)I
+	7		access$1002(I)I
+	6		<init>()V
+	5		access$000()[I
+	5		access$100()I
+	5		access$200()Ljava/util/HashMap;
+	5		access$300()Ljava/util/HashMap;
+	5		access$400()I
+	5		access$500()Ljava/util/HashMap;
+	5		access$600()I
+	5		access$700()Ljava/util/HashMap;
+	5		access$800()I
+	5		access$900()Ljava/util/HashMap;
+	5		access$1000()I
+	5		access$1100()Ljava/util/HashMap;
+	5		access$1200()I
+	5		access$1300()I
+	5		access$1400()Ljava/io/OutputStream;
+	5		access$1500()Lcom/virtenio/driver/usart/USART;
+
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
 	158		toString()Ljava/lang/String;
@@ -508,17 +547,6 @@
 	16		getInt(Ljava/lang/String;I)I
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
-
-699		BaseStation
-	302		sender()V
-	178		receive()V
-	136		singleNodeSense(I)V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	25		main([Ljava/lang/String;)V
-	8		startUSART()V
-	6		<init>()V
-	5		access$000()Ljava/io/OutputStream;
-	5		access$100()Lcom/virtenio/driver/usart/USART;
 
 639		com/virtenio/misc/StringUtils
 	116		split(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
@@ -720,10 +748,6 @@
 	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
 	15		<init>(Ljava/io/InputStream;)V
 	10		isOpen()Z
-
-273		BaseStation$1
-	263		run()V
-	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
