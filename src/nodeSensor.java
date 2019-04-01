@@ -49,6 +49,7 @@ public class nodeSensor {
 							Time.setCurrentTimeMillis(currTime);
 						}
 						else if(str.equalsIgnoreCase("EXIT")) {
+							System.out.println(str);
 							try {
 								radio.reset();
 								radio.setChannel(COMMON_CHANNEL);
@@ -63,6 +64,7 @@ public class nodeSensor {
 							break;
 						}
 						else if(str.equalsIgnoreCase("WAKTU")) {
+							System.out.println(str);
 							boolean isOK = false;
 							while (!isOK) {
 								try {
@@ -102,8 +104,9 @@ public class nodeSensor {
 								}
 							}
 						} else if (str.equalsIgnoreCase("DETECT")) {
+							System.out.println(str);
 //							end = System.currentTimeMillis() + 30000;
-							end = Time.currentTimeMillis() + 30000;
+							end = Time.currentTimeMillis() + 35000;
 							int i = 0;
 							String message = "";
 							while (i <= 15 ) {
@@ -122,7 +125,7 @@ public class nodeSensor {
 										frame.setSrcPanId(COMMON_PANID);
 										frame.setDestAddr(ADDR_NODE1);
 										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ON);
+										radio.setState(AT86RF231.STATE_TX_ARET_ON);
 										frame.setPayload(message.getBytes());
 										hmap.put(i, frame);
 										System.out.println(message);
@@ -138,10 +141,11 @@ public class nodeSensor {
 							}
 						} else {
 							if (str.equalsIgnoreCase("ACK")) {
-								System.out.println("ACK");
+								System.out.println(str);
 								hmap.clear();
 								isSensing = false;
 							} else {
+								System.out.println(str);
 								for (int j = 0; j < hmap.size() ; j++) {
 									boolean isOK = false;
 									while (!isOK) {
@@ -164,7 +168,8 @@ public class nodeSensor {
 		reader.start();
 		while (reader.isAlive()) {
 			if (isSensing == true) {
-				if (System.currentTimeMillis() > end) {
+				if (Time.currentTimeMillis() > end) {
+					System.out.println("Timeout");
 					for (int i = 0; i <hmap.size(); i++) {
 						boolean isOK = false;
 						while (!isOK) {
@@ -179,7 +184,7 @@ public class nodeSensor {
 						Thread.sleep(1000);
 					}
 //					end = System.currentTimeMillis()+30000;
-					end = Time.currentTimeMillis()+30000;
+					end = Time.currentTimeMillis()+35000;
 				}
 			}
 		}

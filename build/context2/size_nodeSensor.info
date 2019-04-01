@@ -519,6 +519,10 @@
 	5		close()V
 	2		getConversionScale()F
 
+971		nodeSensor$1
+	957		run()V
+	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
 	158		toString()Ljava/lang/String;
@@ -553,10 +557,6 @@
 	16		getInt(Ljava/lang/String;I)I
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
-
-714		nodeSensor$1
-	700		run()V
-	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 650		com/virtenio/driver/device/ADT7410
 	121		readValue(II)I
@@ -762,6 +762,21 @@
 	5		isOpened()Z
 	1		close()V
 
+352		nodeSensor
+	181		receiver_sender()V
+	108		<init>()V
+	11		main([Ljava/lang/String;)V
+	10		access$708(LnodeSensor;)I
+	7		access$602(LnodeSensor;J)J
+	6		access$402(LnodeSensor;Z)Z
+	5		access$300()Ljava/util/HashMap;
+	4		access$000(LnodeSensor;)I
+	4		access$100(LnodeSensor;)I
+	4		access$200(LnodeSensor;)I
+	4		access$500(LnodeSensor;)I
+	4		access$700(LnodeSensor;)I
+	4		access$800(LnodeSensor;)Lsensing;
+
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
 	61		get(I)Ljava/lang/Object;
@@ -777,21 +792,6 @@
 	184		<init>()V
 	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
 	37		prepareFrame(III)Lcom/virtenio/radio/ieee_802_15_4/Frame;
-
-335		nodeSensor
-	164		receiver_sender()V
-	108		<init>()V
-	11		main([Ljava/lang/String;)V
-	10		access$508(LnodeSensor;)I
-	7		access$402(LnodeSensor;J)J
-	6		access$802(LnodeSensor;Z)Z
-	5		access$700()Ljava/util/HashMap;
-	4		access$000(LnodeSensor;)I
-	4		access$100(LnodeSensor;)I
-	4		access$200(LnodeSensor;)I
-	4		access$300(LnodeSensor;)I
-	4		access$500(LnodeSensor;)I
-	4		access$600(LnodeSensor;)Lsensing;
 
 256		com/virtenio/driver/i2c/NativeI2C
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
