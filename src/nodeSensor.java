@@ -16,10 +16,9 @@ public class nodeSensor {
 	private sensing s = new sensing();
 	private int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
-//	private String message;
 	private long end;
 	private boolean isSensing = false;
-//	private boolean exit = false;
+	private static boolean exit = false;
 
 	public void receiver_sender() throws Exception {
 		final AT86RF231 radio = RadioInit.initRadio();
@@ -50,17 +49,9 @@ public class nodeSensor {
 						}
 						else if(str.equalsIgnoreCase("EXIT")) {
 							System.out.println(str);
-							try {
-								radio.reset();
-								radio.setChannel(COMMON_CHANNEL);
-								radio.setPANId(COMMON_PANID);
-								radio.setShortAddress(ADDR_NODE2); // receiver
-							}
-							catch(Exception e) {
-							}
 							hmap.clear();
 							isSensing = false;
-//							exit = true;
+							exit = true;
 							break;
 						}
 						else if(str.equalsIgnoreCase("WAKTU")) {
@@ -105,7 +96,6 @@ public class nodeSensor {
 							}
 						} else if (str.equalsIgnoreCase("DETECT")) {
 							System.out.println(str);
-//							end = System.currentTimeMillis() + 30000;
 							end = Time.currentTimeMillis() + 35000;
 							int i = 0;
 							String message = "";
@@ -117,6 +107,7 @@ public class nodeSensor {
 											message = "END";
 										} else {
 											message = "SENSE " +Integer.toHexString(ADDR_NODE2)+" "+ sn +" "+Time.currentTimeMillis()+" "+ s.sense();
+											sn++;
 										}
 										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
 												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
@@ -135,7 +126,6 @@ public class nodeSensor {
 										e.printStackTrace();
 									}
 								}
-								sn++;
 								i++;
 								isSensing = true;
 							}
@@ -151,7 +141,7 @@ public class nodeSensor {
 									while (!isOK) {
 										try {
 											Frame frame = hmap.get(j);
-											radio.setState(AT86RF231.STATE_TX_ON);
+											radio.setState(AT86RF231.STATE_TX_ARET_ON);
 											radio.transmitFrame(frame);
 											isOK = true;
 											Thread.sleep(1000);
@@ -167,7 +157,7 @@ public class nodeSensor {
 		};
 		reader.start();
 		while (reader.isAlive()) {
-			if (isSensing == true) {
+			if (isSensing == true && exit == false) {
 				if (Time.currentTimeMillis() > end) {
 					System.out.println("Timeout");
 					for (int i = 0; i <hmap.size(); i++) {
@@ -175,7 +165,7 @@ public class nodeSensor {
 						while (!isOK) {
 							try {
 								Frame frame = hmap.get(i);
-								radio.setState(AT86RF231.STATE_TX_ON);
+								radio.setState(AT86RF231.STATE_TX_ARET_ON);
 								radio.transmitFrame(frame);
 								isOK = true;
 							} catch (Exception e) {
@@ -183,7 +173,6 @@ public class nodeSensor {
 						}
 						Thread.sleep(1000);
 					}
-//					end = System.currentTimeMillis()+30000;
 					end = Time.currentTimeMillis()+35000;
 				}
 			}
@@ -191,6 +180,7 @@ public class nodeSensor {
 	}
 
 	public static void main(String[] args) throws Exception {
+		exit = false;
 		new nodeSensor().receiver_sender();
 	}
 }

@@ -9,7 +9,7 @@ import com.virtenio.driver.device.at86rf231.*;
 import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
 import com.virtenio.driver.usart.USARTParams;
-import com.virtenio.io.Console;
+//import com.virtenio.io.Console;
 
 public class BaseStation extends Thread {
 
@@ -38,12 +38,9 @@ public class BaseStation extends Thread {
 		radio.setChannel(COMMON_CHANNEL);
 		radio.setPANId(COMMON_PANID);
 		radio.setShortAddress(ADDR_NODE2);
-		Console console = new Console();
 
 		while (true) {
 			int temp = usart.read();
-//			String s = console.readLine("ASDDF");
-//			int temp = Integer.parseInt(s);
 			if (temp == 0) {
 				boolean isOK = false;
 				while (!isOK) {
@@ -178,7 +175,6 @@ public class BaseStation extends Thread {
 						String str = new String(dg, 0, dg.length);
 						if (str.charAt(str.length() - 1) == 'E') {
 							String msg = "#" + str + "#";
-//							System.out.println(msg);
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
@@ -188,7 +184,6 @@ public class BaseStation extends Thread {
 						} 
 						if (str.charAt(0) == 'T') {
 							String msg = "#" + str + "#";
-//							System.out.println(msg);
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
@@ -241,7 +236,6 @@ public class BaseStation extends Thread {
 							}
 							if (f.getSrcAddr() == node_list[1]) {
 								for (int i = 1; i <= hmap1.size(); i++) {
-//									String msg = "#" + hmap1.get(i) + "#";
 									try {
 										Frame fr = hmap1.get(i);
 										byte[] bt = fr.getPayload();
@@ -250,17 +244,9 @@ public class BaseStation extends Thread {
 										out.write(msg.getBytes(), 0, msg.length()); //
 										usart.flush(); //
 										Thread.sleep(500);
-//										System.out.println(msg);
 									}
 									catch(Exception e) {	
 									}
-//									try {
-//										out.write(msg.getBytes(), 0, msg.length());
-//										Thread.sleep(1000);
-//										usart.flush();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
 								}
 								a = 1;
 								hmap1.clear();
@@ -270,7 +256,6 @@ public class BaseStation extends Thread {
 								}
 							} else if (f.getSrcAddr() == node_list[2]) {
 								for (int i = 1; i <= hmap2.size(); i++) {
-//									String msg = "#" + hmap2.get(i) + "#";
 									try {
 										Frame fr = hmap2.get(i);
 										byte[] bt = fr.getPayload();
@@ -279,17 +264,9 @@ public class BaseStation extends Thread {
 										out.write(msg.getBytes(), 0, msg.length()); //
 										usart.flush(); //
 										Thread.sleep(500);
-//										System.out.println(msg);
 									}
 									catch(Exception e) {
 									}
-//									try {
-//										out.write(msg.getBytes(), 0, msg.length());
-//										Thread.sleep(1000);
-//										usart.flush();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
 								}
 								b = 1;
 								hmap2.clear();
@@ -299,7 +276,6 @@ public class BaseStation extends Thread {
 								}
 							} else if (f.getSrcAddr() == node_list[3]) {
 								for (int i = 1; i <= hmap3.size(); i++) {
-//									String msg = "#" + hmap3.get(i) + "#";
 									try {
 										Frame fr = hmap3.get(i);
 										byte[] bt = fr.getPayload();
@@ -308,17 +284,9 @@ public class BaseStation extends Thread {
 										out.write(msg.getBytes(), 0, msg.length()); //
 										usart.flush(); //
 										Thread.sleep(500);
-//										System.out.println(msg);
 									}
 									catch(Exception e) {
 									}
-//									try {
-//										out.write(msg.getBytes(), 0, msg.length());
-//										Thread.sleep(1000);
-//										usart.flush();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
 								}
 								c = 1;
 								hmap3.clear();
@@ -328,7 +296,6 @@ public class BaseStation extends Thread {
 								}
 							} else if (f.getSrcAddr() == node_list[4]) {
 								for (int i = 1; i <= hmap4.size(); i++) {
-//									String msg = "#" + hmap4.get(i) + "#";
 									try {
 										Frame fr = hmap4.get(i);
 										byte[] bt = fr.getPayload();
@@ -337,17 +304,9 @@ public class BaseStation extends Thread {
 										out.write(msg.getBytes(), 0, msg.length()); //
 										usart.flush(); //
 										Thread.sleep(500);
-//										System.out.println(msg);
 									}
 									catch(Exception e) {
 									}
-//									try {
-//										out.write(msg.getBytes(), 0, msg.length());
-//										Thread.sleep(1000);
-//										
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
 								}
 								d = 1;
 								hmap4.clear();
@@ -357,7 +316,6 @@ public class BaseStation extends Thread {
 								}
 							} else if (f.getSrcAddr() == node_list[5]) {
 								for (int i = 1; i <= hmap5.size(); i++) {
-//									String msg = "#" + hmap5.get(i) + "#";
 									try {
 										Frame fr = hmap5.get(i);
 										byte[] bt = fr.getPayload();
@@ -366,17 +324,9 @@ public class BaseStation extends Thread {
 										out.write(msg.getBytes(), 0, msg.length());
 										usart.flush();
 										Thread.sleep(500);
-//										System.out.println(msg);
 									}
 									catch(Exception e) {
 									}
-//									try {
-//										out.write(msg.getBytes(), 0, msg.length());
-//										Thread.sleep(1000);
-//										usart.flush();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
 								}
 								e = 1;
 								hmap5.clear();
@@ -424,21 +374,6 @@ public class BaseStation extends Thread {
 			}
 		};
 		reader.start();
-//		while (reader.isAlive() && firstSense == true) {
-//			if (exit == false) {
-//				if (hmap1.isEmpty()) {
-//					singleNodeSense(node_list[1]);
-//				} else if (hmap2.isEmpty()) {
-//					singleNodeSense(node_list[2]);
-//				} else if (hmap3.isEmpty()) {
-//					singleNodeSense(node_list[3]);
-//				} else if (hmap4.isEmpty()) {
-//					singleNodeSense(node_list[4]);
-//				} else if (hmap5.isEmpty()) {
-//					singleNodeSense(node_list[5]);
-//				}
-//			}
-//		}
 	}
 
 	public static void singleNodeSense(int address) throws Exception {

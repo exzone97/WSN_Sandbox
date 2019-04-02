@@ -519,8 +519,8 @@
 	5		close()V
 	2		getConversionScale()F
 
-971		nodeSensor$1
-	957		run()V
+927		nodeSensor$1
+	913		run()V
 	14		<init>(LnodeSensor;Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
 
 807		java/util/AbstractMap
@@ -762,17 +762,17 @@
 	5		isOpened()Z
 	1		close()V
 
-352		nodeSensor
-	181		receiver_sender()V
+367		nodeSensor
+	188		receiver_sender()V
 	108		<init>()V
-	11		main([Ljava/lang/String;)V
+	16		main([Ljava/lang/String;)V
 	10		access$708(LnodeSensor;)I
+	7		access$202(Z)Z
 	7		access$602(LnodeSensor;J)J
-	6		access$402(LnodeSensor;Z)Z
-	5		access$300()Ljava/util/HashMap;
-	4		access$000(LnodeSensor;)I
-	4		access$100(LnodeSensor;)I
-	4		access$200(LnodeSensor;)I
+	6		access$102(LnodeSensor;Z)Z
+	5		access$000()Ljava/util/HashMap;
+	4		access$300(LnodeSensor;)I
+	4		access$400(LnodeSensor;)I
 	4		access$500(LnodeSensor;)I
 	4		access$700(LnodeSensor;)I
 	4		access$800(LnodeSensor;)Lsensing;

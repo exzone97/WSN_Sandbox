@@ -390,22 +390,6 @@
 	7		<init>()V
 	2		size()I
 
-1532		java/io/BufferedReader
-	475		readLine()Ljava/lang/String;
-	226		skip(J)J
-	221		read([CII)I
-	155		fillBuf()I
-	86		read()I
-	74		mark(I)V
-	72		reset()V
-	66		ready()Z
-	50		close()V
-	38		<init>(Ljava/io/Reader;I)V
-	30		chompNewline()V
-	27		<init>(Ljava/io/Reader;)V
-	10		isClosed()Z
-	2		markSupported()Z
-
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
 	145		programPage(I[BII)V
@@ -442,8 +426,8 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
-1151		BaseStation
-	681		sender()V
+1143		BaseStation
+	673		sender()V
 	140		singleNodeSense(I)V
 	61		main([Ljava/lang/String;)V
 	46		receive()V
@@ -711,19 +695,6 @@
 	2		getReceiveTimeout()I
 	0		command(Lcom/virtenio/driver/usart/NativeUSART;I)I
 
-341		com/virtenio/io/Console
-	77		readLong(Ljava/lang/String;)J
-	67		readLine(Ljava/lang/String;)Ljava/lang/String;
-	37		<init>(Ljava/io/Reader;Ljava/io/PrintStream;)V
-	34		<init>()V
-	30		readInt(Ljava/lang/String;II)I
-	29		readLong(Ljava/lang/String;JJ)J
-	27		readBool(Ljava/lang/String;)Z
-	21		readLine(Ljava/lang/String;Z)Ljava/lang/String;
-	7		readInt(Ljava/lang/String;)I
-	6		print(Ljava/lang/String;)V
-	6		println(Ljava/lang/String;)V
-
 339		com/virtenio/preon32/examples/common/RadioInit
 	184		<init>()V
 	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
@@ -739,15 +710,6 @@
 	11		toArray()[Ljava/lang/Object;
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
-
-283		java/io/InputStreamReader
-	78		read()I
-	55		read([CII)I
-	49		ready()Z
-	47		close()V
-	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
-	15		<init>(Ljava/io/InputStream;)V
-	10		isOpen()Z
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
