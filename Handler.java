@@ -53,7 +53,7 @@ public class Handler {
 
 	public void init() throws Exception {
 		try {
-			Preon32Helper nodeHelper = new Preon32Helper("COM6", 115200);
+			Preon32Helper nodeHelper = new Preon32Helper("COM3", 115200);
 			DataConnection conn = nodeHelper.runModule("basestation");
 			BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 

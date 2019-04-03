@@ -1,156 +1,150 @@
-import com.virtenio.preon32.examples.common.RadioInit;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
 
 import java.util.HashMap;
-import com.virtenio.driver.device.at86rf231.*;
+import com.virtenio.misc.PropertyHelper;
+import com.virtenio.driver.device.at86rf231.AT86RF231;
+import com.virtenio.driver.device.at86rf231.AT86RF231RadioDriver;
+import com.virtenio.preon32.node.Node;
+import com.virtenio.radio.ieee_802_15_4.FrameIO;
+import com.virtenio.radio.ieee_802_15_4.RadioDriver;
+import com.virtenio.radio.ieee_802_15_4.RadioDriverFrameIO;
 
 public class nodeSensor {
+	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
 
-	private int COMMON_CHANNEL = 16;
-	private int COMMON_PANID = 0xCAFF;
-	private int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xDAAB, 0xDAAC, 0xDAAD, 0xDAAE };
+	private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
+			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xDAAB),
+			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
+			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
-	private int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
-	private int ADDR_NODE2 = node_list[1]; // NODE DIRINYA
-	private sensing s = new sensing();
-	private int sn = 1;
+	private static int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
+	private static int ADDR_NODE2 = node_list[1]; // NODE DIRINYA
+	private static sensing s = new sensing();
+	private static int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
-	private long end;
-	private boolean isSensing = false;
+	private static long end;
+	private static boolean isSensing = false;
 	private static boolean exit = false;
 
-	public void receiver_sender() throws Exception {
-		final AT86RF231 radio = RadioInit.initRadio();
-		radio.reset();
-		radio.setChannel(COMMON_CHANNEL);
-		radio.setPANId(COMMON_PANID);
-		radio.setShortAddress(ADDR_NODE2); // receiver
+	public static void runs() {
+		try {
+			AT86RF231 t = Node.getInstance().getTransceiver();
+			t.open();
+			t.setAddressFilter(COMMON_PANID, ADDR_NODE2, ADDR_NODE2, false);
+			final RadioDriver radioDriver = new AT86RF231RadioDriver(t);
+			final FrameIO fio = new RadioDriverFrameIO(radioDriver);
 
+			receive(fio);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void receive(final FrameIO fio) throws Exception {
 		Thread reader = new Thread() {
-			@Override
 			public void run() {
+				Frame frame = new Frame();
 				while (true) {
-					Frame f = null;
 					try {
-						f = new Frame();
-						radio.setState(AT86RF231.STATE_RX_AACK_ON);
-						radio.waitForFrame(f);
-					} catch (Exception e) {
-					}
-					if (f != null) {
-						byte[] dg = f.getPayload();
+						fio.receive(frame);
+						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
-//						dpt time dr basestation dan set waktu dirinya.
-						if(str.charAt(0)=='T') {
+						if (str.charAt(0) == 'T') {
 							String tm = str.substring(1);
 							long currTime = Long.parseLong(tm);
 							Time.setCurrentTimeMillis(currTime);
-						}
-						else if(str.equalsIgnoreCase("EXIT")) {
+						} else if (str.equalsIgnoreCase("EXIT")) {
 							System.out.println(str);
 							hmap.clear();
 							isSensing = false;
 							exit = true;
 							break;
-						}
-						else if(str.equalsIgnoreCase("WAKTU")) {
-							System.out.println(str);
-							boolean isOK = false;
-							while (!isOK) {
-								try {
-									String message = "Time " + Integer.toHexString(ADDR_NODE2) +" "+ Time.currentTimeMillis();
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(ADDR_NODE1);
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
-									frame.setPayload(message.getBytes());
-									System.out.println(message);
-									radio.transmitFrame(frame);
-									isOK = true;
-								} catch (Exception e) {
-								}
+						} else if (str.equalsIgnoreCase("WAKTU")) {
+							String message = "Time " + Integer.toHexString(ADDR_NODE2) + " " + Time.currentTimeMillis();
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(ADDR_NODE1);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload(message.getBytes());
+							System.out.println(message);
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
 							}
-						}
-						else if (str.equalsIgnoreCase("ON")) {
-							boolean isOK = false;
-							while (!isOK) {
-								try {
-									String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(ADDR_NODE1);
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ARET_ON);
-									frame.setPayload(message.getBytes());
-									System.out.println(message);
-									radio.transmitFrame(frame);
-									isOK = true;
-								} catch (Exception e) {
-								}
+						} else if (str.equalsIgnoreCase("ON")) {
+							String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(ADDR_NODE1);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload(message.getBytes());
+							System.out.println(message);
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
 							}
 						} else if (str.equalsIgnoreCase("DETECT")) {
+							end = Time.currentTimeMillis() + 20000;
 							System.out.println(str);
-							end = Time.currentTimeMillis() + 35000;
-							int i = 0;
 							String message = "";
-							while (i <= 15 ) {
-								boolean isOK = false;
-								while (!isOK) {
-									try {
-										if (i == 15) {
-											message = "END";
-										} else {
-											message = "SENSE " +Integer.toHexString(ADDR_NODE2)+" "+ sn +" "+Time.currentTimeMillis()+" "+ s.sense();
-											sn++;
-										}
-										Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-												| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-										frame.setSrcAddr(ADDR_NODE2);
-										frame.setSequenceNumber(sn);
-										frame.setSrcPanId(COMMON_PANID);
-										frame.setDestAddr(ADDR_NODE1);
-										frame.setDestPanId(COMMON_PANID);
-										radio.setState(AT86RF231.STATE_TX_ARET_ON);
-										frame.setPayload(message.getBytes());
-										hmap.put(i, frame);
-										System.out.println(message);
-										radio.transmitFrame(frame);
-										isOK = true;
-									} catch (Exception e) {
-										e.printStackTrace();
+
+							int i = 0;
+							while (i <= 15) {
+//								System.out.println(i);
+								try {
+									if (i == 15) {
+										message = "END";
+									} else {
+										message = "SENSE " + Integer.toHexString(ADDR_NODE2) + " " + sn + " "
+												+ Time.currentTimeMillis() + " " + s.sense();
+										sn++;
 									}
+									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16
+											| Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+									final Frame testFrame = new Frame(frameControl);
+									testFrame.setDestPanId(COMMON_PANID);
+									testFrame.setDestAddr(ADDR_NODE1);
+									testFrame.setSrcAddr(ADDR_NODE2);
+									testFrame.setPayload(message.getBytes());
+									System.out.println(message);
+									hmap.put(i, testFrame);
+									try {
+										fio.transmit(testFrame);
+										Thread.sleep(50);
+									} catch (Exception e) {
+									}
+									i++;
+									isSensing = true;
+								} catch (Exception e) {
 								}
-								i++;
-								isSensing = true;
 							}
 						} else {
+							System.out.println(str);
 							if (str.equalsIgnoreCase("ACK")) {
-								System.out.println(str);
+//								System.out.println("ACK");
 								hmap.clear();
 								isSensing = false;
 							} else {
-								System.out.println(str);
-								for (int j = 0; j < hmap.size() ; j++) {
-									boolean isOK = false;
-									while (!isOK) {
-										try {
-											Frame frame = hmap.get(j);
-											radio.setState(AT86RF231.STATE_TX_ARET_ON);
-											radio.transmitFrame(frame);
-											isOK = true;
-											Thread.sleep(1000);
-										} catch (Exception e) {
-										}
+//								System.out.println("NACK");
+								for (int j = 0; j < hmap.size(); j++) {
+									final Frame testFrame = hmap.get(j);
+									Thread.sleep(50);
+									try {
+										fio.transmit(testFrame);
+										Thread.sleep(50);
+									} catch (Exception e) {
 									}
 								}
 							}
 						}
+					} catch (Exception e) {
 					}
 				}
 			}
@@ -160,20 +154,16 @@ public class nodeSensor {
 			if (isSensing == true && exit == false) {
 				if (Time.currentTimeMillis() > end) {
 					System.out.println("Timeout");
-					for (int i = 0; i <hmap.size(); i++) {
-						boolean isOK = false;
-						while (!isOK) {
-							try {
-								Frame frame = hmap.get(i);
-								radio.setState(AT86RF231.STATE_TX_ARET_ON);
-								radio.transmitFrame(frame);
-								isOK = true;
-							} catch (Exception e) {
-							}
+					for (int i = 0; i < hmap.size(); i++) {
+						final Frame testFrame = hmap.get(i);
+						Thread.sleep(50);
+						try {
+							fio.transmit(testFrame);
+							Thread.sleep(50);
+						} catch (Exception e) {
 						}
-						Thread.sleep(1000);
 					}
-					end = Time.currentTimeMillis()+35000;
+					end = Time.currentTimeMillis() + 20000;
 				}
 			}
 		}
@@ -181,6 +171,6 @@ public class nodeSensor {
 
 	public static void main(String[] args) throws Exception {
 		exit = false;
-		new nodeSensor().receiver_sender();
+		runs();
 	}
 }

@@ -357,9 +357,9 @@
 	3		isDataPending()Z
 	2		getBuffer()[B
 
-1857		BaseStation$1
-	1847		run()V
-	10		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+1795		BaseStation$3
+	1785		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1645		java/util/ArrayList
 	214		addAll(ILjava/util/Collection;)Z
@@ -425,41 +425,6 @@
 	2		getPageSize()I
 	2		getSectorSize()I
 	2		getBlockSize()I
-
-1143		BaseStation
-	673		sender()V
-	140		singleNodeSense(I)V
-	61		main([Ljava/lang/String;)V
-	46		receive()V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	12		access$308()I
-	12		access$608()I
-	12		access$808()I
-	12		access$1008()I
-	12		access$1208()I
-	8		startUSART()V
-	7		access$302(I)I
-	7		access$602(I)I
-	7		access$802(I)I
-	7		access$1002(I)I
-	7		access$1202(I)I
-	6		<init>()V
-	5		access$000()Ljava/io/OutputStream;
-	5		access$100()Lcom/virtenio/driver/usart/USART;
-	5		access$200()[I
-	5		access$300()I
-	5		access$400()Ljava/util/HashMap;
-	5		access$500()Ljava/util/HashMap;
-	5		access$600()I
-	5		access$700()Ljava/util/HashMap;
-	5		access$800()I
-	5		access$900()Ljava/util/HashMap;
-	5		access$1000()I
-	5		access$1100()Ljava/util/HashMap;
-	5		access$1200()I
-	5		access$1300()Ljava/util/HashMap;
-	5		access$1400()I
-	5		access$1500()I
 
 1091		java/util/HashMap
 	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
@@ -532,6 +497,10 @@
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 
+676		BaseStation$2
+	666		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 639		com/virtenio/misc/StringUtils
 	116		split(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
 	115		splitByChars(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
@@ -542,6 +511,16 @@
 	46		indexOfChars(Ljava/lang/String;Ljava/lang/String;I)I
 	9		join(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
+
+604		com/virtenio/radio/ieee_802_15_4/RadioDriverFrameIO
+	245		receive(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	92		transmit(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	89		rxBeforeTx()V
+	71		available()I
+	53		<init>(Lcom/virtenio/radio/ieee_802_15_4/RadioDriver;)V
+	52		<init>(Lcom/virtenio/radio/ieee_802_15_4/RadioDriver;I)V
+	1		close()V
+	1		flush()V
 
 596		com/virtenio/net/NetAddress
 	138		<init>(Ljava/lang/String;)V
@@ -604,6 +583,44 @@
 	13		isEmpty()Z
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
+
+495		BaseStation
+	92		singleNodeSense(ILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	79		runs()V
+	61		main([Ljava/lang/String;)V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	12		access$508()I
+	12		access$608()I
+	12		access$708()I
+	12		access$808()I
+	12		access$908()I
+	8		startUSART()V
+	7		access$402(Z)Z
+	7		access$502(I)I
+	7		access$602(I)I
+	7		access$702(I)I
+	7		access$802(I)I
+	7		access$902(I)I
+	7		access$1002(Z)Z
+	6		<init>()V
+	5		access$000()Lcom/virtenio/driver/usart/USART;
+	5		access$100()[I
+	5		access$200()I
+	5		access$300()I
+	5		access$1100()Ljava/util/HashMap;
+	5		access$1200()Ljava/util/HashMap;
+	5		access$1300()Ljava/util/HashMap;
+	5		access$1400()Ljava/util/HashMap;
+	5		access$1500()Ljava/util/HashMap;
+	5		access$1600()Ljava/util/HashMap;
+	5		access$1700()Ljava/io/OutputStream;
+	5		access$500()I
+	5		access$600()I
+	5		access$700()I
+	5		access$800()I
+	5		access$900()I
 
 452		java/util/AbstractList
 	89		equals(Ljava/lang/Object;)Z
@@ -668,6 +685,37 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
+365		com/virtenio/radio/ieee_802_15_4/RadioDriver
+	95		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;J)Z
+	47		transmitFrame()V
+	31		setPANId(I)V
+	31		setShortAddress(I)V
+	22		setAddressFilter(IIJZ)V
+	18		setRxMode(ZZ)V
+	16		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	13		clearAddressFilter()V
+	10		setExtendedAddress(J)V
+	9		setIAmCoordinator(Z)V
+	6		<init>()V
+	5		sleep()V
+	5		off()V
+	5		rx()V
+	5		tx()V
+	5		setChannel(I)V
+	5		setMaxFrameRetries(I)V
+	5		setPendingData(Z)V
+	5		prepareFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	5		waitForEvent(J)V
+	3		getExtendedAddress()J
+	3		getIAmCoordinator()Z
+	3		getMaxFrameRetries()I
+	3		getPendingData()Z
+	2		getMode()I
+	2		getPANId()I
+	2		getShortAddress()I
+	2		getChannel()I
+	2		available()I
+
 345		com/virtenio/driver/usart/NativeUSART
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
 	26		read([BII)I
@@ -695,11 +743,6 @@
 	2		getReceiveTimeout()I
 	0		command(Lcom/virtenio/driver/usart/NativeUSART;I)I
 
-339		com/virtenio/preon32/examples/common/RadioInit
-	184		<init>()V
-	118		initRadio()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
-	37		prepareFrame(III)Lcom/virtenio/radio/ieee_802_15_4/Frame;
-
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
 	61		get(I)Ljava/lang/Object;
@@ -710,6 +753,22 @@
 	11		toArray()[Ljava/lang/Object;
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
+
+335		com/virtenio/misc/FixedFifo
+	132		remove(I)Ljava/lang/Object;
+	35		remove()Ljava/lang/Object;
+	33		put(Ljava/lang/Object;)Z
+	32		clear()V
+	28		peek(I)Ljava/lang/Object;
+	20		<init>(I)V
+	12		isFull()Z
+	10		peek()Ljava/lang/Object;
+	10		isEmpty()Z
+	9		iterator()Ljava/util/Iterator;
+	5		freeCapacity()I
+	4		access$000(Lcom/virtenio/misc/FixedFifo;)I
+	3		capacity()I
+	2		size()I
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
@@ -739,6 +798,27 @@
 	10		hasPrevious()Z
 	4		nextIndex()I
 	2		previousIndex()I
+
+228		com/virtenio/driver/device/at86rf231/AT86RF231RadioDriver
+	29		rx()V
+	20		setAddressFilter(IIJZ)V
+	14		setExtendedAddress(J)V
+	14		available()I
+	12		setPANId(I)V
+	12		setShortAddress(I)V
+	12		setIAmCoordinator(Z)V
+	12		setChannel(I)V
+	12		setMaxFrameRetries(I)V
+	12		setPendingData(Z)V
+	12		sleep()V
+	12		off()V
+	12		tx()V
+	9		<init>(Lcom/virtenio/driver/device/at86rf231/AT86RF231;)V
+	9		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;J)Z
+	8		fetchFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)Z
+	7		transmitFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	7		prepareFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
+	3		getTransceiver()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
 
 226		com/virtenio/driver/gpio/NativeGPIO
 	39		open(II)V
@@ -978,6 +1058,12 @@
 54		com/virtenio/preon32/node/Node12
 	54		<init>(Ljava/lang/String;)V
 
+51		com/virtenio/misc/FixedFifo$1
+	14		<init>(Lcom/virtenio/misc/FixedFifo;)V
+	14		hasNext()Z
+	14		next()Ljava/lang/Object;
+	9		remove()V
+
 50		com/virtenio/driver/device/M25P80
 	44		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
 	6		eraseSector(I)V
@@ -1002,12 +1088,24 @@
 	5		hasNext()Z
 	5		remove()V
 
+35		BaseStation$1
+	25		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 34		java/util/HashMap$2
 	9		<init>(Ljava/util/HashMap;)V
 	9		iterator()Ljava/util/Iterator;
 	6		contains(Ljava/lang/Object;)Z
 	5		size()I
 	5		clear()V
+
+31		com/virtenio/radio/ieee_802_15_4/FrameIO
+	18		<init>()V
+	6		setReceiveTimeout(J)V
+	3		getReceiveTimeout()J
+	2		available()I
+	1		close()V
+	1		flush()V
 
 30		com/virtenio/driver/NativeDeviceDriver
 	10		<init>(I)V
@@ -1101,11 +1199,15 @@
 	8		next()Ljava/lang/Object;
 	6		<init>(Ljava/util/HashMap;)V
 
+13		java/util/NoSuchElementException
+	7		<init>(Ljava/lang/String;)V
+	6		<init>()V
+
 13		java/util/ConcurrentModificationException
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
-13		java/util/NoSuchElementException
+13		com/virtenio/io/TimeoutException
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
