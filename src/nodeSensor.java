@@ -19,7 +19,7 @@ public class nodeSensor {
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
 	private static int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
-	private static int ADDR_NODE2 = node_list[1]; // NODE DIRINYA
+	private static int ADDR_NODE2 = node_list[2]; // NODE DIRINYA
 	private static sensing s = new sensing();
 	private static int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
@@ -91,15 +91,15 @@ public class nodeSensor {
 							} catch (Exception e) {
 							}
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = Time.currentTimeMillis() + 20000;
+							end = Time.currentTimeMillis() + 8000;
 							System.out.println(str);
 							String message = "";
 
 							int i = 0;
-							while (i <= 15) {
+							while (i <= 5) {
 //								System.out.println(i);
 								try {
-									if (i == 15) {
+									if (i == 5) {
 										message = "END";
 									} else {
 										message = "SENSE " + Integer.toHexString(ADDR_NODE2) + " " + sn + " "
@@ -163,7 +163,7 @@ public class nodeSensor {
 						} catch (Exception e) {
 						}
 					}
-					end = Time.currentTimeMillis() + 20000;
+					end = Time.currentTimeMillis() + 8000;
 				}
 			}
 		}

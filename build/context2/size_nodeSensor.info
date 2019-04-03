@@ -519,8 +519,8 @@
 	5		close()V
 	2		getConversionScale()F
 
-813		nodeSensor$1
-	803		run()V
+811		nodeSensor$1
+	801		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 807		java/util/AbstractMap

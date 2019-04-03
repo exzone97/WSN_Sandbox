@@ -237,7 +237,7 @@ public class BaseStation extends Thread {
 								e++;
 							}
 						} else if (str.charAt(0) == 'E') {
-							if (hmapCOUNT.get(frame.getSrcAddr()) == 15) {
+							if (hmapCOUNT.get(frame.getSrcAddr()) == 5) {
 //								System.out.println("ACK");
 								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
 										| Frame.SRC_ADDR_16;
@@ -252,7 +252,7 @@ public class BaseStation extends Thread {
 								} catch (Exception e) {
 								}
 								if (frame.getSrcAddr() == node_list[1]) {
-									for (int i = 1; i <= 15; i++) {
+									for (int i = 1; i <= 5; i++) {
 										String s = hmap1.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -270,7 +270,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[2]) {
-									for (int i = 1; i <= 15; i++) {
+									for (int i = 1; i <= 5; i++) {
 										String s = hmap2.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -288,7 +288,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[3]) {
-									for (int i = 1; i <= 15; i++) {
+									for (int i = 1; i <= 5; i++) {
 										String s = hmap3.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -306,7 +306,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[4]) {
-									for (int i = 1; i <= 15; i++) {
+									for (int i = 1; i <= 5; i++) {
 										String s = hmap4.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -324,7 +324,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[5]) {
-									for (int i = 1; i < 15; i++) {
+									for (int i = 1; i < 5; i++) {
 										String s = hmap5.get(i);
 										String msg = "#"+s+"#";
 										try {
