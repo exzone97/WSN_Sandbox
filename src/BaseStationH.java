@@ -1,184 +1,173 @@
-import com.virtenio.preon32.examples.common.RadioInit;
+
 import com.virtenio.preon32.examples.common.USARTConstants;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
 
+import com.virtenio.driver.device.at86rf231.AT86RF231;
+import com.virtenio.driver.device.at86rf231.AT86RF231RadioDriver;
+import com.virtenio.misc.PropertyHelper;
+import com.virtenio.preon32.node.Node;
+import com.virtenio.radio.ieee_802_15_4.FrameIO;
+import com.virtenio.radio.ieee_802_15_4.RadioDriver;
+import com.virtenio.radio.ieee_802_15_4.RadioDriverFrameIO;
+
 import java.io.OutputStream;
 import java.util.HashMap;
-import com.virtenio.driver.device.at86rf231.*;
 import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
+import com.virtenio.driver.usart.USARTException;
 import com.virtenio.driver.usart.USARTParams;
+//import com.virtenio.io.Console;
 
 public class BaseStationH extends Thread {
 
-	private static int COMMON_CHANNEL = 16;
-	private static int COMMON_PANID = 0xCAFF;
-//	DAAA , EAAA = CH
-//	DAAB,DAAC = NS dari CH 1
-//	EAAB = NS dari CH 2
-	private static int[] node_list = new int[] { 0xABFE, 0xDAAA, 0xEAAA, 0xDAAB, 0xDAAC, 0xEAAB };
+	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
+	private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
+			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xCAAA) };
 
-	private static int ADDR_NODE2 = node_list[0];
+	private static int ADDR_NODE2 = node_list[0]; // NODE DIRINYA (BS)
 
+	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
+	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
+	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
+	private static int a, b;
 	private static USART usart;
 	private static OutputStream out;
-	private static boolean exit = false;
-	private static boolean firstSense = false;
+	private static boolean exit;
+	private static boolean firstSense;
 
-	private static String message;
-	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
-
-	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
-	private static HashMap<Integer, Frame> hmap2 = new HashMap<Integer, Frame>();
-
-	private static int a, b = 1;
-
-	public static void sender() throws Exception {
-		final AT86RF231 radio = RadioInit.initRadio();
-		radio.reset();
-		radio.setChannel(COMMON_CHANNEL);
-		radio.setPANId(COMMON_PANID);
-		radio.setShortAddress(ADDR_NODE2);
-
-		while (true) {
-			int temp = usart.read();
-			if (temp == 0) {
-				for (int i = 1; i <= 2; i++) {
-					boolean isOK = false;
-					while (!isOK) {
-						try {
-							String message = "EXIT";
-							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-									| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-							frame.setSrcAddr(ADDR_NODE2);
-							frame.setSrcPanId(COMMON_PANID);
-							frame.setDestAddr(node_list[i]);
-							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ON);
-							frame.setPayload(message.getBytes());
-							radio.transmitFrame(frame);
-							isOK = true;
-						} catch (Exception e) {
-						}
+	public static void runs() {
+		try {
+			AT86RF231 t = Node.getInstance().getTransceiver();
+			t.open();
+			t.setAddressFilter(COMMON_PANID, ADDR_NODE2, ADDR_NODE2, false);
+			final RadioDriver radioDriver = new AT86RF231RadioDriver(t);
+			final FrameIO fio = new RadioDriverFrameIO(radioDriver);
+			Thread thread = new Thread() {
+				public void run() {
+					try {
+						send(fio);
+						receive(fio);
+					} catch (Exception e) {
 					}
 				}
-				exit = true;
-				a = 1;
-				b = 1;
-				firstSense = false;
-				hmapCOUNT.clear();
-				hmap1.clear();
-				hmap2.clear();
-				break;
-			} else if (temp == 1) {
-				for (int i = 1; i <= 2; i++) {
-					boolean isOK = false;
-					while (!isOK) {
-						try {
-							String message = "ON";
-							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-									| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-							frame.setSrcAddr(ADDR_NODE2);
-							frame.setSrcPanId(COMMON_PANID);
-							frame.setDestAddr(node_list[i]);
-							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ON);
-							frame.setPayload(message.getBytes());
-							radio.transmitFrame(frame);
-							isOK = true;
-						} catch (Exception e) {
-						}
+			};
+			thread.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void send(final FrameIO fio) throws Exception {
+		new Thread() {
+			public void run() {
+				while (true) {
+//					int temp = 100;
+					int temp = 0;
+					try {
+						temp = usart.read();
+					} catch (USARTException e1) {
+						e1.printStackTrace();
 					}
-				}
-			} else if (temp == 2) {
-				long currTime = Time.currentTimeMillis();
-				for (int i = 1; i <= 2; i++) {
-					boolean isOK = false;
-					while (!isOK) {
-						try {
-							String message = "T" + currTime;
-							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-									| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-							frame.setSrcAddr(ADDR_NODE2);
-							frame.setSrcPanId(COMMON_PANID);
-							frame.setDestAddr(node_list[i]);
-							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ON);
-							frame.setPayload(message.getBytes());
-							radio.transmitFrame(frame);
-							isOK = true;
-						} catch (Exception e) {
+					if (temp == 0) {
+						for (int i = 1; i < node_list.length; i++) {
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(node_list[i]);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload("EXIT".getBytes());
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
+							}
 						}
-					}
-				}
-			} else if (temp == 3) {
-				for (int i = 0; i <= 2; i++) {
-					boolean isOK = false;
-					while (!isOK) {
-						try {
-							String message = "WAKTU";
-							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-									| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-							frame.setSrcAddr(ADDR_NODE2);
-							frame.setSrcPanId(COMMON_PANID);
-							frame.setDestAddr(node_list[i]);
-							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ON);
-							frame.setPayload(message.getBytes());
-							radio.transmitFrame(frame);
-							isOK = true;
-						} catch (Exception e) {
+						exit = true;
+						a = 1;
+						b = 1;
+						firstSense = false;
+						hmapCOUNT.clear();
+						hmap1.clear();
+						hmap2.clear();
+						break;
+					} else if (temp == 1) {
+						for (int i = 1; i < node_list.length; i++) {
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(node_list[i]);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload("ON".getBytes());
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
+							}
 						}
-					}
-				}
-			} else if (temp == 4) {
-				firstSense = true;
-				for(int i = 1;i<=2;i++) {
-					boolean isOK = false;
-					while (!isOK) {
-						try {
-							String message = "DETECT";
-							Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-									| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-							frame.setSrcAddr(ADDR_NODE2);
-							frame.setSrcPanId(COMMON_PANID);
-							frame.setDestAddr(node_list[i]);
-							frame.setDestPanId(COMMON_PANID);
-							radio.setState(AT86RF231.STATE_TX_ON);
-							frame.setPayload(message.getBytes());
-							radio.transmitFrame(frame);
-							isOK = true;
-						} catch (Exception e) {
+					} else if (temp == 2) {
+						long currTime = Time.currentTimeMillis();
+						for (int i = 1; i < node_list.length; i++) {
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(node_list[i]);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload(("Q" + currTime).getBytes());
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
+							}
+						}
+					} else if (temp == 3) {
+						for (int i = 1; i < node_list.length; i++) {
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(node_list[i]);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload("WAKTU".getBytes());
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
+							}
+						}
+					} else if (temp == 4) {
+						firstSense = true;
+						for (int i = 1; i < node_list.length; i++) {
+							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+									| Frame.SRC_ADDR_16;
+							final Frame testFrame = new Frame(frameControl);
+							testFrame.setDestPanId(COMMON_PANID);
+							testFrame.setDestAddr(node_list[i]);
+							testFrame.setSrcAddr(ADDR_NODE2);
+							testFrame.setPayload("DETECT".getBytes());
+							try {
+								fio.transmit(testFrame);
+								Thread.sleep(50);
+							} catch (Exception e) {
+							}
 						}
 					}
 				}
 			}
-			receiver();
-		}
-
+		}.start();
 	}
 
-	public static void receiver() throws Exception {
-		final AT86RF231 radio = RadioInit.initRadio();
-		radio.reset();
-		radio.setChannel(COMMON_CHANNEL);
-		radio.setPANId(COMMON_PANID);
-		radio.setShortAddress(ADDR_NODE2);
-
-		Thread reader = new Thread() {
+	public static void receive(final FrameIO fio) throws Exception {
+		Thread receive = new Thread() {
 			public void run() {
+				Frame frame = new Frame();
 				while (true) {
-					Frame f = null;
 					try {
-						f = new Frame();
-						radio.setState(AT86RF231.STATE_RX_AACK_ON);
-						radio.waitForFrame(f);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					if (f != null) {
-						byte[] dg = f.getPayload();
+						fio.receive(frame);
+						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
 						if (str.charAt(str.length() - 1) == 'E') {
 							String msg = "#" + str + "#";
@@ -197,128 +186,110 @@ public class BaseStationH extends Thread {
 								e.printStackTrace();
 							}
 						} else if (str.charAt(0) == 'S') {
-							if (f.getSrcAddr() == node_list[1]) {
-								hmapCOUNT.put(f.getSrcAddr(), a);
-								hmap1.put(a, f);
+							if (frame.getSrcAddr() == node_list[1]) {
+								hmapCOUNT.put(frame.getSrcAddr(), a);
+								byte[] s = frame.getPayload();
+								String st = new String(s, 0, s.length);
+								hmap1.put(a, st);
 								a++;
-							} else if (f.getSrcAddr() == node_list[2]) {
-								hmapCOUNT.put(f.getSrcAddr(), b);
-								hmap2.put(b, f);
+							} else if (frame.getSrcAddr() == node_list[2]) {
+								hmapCOUNT.put(frame.getSrcAddr(), b);
+								byte[] s = frame.getPayload();
+								String st = new String(s, 0, s.length);
+								hmap2.put(b, st);
 								b++;
 							}
-						} else if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) == 15) {
-							boolean isOK = false;
-							while (!isOK) {
+						} else if (str.charAt(0) == 'E') {
+							if (hmapCOUNT.get(frame.getSrcAddr()) == 10) {
+								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+										| Frame.SRC_ADDR_16;
+								final Frame testFrame = new Frame(frameControl);
+								testFrame.setDestPanId(COMMON_PANID);
+								testFrame.setDestAddr(frame.getSrcAddr());
+								testFrame.setSrcAddr(ADDR_NODE2);
+								testFrame.setPayload("ACK".getBytes());
 								try {
-									String message = "ACK";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(f.getSrcAddr());
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ON);
-									frame.setPayload(message.getBytes());
-									radio.transmitFrame(frame);
-									isOK = true;
+									fio.transmit(testFrame);
+									Thread.sleep(50);
 								} catch (Exception e) {
-									e.printStackTrace();
 								}
-							}
-							hmapCOUNT.put(f.getSrcAddr(), 0);
-							if (f.getSrcAddr() == node_list[1]) {
-								for (int i = 1; i <= hmap1.size(); i++) {
-									String msg = "#" + hmap1.get(i) + "#";
+								if (frame.getSrcAddr() == node_list[1]) {
+									for (int i = 1; i <= 10; i++) {
+										String s = hmap1.get(i);
+										String msg = "#" + s + "#";
+										try {
+											out.write(msg.getBytes(), 0, msg.length()); //
+											usart.flush(); //
+											Thread.sleep(50);
+										} catch (Exception e) {
+										}
+									}
+									a = 1;
+									hmap1.clear();
 									try {
-										out.write(msg.getBytes(), 0, msg.length());
-										Thread.sleep(1000);
-										usart.flush();
+										singleNodeSense(node_list[1], fio);
 									} catch (Exception e) {
-										e.printStackTrace();
+									}
+								} else if (frame.getSrcAddr() == node_list[2]) {
+									for (int i = 1; i <= 5; i++) {
+										String s = hmap2.get(i);
+										String msg = "#" + s + "#";
+										try {
+											out.write(msg.getBytes(), 0, msg.length()); //
+											usart.flush(); //
+											Thread.sleep(50);
+										} catch (Exception e) {
+										}
+									}
+									b = 1;
+									hmap2.clear();
+									try {
+										singleNodeSense(node_list[2], fio);
+									} catch (Exception e) {
 									}
 								}
-								a = 1;
-								hmap1.clear();
-							} else if (f.getSrcAddr() == node_list[2]) {
-								for (int i = 1; i <= hmap2.size(); i++) {
-									String msg = "#" + hmap2.get(i) + "#";
-									try {
-										out.write(msg.getBytes(), 0, msg.length());
-										Thread.sleep(1000);
-										usart.flush();
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-								b = 1;
-								hmap2.clear();
-							}
-						} else if (str.charAt(0) == 'E' && hmapCOUNT.get(f.getSrcAddr()) != 15) {
-							boolean isOK = false;
-							while (!isOK) {
+								hmapCOUNT.put(frame.getSrcAddr(), 0);
+							} else {
+								System.out.println("NACK");
+								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+										| Frame.SRC_ADDR_16;
+								final Frame testFrame = new Frame(frameControl);
+								testFrame.setSequenceNumber(0);
+								testFrame.setDestPanId(COMMON_PANID);
+								testFrame.setDestAddr(frame.getSrcAddr());
+								testFrame.setSrcAddr(ADDR_NODE2);
+								testFrame.setPayload("NACK".getBytes());
 								try {
-									String message = "NACK";
-									Frame frame = new Frame(Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16
-											| Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-									frame.setSrcAddr(ADDR_NODE2);
-									frame.setSrcPanId(COMMON_PANID);
-									frame.setDestAddr(f.getSrcAddr());
-									frame.setDestPanId(COMMON_PANID);
-									radio.setState(AT86RF231.STATE_TX_ON);
-									frame.setPayload(message.getBytes());
-									radio.transmitFrame(frame);
-									System.out.println("NACK");
-									isOK = true;
+									fio.transmit(testFrame);
+									Thread.sleep(50);
 								} catch (Exception e) {
-									e.printStackTrace();
 								}
-							}
-							if (f.getSrcAddr() == node_list[1]) {
-								a = 1;
-							} else if (f.getSrcAddr() == node_list[2]) {
-								b = 1;
+								if (frame.getSrcAddr() == node_list[1]) {
+									a = 1;
+								} else if (frame.getSrcAddr() == node_list[2]) {
+									b = 1;
+								}
 							}
 						}
+					} catch (Exception e) {
 					}
 				}
 			}
 		};
-		reader.start();
-		while (reader.isAlive() && firstSense == true) {
-			if (exit == false) {
-				if (hmap1.isEmpty()) {
-					singleNodeSense(node_list[1]);
-				} else if (hmap2.isEmpty()) {
-					singleNodeSense(node_list[2]);
-				}
-			}
-		}
+		receive.start();
 	}
 
-	public static void singleNodeSense(int address) throws Exception {
-		final AT86RF231 radio = RadioInit.initRadio();
-		radio.reset();
-		radio.setChannel(COMMON_CHANNEL);
-		radio.setPANId(COMMON_PANID);
-		radio.setShortAddress(ADDR_NODE2);
-
-		boolean isOK = false;
-		while (!isOK) {
-			try {
-				message = "DETECT";
-				Frame frame = new Frame(
-						Frame.TYPE_DATA | Frame.ACK_REQUEST | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16);
-				frame.setSrcAddr(ADDR_NODE2);
-				frame.setSrcPanId(COMMON_PANID);
-				frame.setDestAddr(address);
-				frame.setDestPanId(COMMON_PANID);
-				radio.setState(AT86RF231.STATE_TX_ON);
-				frame.setPayload(message.getBytes());
-				radio.transmitFrame(frame);
-				isOK = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public static void singleNodeSense(int address, final FrameIO fio) throws Exception {
+		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+		final Frame testFrame = new Frame(frameControl);
+		testFrame.setDestPanId(COMMON_PANID);
+		testFrame.setDestAddr(address);
+		testFrame.setSrcAddr(ADDR_NODE2);
+		testFrame.setPayload("DETECT".getBytes());
+		try {
+			fio.transmit(testFrame);
+			Thread.sleep(50);
+		} catch (Exception e) {
 		}
 	}
 
@@ -339,12 +310,14 @@ public class BaseStationH extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
+		a = 1;
+		b = 1;
 		try {
 			startUSART();
 			out = usart.getOutputStream();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		sender();
+		runs();
 	}
 }

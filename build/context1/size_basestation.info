@@ -497,8 +497,8 @@
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 
-676		BaseStation$2
-	666		run()V
+677		BaseStation$2
+	667		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 639		com/virtenio/misc/StringUtils

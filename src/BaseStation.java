@@ -17,7 +17,7 @@ import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
 import com.virtenio.driver.usart.USARTException;
 import com.virtenio.driver.usart.USARTParams;
-import com.virtenio.io.Console;
+//import com.virtenio.io.Console;
 
 public class BaseStation extends Thread {
 
@@ -69,10 +69,7 @@ public class BaseStation extends Thread {
 	public static void sender(final FrameIO fio) throws Exception {
 		new Thread() {
 			public void run() {
-//				Console console = new Console();
 				while (true) {
-//					String s = console.readLine("ASDF");
-//					int temp = Integer.parseInt(s);
 					int temp = 100;
 					try {
 						temp = usart.read();
@@ -108,6 +105,7 @@ public class BaseStation extends Thread {
 						hmap3.clear();
 						hmap4.clear();
 						hmap5.clear();
+						break;
 					} else if (temp == 1) {
 						for (int i = 1; i < node_list.length; i++) {
 							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN

@@ -19,7 +19,7 @@ public class nodeSensor {
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
 	private static int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
-	private static int ADDR_NODE2 = node_list[2]; // NODE DIRINYA
+	private static int ADDR_NODE2 = node_list[1]; // NODE DIRINYA
 	private static sensing s = new sensing();
 	private static int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
@@ -94,10 +94,8 @@ public class nodeSensor {
 							end = Time.currentTimeMillis() + 8000;
 							System.out.println(str);
 							String message = "";
-
 							int i = 0;
-							while (i <= 5) {
-//								System.out.println(i);
+							while (i <= 5 && exit == false) {
 								try {
 									if (i == 5) {
 										message = "END";
@@ -106,9 +104,12 @@ public class nodeSensor {
 												+ Time.currentTimeMillis() + " " + s.sense();
 										sn++;
 									}
-									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16
-											| Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
+											| Frame.SRC_ADDR_16;
 									final Frame testFrame = new Frame(frameControl);
+									if(!message.equals("END")) {
+										testFrame.setSequenceNumber(sn);	
+									}
 									testFrame.setDestPanId(COMMON_PANID);
 									testFrame.setDestAddr(ADDR_NODE1);
 									testFrame.setSrcAddr(ADDR_NODE2);
@@ -128,11 +129,9 @@ public class nodeSensor {
 						} else {
 							System.out.println(str);
 							if (str.equalsIgnoreCase("ACK")) {
-//								System.out.println("ACK");
 								hmap.clear();
 								isSensing = false;
 							} else {
-//								System.out.println("NACK");
 								for (int j = 0; j < hmap.size(); j++) {
 									final Frame testFrame = hmap.get(j);
 									Thread.sleep(50);

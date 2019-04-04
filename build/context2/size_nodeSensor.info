@@ -519,8 +519,8 @@
 	5		close()V
 	2		getConversionScale()F
 
-811		nodeSensor$1
-	801		run()V
+817		nodeSensor$1
+	807		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 807		java/util/AbstractMap
@@ -830,7 +830,7 @@
 	3		capacity()I
 	2		size()I
 
-308		nodeSensor
+313		nodeSensor
 	159		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	70		runs()V
 	12		access$708()I
@@ -843,6 +843,7 @@
 	5		access$300()I
 	5		access$400()I
 	5		access$500()I
+	5		access$200()Z
 	5		access$700()I
 	5		access$800()Lsensing;
 
