@@ -519,10 +519,6 @@
 	5		close()V
 	2		getConversionScale()F
 
-817		nodeSensor$1
-	807		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
 	158		toString()Ljava/lang/String;
@@ -557,6 +553,10 @@
 	16		getInt(Ljava/lang/String;I)I
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
+
+681		nodeSensor$1
+	671		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 650		com/virtenio/driver/device/ADT7410
 	121		readValue(II)I
@@ -741,6 +741,24 @@
 	5		hasMoreElements()Z
 	5		nextElement()Ljava/lang/Object;
 
+396		nodeSensor
+	159		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	83		send(Ljava/lang/String;Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	70		runs()V
+	12		access$508()I
+	9		main([Ljava/lang/String;)V
+	8		access$402(J)J
+	7		access$102(Z)Z
+	7		access$202(Z)Z
+	6		<init>()V
+	5		access$000()Ljava/util/HashMap;
+	5		access$300()I
+	5		access$200()Z
+	5		access$500()I
+	5		access$600()Lsensing;
+	5		access$700()I
+	5		access$800()I
+
 395		com/virtenio/preon32/node/Node
 	141		getInstance()Lcom/virtenio/preon32/node/Node;
 	119		getTransceiver(I)Lcom/virtenio/driver/device/at86rf231/AT86RF231;
@@ -829,23 +847,6 @@
 	4		access$000(Lcom/virtenio/misc/FixedFifo;)I
 	3		capacity()I
 	2		size()I
-
-313		nodeSensor
-	159		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	70		runs()V
-	12		access$708()I
-	9		main([Ljava/lang/String;)V
-	8		access$602(J)J
-	7		access$102(Z)Z
-	7		access$202(Z)Z
-	6		<init>()V
-	5		access$000()Ljava/util/HashMap;
-	5		access$300()I
-	5		access$400()I
-	5		access$500()I
-	5		access$200()Z
-	5		access$700()I
-	5		access$800()Lsensing;
 
 256		com/virtenio/driver/i2c/NativeI2C
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
@@ -1036,11 +1037,6 @@
 	4		size()I
 	2		hashMap()Ljava/util/HashMap;
 
-134		sensors/AccelerationSensor
-	120		run()V
-	12		<init>()V
-	2		getTemp()Ljava/lang/String;
-
 132		sensors/PressureSensor
 	124		run(Lcom/virtenio/driver/i2c/NativeI2C;)V
 	6		<init>()V
@@ -1051,6 +1047,11 @@
 	54		read()I
 	18		<init>(Lcom/virtenio/driver/flash/Flash;II)V
 	2		getAddress()I
+
+128		sensors/AccelerationSensor
+	120		run()V
+	6		<init>()V
+	2		getTemp()Ljava/lang/String;
 
 122		com/virtenio/driver/flash/FlashOutputStream
 	52		write([BII)V

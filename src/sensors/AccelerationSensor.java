@@ -11,7 +11,7 @@ public class AccelerationSensor {
 	private ADXL345 accelerationSensor;
 	private GPIO accelCs;
 
-	private String temp = "";
+	private String temp;
 
 	public void run() throws Exception {
 		accelCs = NativeGPIO.getInstance(20);

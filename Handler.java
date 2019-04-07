@@ -5,9 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Scanner;
 
 import org.apache.tools.ant.*;
@@ -15,10 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Handler {
-	Calendar cal = Calendar.getInstance();
 
 	private Scanner scanner;
-	private boolean exit;
+	private volatile static boolean exit = false;
 	private BufferedWriter writer;
 
 	private static DefaultLogger getConsoleLogger() {
@@ -114,10 +111,11 @@ public class Handler {
 					break;
 				}
 				case 4: {
-						String fName = System.currentTimeMillis() + "";
-						fName = "Pengujian_" + fName + ".txt";
-						writeToFile(fName, "Tester", in);
-						break;
+					String fName = System.currentTimeMillis() + "";
+					fName = "Pengujian_" + fName + ".txt";
+					writeToFile(fName, "Tester", in);
+
+					break;
 				}
 				}
 			} while (choiceentry != 0);
@@ -134,7 +132,7 @@ public class Handler {
 	}
 
 	public void writeToFile(String fName, String folName, BufferedInputStream in) throws Exception {
-		new Thread() {
+		Thread t = new Thread() {
 			byte[] buffer = new byte[2048];
 			String s;
 			long count = 0;
@@ -152,28 +150,30 @@ public class Handler {
 				}
 				while (!exit) {
 					try {
-						in.read(buffer);
-						s = new String(buffer);
-						String[] subStr = s.split("#");
-						for (String w : subStr) {
-							if (w.startsWith("SENSE")) {
-								String[] ss = w.split(" ");
-								long val = Long.parseLong(ss[3]);
-								String newString = ss[0] + " " + ss[1] + " " + ss[2] + " " + stringFormat(val) + " "
-										+ ss[4] + " " + ss[5] + " " + ss[6] + " " + ss[7] + " " + ss[8] + " " + ss[9]
-										+ " " + ss[10] + " " + ss[11] + " " + ss[12] + " " + ss[13];
-								writer.write(newString, 0, newString.length());
-								writer.newLine();
+						if (in.available() > 0) {
+							in.read(buffer);
+							s = new String(buffer);
+							String[] subStr = s.split("#");
+							for (String w : subStr) {
+								if (w.startsWith("SENSE")) {
+									String[] ss = w.split(" ");
+									long val = Long.parseLong(ss[3]);
+									String newString = ss[0] + " " + ss[1] + " " + ss[2] + " " + stringFormat(val) + " "
+											+ ss[4] + " " + ss[5] + " " + ss[6] + " " + ss[7] + " " + ss[8] + " "
+											+ ss[9] + " " + ss[10] + " " + ss[11] + " " + ss[12] + " " + ss[13];
+									writer.write(newString, 0, newString.length());
+									writer.newLine();
+								}
+							}
+							count++;
+							if (count == 10) {
+								writer.close();
+								FileWriter fw = new FileWriter(path, true);
+								writer = new BufferedWriter(fw);
+								count = 0;
 							}
 						}
-						count++;
-						if (count == 10) {
-							writer.close();
-							FileWriter fw = new FileWriter(path, true);
-							writer = new BufferedWriter(fw);
-							count = 0;
-						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 					}
 					Arrays.fill(buffer, (byte) 0);
 				}
@@ -183,7 +183,8 @@ public class Handler {
 					e.printStackTrace();
 				}
 			}
-		}.start();
+		};
+		t.start();
 	}
 
 	private void context_set(String target) throws Exception {
@@ -209,7 +210,7 @@ public class Handler {
 
 	public static void main(String[] args) throws Exception {
 		Handler handler = new Handler();
-
+//		System.setProperty("purejavacomm.loglevel","6");
 		handler.context_set("context.set.1");
 		handler.time_synchronize();
 		handler.init();

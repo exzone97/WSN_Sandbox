@@ -19,13 +19,13 @@ public class nodeSensor {
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
 	private static int ADDR_NODE1 = node_list[0]; // NODE DIATASNYA
-	private static int ADDR_NODE2 = node_list[1]; // NODE DIRINYA
+	private static int ADDR_NODE2 = node_list[4]; // NODE DIRINYA
 	private static sensing s = new sensing();
 	private static int sn = 1;
 	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
 	private static long end;
 	private static boolean isSensing = false;
-	private static boolean exit = false;
+	private static boolean exit = false;	
 
 	public static void runs() {
 		try {
@@ -34,14 +34,13 @@ public class nodeSensor {
 			t.setAddressFilter(COMMON_PANID, ADDR_NODE2, ADDR_NODE2, false);
 			final RadioDriver radioDriver = new AT86RF231RadioDriver(t);
 			final FrameIO fio = new RadioDriverFrameIO(radioDriver);
-
-			receive(fio);
+			send_receive(fio);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void receive(final FrameIO fio) throws Exception {
+	public static void send_receive(final FrameIO fio) throws Exception {
 		Thread reader = new Thread() {
 			public void run() {
 				Frame frame = new Frame();
@@ -62,36 +61,13 @@ public class nodeSensor {
 							break;
 						} else if (str.equalsIgnoreCase("WAKTU")) {
 							String message = "Time " + Integer.toHexString(ADDR_NODE2) + " " + Time.currentTimeMillis();
-							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-									| Frame.SRC_ADDR_16;
-							final Frame testFrame = new Frame(frameControl);
-							testFrame.setDestPanId(COMMON_PANID);
-							testFrame.setDestAddr(ADDR_NODE1);
-							testFrame.setSrcAddr(ADDR_NODE2);
-							testFrame.setPayload(message.getBytes());
-							System.out.println(message);
-							try {
-								fio.transmit(testFrame);
-								Thread.sleep(50);
-							} catch (Exception e) {
-							}
+							send(message, fio);
 						} else if (str.equalsIgnoreCase("ON")) {
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
-							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-									| Frame.SRC_ADDR_16;
-							final Frame testFrame = new Frame(frameControl);
-							testFrame.setDestPanId(COMMON_PANID);
-							testFrame.setDestAddr(ADDR_NODE1);
-							testFrame.setSrcAddr(ADDR_NODE2);
-							testFrame.setPayload(message.getBytes());
 							System.out.println(message);
-							try {
-								fio.transmit(testFrame);
-								Thread.sleep(50);
-							} catch (Exception e) {
-							}
+							send(message, fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = Time.currentTimeMillis() + 8000;
+							end = Time.currentTimeMillis() + 10000;
 							System.out.println(str);
 							String message = "";
 							int i = 0;
@@ -107,8 +83,8 @@ public class nodeSensor {
 									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
 											| Frame.SRC_ADDR_16;
 									final Frame testFrame = new Frame(frameControl);
-									if(!message.equals("END")) {
-										testFrame.setSequenceNumber(sn);	
+									if (!message.equals("END")) {
+										testFrame.setSequenceNumber(sn);
 									}
 									testFrame.setDestPanId(COMMON_PANID);
 									testFrame.setDestAddr(ADDR_NODE1);
@@ -162,9 +138,23 @@ public class nodeSensor {
 						} catch (Exception e) {
 						}
 					}
-					end = Time.currentTimeMillis() + 8000;
+					end = Time.currentTimeMillis() + 10000;
 				}
 			}
+		}
+	}
+
+	public static void send(String msg, final FrameIO fio) throws Exception {
+		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+		final Frame testFrame = new Frame(frameControl);
+		testFrame.setDestPanId(COMMON_PANID);
+		testFrame.setDestAddr(ADDR_NODE1);
+		testFrame.setSrcAddr(ADDR_NODE2);
+		testFrame.setPayload(msg.getBytes());
+		try {
+			fio.transmit(testFrame);
+			Thread.sleep(50);
+		} catch (Exception e) {
 		}
 	}
 

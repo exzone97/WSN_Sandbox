@@ -1,3 +1,4 @@
+
 //CLUSTER HEAD A
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
@@ -24,30 +25,25 @@ public class ClusterHeadA extends Thread {
 //	Node dibwh CH1
 	private static int[] ADDR_NODE3 = new int[] { PropertyHelper.getInt("radio.panid", 0xDABA),
 			PropertyHelper.getInt("radio.panid", 0xDABB) }; // NODE DIBAWAHNYA
-//	Node dibwh CH2
-//	private static int ADDR_NODE3 = PropertyHelper.getInt("radio.panid", 0xCABA); //NODE DIBAWAHNYA
 
 	private static sensing s = new sensing();
 	private static int sn = 1;
-	private static long end;
+	private static long end_0;
+	private static long end_1;
+	private static long end_2;
 	private static boolean firstSense = false;
 	private static boolean exit = false;
+	private static boolean isSend = false;
 
-	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 
+	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
-
-//	private static HashMap<Integer, Frame> hmap1 = new HashMap<Integer, Frame>();
 
 //	Count SN untuk node dibwh CH1
 	private static int a = 1;
 	private static int b = 1;
-//	Count SN untuk node dibwh CH2	
-//	private static int a = 1;
-	private static int SN_A = 0;
-	private static int SN_B = b;
 
 	public static void runs() {
 		try {
@@ -77,34 +73,13 @@ public class ClusterHeadA extends Thread {
 							long currTime = Long.parseLong(tm);
 							Time.setCurrentTimeMillis(currTime);
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE3[i]);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(("T" + currTime).getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
+								send(("T" + currTime), ADDR_NODE3[i], fio);
 							}
+						} else if (str.charAt(0) == 'T') {
+							send(str, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("EXIT")) {
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								String message = "EXIT";
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE3[i]);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(message.getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
+								send("EXIT", ADDR_NODE3[i], fio);
 							}
 							exit = true;
 							hmapCOUNT.clear();
@@ -116,181 +91,119 @@ public class ClusterHeadA extends Thread {
 							break;
 						} else if (str.equalsIgnoreCase("WAKTU")) {
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								String message = "WAKTU";
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE3[i]);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(message.getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
+								send("WAKTU", ADDR_NODE3[i], fio);
 							}
 							String message = "Time " + Integer.toHexString(ADDR_NODE2) + "(CH) "
 									+ Time.currentTimeMillis();
-							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-									| Frame.SRC_ADDR_16;
-							final Frame testFrame = new Frame(frameControl);
-							testFrame.setDestPanId(COMMON_PANID);
-							testFrame.setDestAddr(ADDR_NODE1);
-							testFrame.setSrcAddr(ADDR_NODE2);
-							testFrame.setPayload(message.getBytes());
-							try {
-								fio.transmit(testFrame);
-								Thread.sleep(50);
-							} catch (Exception e) {
-							}
+							send(message, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("ON")) {
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								String message = "ON";
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE3[i]);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(message.getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
+								send("ON", ADDR_NODE3[i], fio);
 							}
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + "(CH) ONLINE";
-							int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-									| Frame.SRC_ADDR_16;
-							final Frame testFrame = new Frame(frameControl);
-							testFrame.setDestPanId(COMMON_PANID);
-							testFrame.setDestAddr(ADDR_NODE1);
-							testFrame.setSrcAddr(ADDR_NODE2);
-							testFrame.setPayload(message.getBytes());
-							try {
-								fio.transmit(testFrame);
-								Thread.sleep(50);
-							} catch (Exception e) {
-							}
+							send(message, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = Time.currentTimeMillis() + 20000;
-							for (int i = 0; i < 5; i++) {
+							end_0 = Time.currentTimeMillis() + 8000;
+							for (int i = 1; i <= 5; i++) {
 								try {
-									String message = "SENSE " + Integer.toHexString(ADDR_NODE2) + " " + sn + " "
-											+ Time.currentTimeMillis() + " " + s.sense();
+									String message = "SENSE " + ADDR_NODE2 + " " + sn + " " + Time.currentTimeMillis()
+											+ " " + s.sense();
 									sn++;
+									send(message, ADDR_NODE1, fio);
 									hmap.put(i, message);
 								} catch (Exception e) {
 								}
 							}
+							send("END1", ADDR_NODE1, fio);
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
-								String message = "DETECT";
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE3[i]);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(message.getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
+								send("DETECT", ADDR_NODE3[i], fio);
 							}
 							firstSense = true;
-						} else {
-							if (str.charAt(str.length() - 1) == 'E') {
-								int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-										| Frame.SRC_ADDR_16;
-								final Frame testFrame = new Frame(frameControl);
-								testFrame.setDestPanId(COMMON_PANID);
-								testFrame.setDestAddr(ADDR_NODE1);
-								testFrame.setSrcAddr(ADDR_NODE2);
-								testFrame.setPayload(str.getBytes());
-								try {
-									fio.transmit(testFrame);
-									Thread.sleep(50);
-								} catch (Exception e) {
-								}
-							} else if (str.charAt(0) == 'S') {
-								if (frame.getSrcAddr() == ADDR_NODE3[1]) {
-									if (frame.getSequenceNumber() > SN_A) {
-										SN_A = frame.getSequenceNumber();
-										hmapCOUNT.put(frame.getSrcAddr(), a);
-										byte[] s = frame.getPayload();
-										String st = new String(s, 0, s.length);
-										hmap1.put(a, st);
-										a++;
+						} else if (str.charAt(str.length() - 1) == 'E') {
+							send(str, ADDR_NODE1, fio);
+						} else if (str.charAt(0) == 'S') {
+							if (frame.getSrcAddr() == ADDR_NODE3[0]) {
+								hmapCOUNT.put(frame.getSrcAddr(), a);
+								byte[] s = frame.getPayload();
+								String st = new String(s, 0, s.length);
+								hmap1.put(a, st);
+								a++;
+							} else if (frame.getSrcAddr() == ADDR_NODE3[1]) {
+								hmapCOUNT.put(frame.getSrcAddr(), b);
+								byte[] s = frame.getPayload();
+								String st = new String(s, 0, s.length);
+								hmap2.put(b, st);
+								b++;
+							}
+						} else if (str.charAt(0) == 'E') {
+							if (hmapCOUNT.get(frame.getSrcAddr()) == 5) {
+								send("ACK", frame.getSrcAddr(), fio);
+								long temp = frame.getSrcAddr();
+								if (temp == ADDR_NODE3[0]) {
+									for (int i = 1; i <= 5; i++) {
+										String s = hmap1.get(i);
+										send(s, ADDR_NODE1, fio);
+										end_1 = Time.currentTimeMillis() + 8000;
 									}
-								} else if (frame.getSrcAddr() == ADDR_NODE3[2]) {
-									if (frame.getSequenceNumber() > SN_B) {
-										SN_B = frame.getSequenceNumber();
-										hmapCOUNT.put(frame.getSrcAddr(), b);
-										byte[] s = frame.getPayload();
-										String st = new String(s, 0, s.length);
-										hmap2.put(b, st);
-										b++;
+									send("END2", ADDR_NODE1, fio);
+								} else if (temp == ADDR_NODE3[1]) {
+									for (int i = 1; i <= 5; i++) {
+										String s = hmap2.get(i);
+										send(s, ADDR_NODE1, fio);
+										end_2 = Time.currentTimeMillis() + 8000;
 									}
-								}
-							} else if (str.charAt(0) == 'E') {
-								if (hmapCOUNT.get(frame.getSrcAddr()) == 5) {
-									String message = "ACK";
-									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-											| Frame.SRC_ADDR_16;
-									final Frame testFrame = new Frame(frameControl);
-									testFrame.setDestPanId(COMMON_PANID);
-									testFrame.setDestAddr(frame.getSrcAddr());
-									testFrame.setSrcAddr(ADDR_NODE2);
-									testFrame.setPayload(message.getBytes());
-									try {
-										fio.transmit(testFrame);
-										Thread.sleep(50);
-									} catch (Exception e) {
-									}
-								} else {
-									String message = "NACK";
-									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-											| Frame.SRC_ADDR_16;
-									final Frame testFrame = new Frame(frameControl);
-									testFrame.setDestPanId(COMMON_PANID);
-									testFrame.setDestAddr(frame.getSrcAddr());
-									testFrame.setSrcAddr(ADDR_NODE2);
-									testFrame.setPayload(message.getBytes());
-									try {
-										fio.transmit(testFrame);
-										Thread.sleep(50);
-									} catch (Exception e) {
-									}
-									if (frame.getSrcAddr() == ADDR_NODE3[0]) {
-										a = 1;
-									} else if (frame.getSrcAddr() == ADDR_NODE3[1]) {
-										b = 1;
-									}
+									send("END3", ADDR_NODE1, fio);
 								}
 							} else {
-								if (str.equalsIgnoreCase("ACK")) {
-									hmap.clear();
-									hmap1.clear();
-									hmap2.clear();
-									end = Time.currentTimeMillis()+20000;
-									singleNodeSense(ADDR_NODE3[0], fio);
-									singleNodeSense(ADDR_NODE3[1], fio);
-									for (int i = 0; i < 5; i++) {
-										try {
-											String message = "SENSE " + Integer.toHexString(ADDR_NODE2) + " " + sn + " "
-													+ Time.currentTimeMillis() + " " + s.sense();
-											sn++;
-											hmap.put(i, message);
-										} catch (Exception e) {
-										}
-									}
-								} else if (str.equalsIgnoreCase("NACK")) {
-									resendAll(fio);
+								if (frame.getSrcAddr() == ADDR_NODE3[0]) {
+									a = 1;
+								} else if (frame.getSrcAddr() == ADDR_NODE3[1]) {
+									b = 1;
 								}
+								send("NACK", frame.getSrcAddr(), fio);
+							}
+						} else {
+							if (str.equalsIgnoreCase("ACK1")) {
+								hmap.clear();
+								end_0 = Time.currentTimeMillis() + 8000;
+								for (int i = 1; i <= 5; i++) {
+									try {
+										String message = "SENSE " + ADDR_NODE2 + " " + sn + " "
+												+ Time.currentTimeMillis() + " " + s.sense();
+										sn++;
+										hmap.put(i, message);
+										send(message, ADDR_NODE1, fio);
+									} catch (Exception e) {
+									}
+								}
+								send("END1", ADDR_NODE1, fio);
+							} else if (str.equalsIgnoreCase("ACK2")) {
+								hmap1.clear();
+								send("DETECT", ADDR_NODE3[0], fio);
+							} else if (str.equalsIgnoreCase("ACK3")) {
+								hmap2.clear();
+								send("DETECT", ADDR_NODE3[1], fio);
+							} else if (str.equalsIgnoreCase("NACK1")) {
+								end_0 = Time.currentTimeMillis() + 8000;
+								for (int i = 1; i <= 5; i++) {
+									send(hmap.get(i), ADDR_NODE1, fio);
+								}
+								send("END1", ADDR_NODE1, fio);
+							} else if (str.equalsIgnoreCase("NACK2")) {
+								end_1 = Time.currentTimeMillis() + 8000;
+								for (int i = 1; i <= 5; i++) {
+									send(hmap1.get(i), ADDR_NODE1, fio);
+								}
+								send("END2", ADDR_NODE1, fio);
+							} else if (str.equalsIgnoreCase("NACK3")) {
+								end_2 = Time.currentTimeMillis() + 8000;
+								for (int i = 1; i <= 5; i++) {
+									send(hmap2.get(i), ADDR_NODE1, fio);
+								}
+								send("END3", ADDR_NODE1, fio);
 							}
 						}
+
 					} catch (Exception e) {
 					}
 				}
@@ -298,63 +211,34 @@ public class ClusterHeadA extends Thread {
 		};
 		reader.start();
 		while (reader.isAlive()) {
-			if(firstSense == true && exit !=false && Time.currentTimeMillis()>end) {
-				resendAll(fio);
+			if (Time.currentTimeMillis() > end_0) {
+				end_0 = Time.currentTimeMillis() + 8000;
+				for (int i = 1; i <= 5; i++) {
+					send(hmap.get(i), ADDR_NODE1, fio);
+				}
 			}
-		}
-	}
-	
-	public static void resendAll(final FrameIO fio) {
-		for (int i = 1; i <= 5; i++) {
-			String message = hmap.get(i);
-			int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-					| Frame.SRC_ADDR_16;
-			final Frame testFrame = new Frame(frameControl);
-			testFrame.setDestPanId(COMMON_PANID);
-			testFrame.setDestAddr(ADDR_NODE1);
-			testFrame.setSrcAddr(ADDR_NODE2);
-			testFrame.setPayload(message.getBytes());
-			try {
-				fio.transmit(testFrame);
-				Thread.sleep(50);
-			} catch (Exception e) {
+			if (Time.currentTimeMillis() > end_1) {
+				end_1 = Time.currentTimeMillis() + 8000;
+				for (int i = 1; i <= 5; i++) {
+					send(hmap1.get(i), ADDR_NODE1, fio);
+				}
 			}
-			String message1 = hmap1.get(i);
-			int frameControl1 = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-					| Frame.SRC_ADDR_16;
-			final Frame testFrame1 = new Frame(frameControl1);
-			testFrame1.setDestPanId(COMMON_PANID);
-			testFrame1.setDestAddr(ADDR_NODE1);
-			testFrame1.setSrcAddr(ADDR_NODE2);
-			testFrame1.setPayload(message1.getBytes());
-			try {
-				fio.transmit(testFrame1);
-				Thread.sleep(50);
-			} catch (Exception e) {
-			}
-			String message2 = hmap2.get(i);
-			int frameControl2 = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
-					| Frame.SRC_ADDR_16;
-			final Frame testFrame2 = new Frame(frameControl2);
-			testFrame2.setDestPanId(COMMON_PANID);
-			testFrame2.setDestAddr(ADDR_NODE1);
-			testFrame2.setSrcAddr(ADDR_NODE2);
-			testFrame2.setPayload(message2.getBytes());
-			try {
-				fio.transmit(testFrame2);
-				Thread.sleep(50);
-			} catch (Exception e) {
+			if (Time.currentTimeMillis() > end_2) {
+				end_2 = Time.currentTimeMillis() + 8000;
+				for (int i = 1; i <= 5; i++) {
+					send(hmap2.get(i), ADDR_NODE1, fio);
+				}
 			}
 		}
 	}
 
-	public static void singleNodeSense(int address, final FrameIO fio) throws Exception {
+	public static void send(String msg, long address, final FrameIO fio) throws Exception {
 		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16;
 		final Frame testFrame = new Frame(frameControl);
 		testFrame.setDestPanId(COMMON_PANID);
 		testFrame.setDestAddr(address);
 		testFrame.setSrcAddr(ADDR_NODE2);
-		testFrame.setPayload("DETECT".getBytes());
+		testFrame.setPayload(msg.getBytes());
 		try {
 			fio.transmit(testFrame);
 			Thread.sleep(50);
@@ -363,6 +247,9 @@ public class ClusterHeadA extends Thread {
 	}
 
 	public static void main(String[] arg) throws Exception {
+		a = 1;
+		b = 1;
+		sn = 1; //
 		exit = false;
 		runs();
 	}
