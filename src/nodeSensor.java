@@ -67,13 +67,13 @@ public class nodeSensor {
 							System.out.println(message);
 							send(message, fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = Time.currentTimeMillis() + 10000;
+							end = Time.currentTimeMillis() + 3000;
 							System.out.println(str);
 							String message = "";
 							int i = 0;
-							while (i <= 5 && exit == false) {
+							while (i <= 1 && exit == false) {
 								try {
-									if (i == 5) {
+									if (i == 1) {
 										message = "END";
 									} else {
 										message = "SENSE " + Integer.toHexString(ADDR_NODE2) + " " + sn + " "
@@ -138,7 +138,7 @@ public class nodeSensor {
 						} catch (Exception e) {
 						}
 					}
-					end = Time.currentTimeMillis() + 10000;
+					end = Time.currentTimeMillis() + 2000;
 				}
 			}
 		}

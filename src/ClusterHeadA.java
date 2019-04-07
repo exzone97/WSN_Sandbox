@@ -27,13 +27,13 @@ public class ClusterHeadA extends Thread {
 			PropertyHelper.getInt("radio.panid", 0xDABB) }; // NODE DIBAWAHNYA
 
 	private static sensing s = new sensing();
-	private static int sn = 1;
+
 	private static long end_0;
 	private static long end_1;
 	private static long end_2;
-	private static boolean firstSense = false;
+
 	private static boolean exit = false;
-	private static boolean isSend = false;
+	private static boolean isSensing = false;
 
 	private static HashMap<Long, Integer> hmapCOUNT = new HashMap<Long, Integer>();
 
@@ -41,7 +41,8 @@ public class ClusterHeadA extends Thread {
 	private static HashMap<Integer, String> hmap1 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap2 = new HashMap<Integer, String>();
 
-//	Count SN untuk node dibwh CH1
+	private static int sn = 1;
+
 	private static int a = 1;
 	private static int b = 1;
 
@@ -68,6 +69,7 @@ public class ClusterHeadA extends Thread {
 						fio.receive(frame);
 						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
+						System.out.println("Receive " + str);
 						if (str.charAt(0) == 'Q') {
 							String tm = str.substring(1);
 							long currTime = Long.parseLong(tm);
@@ -81,10 +83,9 @@ public class ClusterHeadA extends Thread {
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
 								send("EXIT", ADDR_NODE3[i], fio);
 							}
+							sn = 1;
 							exit = true;
 							hmapCOUNT.clear();
-							a = 1;
-							b = 2;
 							hmap.clear();
 							hmap1.clear();
 							hmap2.clear();
@@ -103,105 +104,96 @@ public class ClusterHeadA extends Thread {
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + "(CH) ONLINE";
 							send(message, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end_0 = Time.currentTimeMillis() + 8000;
-							for (int i = 1; i <= 5; i++) {
-								try {
-									String message = "SENSE " + ADDR_NODE2 + " " + sn + " " + Time.currentTimeMillis()
-											+ " " + s.sense();
-									sn++;
-									send(message, ADDR_NODE1, fio);
-									hmap.put(i, message);
-								} catch (Exception e) {
-								}
-							}
-							send("END1", ADDR_NODE1, fio);
+							end_0 = Time.currentTimeMillis() + 3000;
+							end_1 = Time.currentTimeMillis() + 3000;
+							end_2 = Time.currentTimeMillis() + 3000;
 							for (int i = 0; i < ADDR_NODE3.length; i++) {
 								send("DETECT", ADDR_NODE3[i], fio);
 							}
-							firstSense = true;
+							String message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?" + Time.currentTimeMillis() + " "
+									+ s.sense();
+							sn++;
+							send(message, ADDR_NODE1, fio);
+							hmap.put(1, message);
+							send("END1", ADDR_NODE1, fio);
+//							System.out.println("END1");
+//							System.out.println(message);
+							isSensing = true;
 						} else if (str.charAt(str.length() - 1) == 'E') {
 							send(str, ADDR_NODE1, fio);
 						} else if (str.charAt(0) == 'S') {
 							if (frame.getSrcAddr() == ADDR_NODE3[0]) {
-								hmapCOUNT.put(frame.getSrcAddr(), a);
+								System.out.println(str);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap1.put(a, st);
-								a++;
+								hmap1.put(1, st);
+								System.out.println(hmap1.get(1));
 							} else if (frame.getSrcAddr() == ADDR_NODE3[1]) {
-								hmapCOUNT.put(frame.getSrcAddr(), b);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap2.put(b, st);
-								b++;
+								hmap2.put(1, st);
 							}
-						} else if (str.charAt(0) == 'E') {
-							if (hmapCOUNT.get(frame.getSrcAddr()) == 5) {
-								send("ACK", frame.getSrcAddr(), fio);
+//						} else if (str.equalsIgnoreCase("END")) {
+						} else if (str.startsWith("END")) {
+							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
 								long temp = frame.getSrcAddr();
 								if (temp == ADDR_NODE3[0]) {
-									for (int i = 1; i <= 5; i++) {
-										String s = hmap1.get(i);
+									if (a == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+										String s = hmap1.get(1);
 										send(s, ADDR_NODE1, fio);
-										end_1 = Time.currentTimeMillis() + 8000;
+										send("END2", ADDR_NODE1, fio);
+										end_1 = Time.currentTimeMillis() + 3000;
+										a++;
 									}
-									send("END2", ADDR_NODE1, fio);
 								} else if (temp == ADDR_NODE3[1]) {
-									for (int i = 1; i <= 5; i++) {
-										String s = hmap2.get(i);
+									if (b == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+										String s = hmap2.get(1);
 										send(s, ADDR_NODE1, fio);
-										end_2 = Time.currentTimeMillis() + 8000;
+										send("END3", ADDR_NODE1, fio);
+										end_2 = Time.currentTimeMillis() + 3000;
+										b++;
 									}
-									send("END3", ADDR_NODE1, fio);
 								}
 							} else {
-								if (frame.getSrcAddr() == ADDR_NODE3[0]) {
-									a = 1;
-								} else if (frame.getSrcAddr() == ADDR_NODE3[1]) {
-									b = 1;
-								}
 								send("NACK", frame.getSrcAddr(), fio);
 							}
-						} else {
-							if (str.equalsIgnoreCase("ACK1")) {
-								hmap.clear();
-								end_0 = Time.currentTimeMillis() + 8000;
-								for (int i = 1; i <= 5; i++) {
-									try {
-										String message = "SENSE " + ADDR_NODE2 + " " + sn + " "
-												+ Time.currentTimeMillis() + " " + s.sense();
-										sn++;
-										hmap.put(i, message);
-										send(message, ADDR_NODE1, fio);
-									} catch (Exception e) {
-									}
-								}
-								send("END1", ADDR_NODE1, fio);
-							} else if (str.equalsIgnoreCase("ACK2")) {
-								hmap1.clear();
-								send("DETECT", ADDR_NODE3[0], fio);
-							} else if (str.equalsIgnoreCase("ACK3")) {
-								hmap2.clear();
-								send("DETECT", ADDR_NODE3[1], fio);
-							} else if (str.equalsIgnoreCase("NACK1")) {
-								end_0 = Time.currentTimeMillis() + 8000;
-								for (int i = 1; i <= 5; i++) {
-									send(hmap.get(i), ADDR_NODE1, fio);
-								}
-								send("END1", ADDR_NODE1, fio);
-							} else if (str.equalsIgnoreCase("NACK2")) {
-								end_1 = Time.currentTimeMillis() + 8000;
-								for (int i = 1; i <= 5; i++) {
-									send(hmap1.get(i), ADDR_NODE1, fio);
-								}
-								send("END2", ADDR_NODE1, fio);
-							} else if (str.equalsIgnoreCase("NACK3")) {
-								end_2 = Time.currentTimeMillis() + 8000;
-								for (int i = 1; i <= 5; i++) {
-									send(hmap2.get(i), ADDR_NODE1, fio);
-								}
-								send("END3", ADDR_NODE1, fio);
-							}
+						}
+						if (str.equalsIgnoreCase("ACK1")) {
+							hmap.clear();
+							hmapCOUNT.put((long) ADDR_NODE2, 0);
+							String message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?" + Time.currentTimeMillis() + " "
+									+ s.sense();
+							sn++;
+							hmap.put(1, message);
+							send(message, ADDR_NODE1, fio);
+							send("END1", ADDR_NODE1, fio);
+							end_0 = Time.currentTimeMillis() + 3000;
+//							System.out.println("END1");
+//							System.out.println(message);
+						} else if (str.equalsIgnoreCase("ACK2")) {
+							hmap1.clear();
+							hmapCOUNT.put((long) ADDR_NODE3[0], 0);
+							send("DETECT", ADDR_NODE3[0], fio);
+						} else if (str.equalsIgnoreCase("ACK3")) {
+							hmap2.clear();
+							hmapCOUNT.put((long) ADDR_NODE3[1], 0);
+							send("DETECT", ADDR_NODE3[1], fio);
+						} else if (str.equalsIgnoreCase("NACK1")) {
+							send(hmap.get(1), ADDR_NODE1, fio);
+							send("END1", ADDR_NODE1, fio);
+							end_0 = Time.currentTimeMillis() + 3000;
+						} else if (str.equalsIgnoreCase("NACK2")) {
+							send(hmap1.get(1), ADDR_NODE1, fio);
+							send("END2", ADDR_NODE1, fio);
+							end_1 = Time.currentTimeMillis() + 3000;
+						} else if (str.equalsIgnoreCase("NACK3")) {
+							send(hmap2.get(1), ADDR_NODE1, fio);
+							send("END3", ADDR_NODE1, fio);
+							end_2 = Time.currentTimeMillis() + 3000;
 						}
 
 					} catch (Exception e) {
@@ -211,23 +203,24 @@ public class ClusterHeadA extends Thread {
 		};
 		reader.start();
 		while (reader.isAlive()) {
-			if (Time.currentTimeMillis() > end_0) {
-				end_0 = Time.currentTimeMillis() + 8000;
-				for (int i = 1; i <= 5; i++) {
-					send(hmap.get(i), ADDR_NODE1, fio);
+			if (isSensing == true && exit == false) {
+				if (Time.currentTimeMillis() > end_0) {
+					System.out.println("Timeout END_0");
+					send(hmap.get(1), ADDR_NODE1, fio);
+					send("END1", ADDR_NODE1, fio);
+					end_0 = Time.currentTimeMillis() + 3000;
+				} else if (Time.currentTimeMillis() > end_1) {
+					System.out.println("Timeout END_1");
+					send(hmap1.get(1), ADDR_NODE1, fio);
+					send("END2", ADDR_NODE1, fio);
+					end_1 = Time.currentTimeMillis() + 3000;
 				}
-			}
-			if (Time.currentTimeMillis() > end_1) {
-				end_1 = Time.currentTimeMillis() + 8000;
-				for (int i = 1; i <= 5; i++) {
-					send(hmap1.get(i), ADDR_NODE1, fio);
-				}
-			}
-			if (Time.currentTimeMillis() > end_2) {
-				end_2 = Time.currentTimeMillis() + 8000;
-				for (int i = 1; i <= 5; i++) {
-					send(hmap2.get(i), ADDR_NODE1, fio);
-				}
+//				else if (Time.currentTimeMillis() > end_2) {
+//					//System.out.println("Timeout END_2");
+//					end_2 = Time.currentTimeMillis() + 3000;
+//						send(hmap2.get(i), ADDR_NODE1, fio);
+//				send("END3",ADDR_NODE1,fio);
+//				}
 			}
 		}
 	}
@@ -247,9 +240,9 @@ public class ClusterHeadA extends Thread {
 	}
 
 	public static void main(String[] arg) throws Exception {
+		sn = 1; //
 		a = 1;
 		b = 1;
-		sn = 1; //
 		exit = false;
 		runs();
 	}

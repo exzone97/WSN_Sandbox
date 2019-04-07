@@ -17,13 +17,20 @@
 	<target name="context.set.1">
 		<switchContext to="config/context1.properties" />
 	</target>
-	
+
 	<target name="context.set.2">
 		<switchContext to="config/context2.properties" />
 	</target>
-	
+
 	<target name="context.set.3">
 		<switchContext to="config/context3.properties" />
 	</target>
+
+	<target name="context.set.4">
+		<switchContext to="config/context4.properties" />
+	</target>
 	
+	<target name="context.set.5">
+		<switchContext to="config/context5.properties" />
+	</target>
 </project>

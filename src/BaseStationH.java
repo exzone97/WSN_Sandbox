@@ -1,4 +1,3 @@
-
 import com.virtenio.preon32.examples.common.USARTConstants;
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
@@ -17,6 +16,7 @@ import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
 import com.virtenio.driver.usart.USARTException;
 import com.virtenio.driver.usart.USARTParams;
+import com.virtenio.io.Console;
 
 public class BaseStationH extends Thread {
 
@@ -38,11 +38,18 @@ public class BaseStationH extends Thread {
 	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
-	private static int a, b, c, d, e;
 	private static USART usart;
 	private static OutputStream out;
 	private static boolean exit;
 	private static boolean firstSense;
+
+	private static int curr_SN_a = 0;
+	private static int curr_SN_b = 0;
+	private static int curr_SN_c = 0;
+	private static int curr_SN_d = 0;
+	private static int curr_SN_e = 0;
+
+//	private Console console;
 
 	public static void runs() {
 		try {
@@ -70,6 +77,9 @@ public class BaseStationH extends Thread {
 		new Thread() {
 			public void run() {
 				while (true) {
+					Console co = new Console();
+//					String s = co.readLine("asd");
+//					int temp = Integer.parseInt(s);
 					int temp = 100;
 					try {
 						temp = usart.read();
@@ -84,12 +94,13 @@ public class BaseStationH extends Thread {
 							}
 						}
 						exit = true;
-						a = 1;
-						b = 1;
 						firstSense = false;
 						hmapCOUNT.clear();
 						hmap1.clear();
 						hmap2.clear();
+						hmap3.clear();
+						hmap4.clear();
+						hmap5.clear();
 						break;
 					} else if (temp == 1) {
 						for (int i = 1; i < node_list.length; i++) {
@@ -141,98 +152,114 @@ public class BaseStationH extends Thread {
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
+								Thread.sleep(200);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+//							System.out.println(str);
 						} else if (str.charAt(0) == 'T') {
 							String msg = "#" + str + "#";
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
+								Thread.sleep(200);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+//							System.out.println(str);
 						} else if (str.charAt(0) == 'S') {
 							if (frame.getSrcAddr() == node_list[1]) {
-//								String ss[] = str.split(" ");
-//								if (Integer.parseInt(ss[1]) == ADDR_NODE_CH1[0]) {
-//									hmap1.put(a, str);
-//									hmapCOUNT.put(ADDR_NODE_CH1[0], a);
-//									a++;
-//								} else if (Integer.parseInt(ss[1]) == ADDR_NODE_CH1[1]) {
-//									hmap2.put(b, str);
-//									hmapCOUNT.put(ADDR_NODE_CH1[1], b);
-//									b++;
-//								} else if (Integer.parseInt(ss[1]) == ADDR_NODE_CH1[2]) {
-//									hmap3.put(c, str);
-//									hmapCOUNT.put(ADDR_NODE_CH1[2], c);
-//									c++;
-//								}
+								int awal = str.indexOf("<");
+								int akhir = str.indexOf(">");
+								String node = str.substring(awal + 1, akhir);
+								if (Integer.parseInt(node) == ADDR_NODE_CH1[0]) {
+									hmap1.put(1, str);
+									hmapCOUNT.put(ADDR_NODE_CH1[0], 1);
+								} else if (Integer.parseInt(node) == ADDR_NODE_CH1[1]) {
+									hmap2.put(1, str);
+									hmapCOUNT.put(ADDR_NODE_CH1[1], 1);
+								} else if (Integer.parseInt(node) == ADDR_NODE_CH1[2]) {
+									hmap3.put(1, str);
+									hmapCOUNT.put(ADDR_NODE_CH1[2], 1);
+								}
 							} else if (frame.getSrcAddr() == node_list[2]) {
-//								String ss[] = str.split(" ");
-//								if (Integer.parseInt(ss[1]) == ADDR_NODE_CH2[0]) {
-//									hmap4.put(d, str);
-//									hmapCOUNT.put(ADDR_NODE_CH2[0], d);
-//									d++;
-//								} else if (Integer.parseInt(ss[1]) == ADDR_NODE_CH2[1]) {
-//									hmap5.put(e, str);
-//									hmapCOUNT.put(ADDR_NODE_CH2[1], e);
-//									e++;
-//								}
+								int awal = str.indexOf("<");
+								int akhir = str.indexOf(">");
+								String node = str.substring(awal + 1, akhir);
+								if (Integer.parseInt(node) == ADDR_NODE_CH2[0]) {
+									hmap4.put(1, str);
+									hmapCOUNT.put(ADDR_NODE_CH2[0], 1);
+								} else if (Integer.parseInt(node) == ADDR_NODE_CH2[1]) {
+									hmap5.put(1, str);
+									hmapCOUNT.put(ADDR_NODE_CH2[1], 1);
+								}
 							}
 						} else if (str.charAt(0) == 'E') {
 							if (str.equalsIgnoreCase("END1")) {
-								if (hmapCOUNT.get(ADDR_NODE_CH1[0]) == 5) {
-									for (int i = 1; i <= 5; i++) {
-										String s = hmap1.get(i);
-										String msg = "#" + s + "#";
+								if (hmapCOUNT.get(ADDR_NODE_CH1[0]) == 1) {
+									String ss = hmap1.get(1);
+									int akhir = ss.indexOf(">");
+									int akhir_sn = ss.indexOf("?");
+									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
+									if (curr_SN_a < seq) {
+										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											usart.flush();
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
+										curr_SN_a = seq;
+//										System.out.println(ss);
 									}
-									a = 1;
 									hmap1.clear();
 									sends("ACK1", node_list[1], fio);
 								} else {
 									sends("NACK1", node_list[1], fio);
+//									System.out.println("NACK1");
 								}
 								hmapCOUNT.put(ADDR_NODE_CH1[0], 0);
 							} else if (str.equalsIgnoreCase("END2")) {
-								if (hmapCOUNT.get(ADDR_NODE_CH1[1]) == 5) {
-									for (int i = 1; i <= 5; i++) {
-										String s = hmap2.get(i);
-										String msg = "#" + s + "#";
+								if (hmapCOUNT.get(ADDR_NODE_CH1[1]) == 1) {
+									String ss = hmap2.get(1);
+									int akhir = ss.indexOf(">");
+									int akhir_sn = ss.indexOf("?");
+									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
+									if (curr_SN_b < seq) {
+										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
+										curr_SN_b = seq;
+//										System.out.println(ss);
 									}
-									b = 1;
 									hmap2.clear();
 									sends("ACK2", node_list[1], fio);
 								} else {
 									sends("NACK2", node_list[1], fio);
+//									System.out.println("NACK2");
 								}
 								hmapCOUNT.put(ADDR_NODE_CH1[1], 0);
 							} else if (str.equalsIgnoreCase("END3")) {
-								if (hmapCOUNT.get(ADDR_NODE_CH1[2]) == 5) {
-									for(int i = 1;i<=5;i++) {
-										String s = hmap3.get(i);
-										String msg = "#" +s +"#";
+								if (hmapCOUNT.get(ADDR_NODE_CH1[2]) == 1) {
+									String ss = hmap3.get(1);
+									int akhir = ss.indexOf(">");
+									int akhir_sn = ss.indexOf("?");
+									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
+									if (curr_SN_c < seq) {
+										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
 											Thread.sleep(50);
+										} catch (Exception e) {
 										}
-										catch(Exception e) {
-										}
+										curr_SN_c = seq;
+//										System.out.println(ss);
 									}
-									c = 1;
 									hmap3.clear();
 									sends("ACK3", node_list[1], fio);
 								} else {
@@ -240,19 +267,22 @@ public class BaseStationH extends Thread {
 								}
 								hmapCOUNT.put(ADDR_NODE_CH1[2], 0);
 							} else if (str.equalsIgnoreCase("END4")) {
-								if (hmapCOUNT.get(ADDR_NODE_CH2[0]) == 5) {
-									for(int i = 1;i<=5;i++) {
-										String s = hmap4.get(i);
-										String msg = "#" + s+"#";
+								if (hmapCOUNT.get(ADDR_NODE_CH2[0]) == 1) {
+									String ss = hmap4.get(1);
+									int akhir = ss.indexOf(">");
+									int akhir_sn = ss.indexOf("?");
+									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
+									if (curr_SN_d < seq) {
+										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
 											Thread.sleep(50);
+										} catch (Exception e) {
 										}
-										catch(Exception e) {
-										}
+										curr_SN_d = seq;
+//										System.out.println(ss);
 									}
-									d = 1;
 									hmap4.clear();
 									sends("ACK4", node_list[2], fio);
 								} else {
@@ -260,19 +290,22 @@ public class BaseStationH extends Thread {
 								}
 								hmapCOUNT.put(ADDR_NODE_CH2[0], 0);
 							} else if (str.equalsIgnoreCase("END5")) {
-								if (hmapCOUNT.get(ADDR_NODE_CH2[1]) == 5) {
-									for(int i =1;i<=5;i++) {
-										String s = hmap5.get(i);
-										String msg = "#" + s +"#";
+								if (hmapCOUNT.get(ADDR_NODE_CH2[1]) == 1) {
+									String ss = hmap5.get(1);
+									int akhir = ss.indexOf(">");
+									int akhir_sn = ss.indexOf("?");
+									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
+									if (curr_SN_e < seq) {
+										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
 											Thread.sleep(50);
+										} catch (Exception e) {
 										}
-										catch(Exception e) {
-										}
+										curr_SN_e = seq;
+//										System.out.println(ss);
 									}
-									e = 1;
 									hmap5.clear();
 									sends("ACK5", node_list[2], fio);
 								} else {
@@ -320,11 +353,13 @@ public class BaseStationH extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
-		a = 1;
-		b = 1;
-		c = 1;
-		d = 1;
-		e = 1;
+
+		curr_SN_a = 0;
+		curr_SN_b = 0;
+		curr_SN_c = 0;
+		curr_SN_d = 0;
+		curr_SN_e = 0;
+
 		try {
 			startUSART();
 			out = usart.getOutputStream();

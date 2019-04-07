@@ -12,7 +12,7 @@ import org.apache.tools.ant.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Handler {
+public class HandlerHierarki {
 
 	private Scanner scanner;
 	private volatile static boolean exit = false;
@@ -156,9 +156,12 @@ public class Handler {
 							String[] subStr = s.split("#");
 							for (String w : subStr) {
 								if (w.startsWith("SENSE")) {
-									String[] ss = w.split(" ");
+									String temp = w.replace('<', ' ');
+									String temp2 = temp.replace('>', ' ');
+									String temp3 = temp2.replace('?', ' ');
+									String[] ss = temp3.split(" ");
 									long val = Long.parseLong(ss[3]);
-									String newString = ss[0] + " " + ss[1] + " " + ss[2] + " " + stringFormat(val) + " "
+									String newString = ss[0] + " " + Integer.toHexString(Integer.parseInt(ss[1])) + " " + ss[2] + " " + stringFormat(val) + " "
 											+ ss[4] + " " + ss[5] + " " + ss[6] + " " + ss[7] + " " + ss[8] + " "
 											+ ss[9] + " " + ss[10] + " " + ss[11] + " " + ss[12] + " " + ss[13];
 									writer.write(newString, 0, newString.length());
@@ -209,7 +212,7 @@ public class Handler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Handler handler = new Handler();
+		HandlerHierarki handler = new HandlerHierarki();
 //		System.setProperty("purejavacomm.loglevel","6");
 		handler.context_set("context.set.1");
 		handler.time_synchronize();

@@ -74,14 +74,11 @@ public class BaseStation extends Thread {
 						e1.printStackTrace();
 					}
 					if (temp == 0) {
-//						for (int i = 1; i < node_list.length; i++) {
 						try {
-//								send("EXIT", node_list[i], fio);
 							send("EXIT", BROADCAST, fio);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-//						}
 						exit = true;
 						a = 1;
 						b = 1;
@@ -97,43 +94,31 @@ public class BaseStation extends Thread {
 						hmap5.clear();
 						break;
 					} else if (temp == 1) {
-//						for (int i = 1; i < node_list.length; i++) {
 						try {
-//								send("ON", node_list[i], fio);
 							send("ON", BROADCAST, fio);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-//						}
 					} else if (temp == 2) {
 						long currTime = Time.currentTimeMillis();
-//						for (int i = 1; i < node_list.length; i++) {
 						try {
-//								send(("T" + currTime), node_list[i], fio);
 							send(("T" + currTime), BROADCAST, fio);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-//						}
 					} else if (temp == 3) {
-//						for (int i = 1; i < node_list.length; i++) {
 						try {
-//								send("WAKTU", node_list[i], fio);
 							send("WAKTU", BROADCAST, fio);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-//						}
 					} else if (temp == 4) {
 						firstSense = true;
-//						for (int i = 1; i < node_list.length; i++) {
 						try {
-//								send("DETECT", node_list[i], fio);
 							send("DETECT", BROADCAST, fio);
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-//						}
 					}
 				}
 			}
@@ -154,6 +139,7 @@ public class BaseStation extends Thread {
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
+								Thread.sleep(50);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -162,6 +148,7 @@ public class BaseStation extends Thread {
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
+								Thread.sleep(50);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -198,14 +185,14 @@ public class BaseStation extends Thread {
 								e++;
 							}
 						} else if (str.charAt(0) == 'E') {
-							if (hmapCOUNT.get(frame.getSrcAddr()) == 5) {
+							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
 								try {
 									send("ACK", frame.getSrcAddr(), fio);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 								if (frame.getSrcAddr() == node_list[1]) {
-									for (int i = 1; i <= 5; i++) {
+									for (int i = 1; i <= 1; i++) {
 										String s = hmap1.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -222,7 +209,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[2]) {
-									for (int i = 1; i <= 5; i++) {
+									for (int i = 1; i <= 1; i++) {
 										String s = hmap2.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -239,7 +226,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[3]) {
-									for (int i = 1; i <= 5; i++) {
+									for (int i = 1; i <= 1; i++) {
 										String s = hmap3.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -256,7 +243,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[4]) {
-									for (int i = 1; i <= 5; i++) {
+									for (int i = 1; i <= 1; i++) {
 										String s = hmap4.get(i);
 										String msg = "#" + s + "#";
 										try {
@@ -273,7 +260,7 @@ public class BaseStation extends Thread {
 									} catch (Exception e) {
 									}
 								} else if (frame.getSrcAddr() == node_list[5]) {
-									for (int i = 1; i <= 5; i++) {
+									for (int i = 1; i <= 1; i++) {
 										String s = hmap5.get(i);
 										String msg = "#" + s + "#";
 										try {

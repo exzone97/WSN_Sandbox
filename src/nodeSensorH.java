@@ -22,7 +22,7 @@ public class nodeSensorH {
 	private static int ADDR_NODE2 = node_list[3]; // NODE DIRINYA (3-4 / 5)
 	private static sensing s = new sensing();
 	private static int sn = 1;
-	private static HashMap<Integer, Frame> hmap = new HashMap<Integer, Frame>();
+	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	private static long end;
 	private static boolean isSensing = false;
 	private static boolean exit = false;
@@ -53,6 +53,7 @@ public class nodeSensorH {
 							String tm = str.substring(1);
 							long currTime = Long.parseLong(tm);
 							Time.setCurrentTimeMillis(currTime);
+							System.out.println(str);
 						} else if (str.equalsIgnoreCase("EXIT")) {
 							System.out.println(str);
 							hmap.clear();
@@ -64,36 +65,32 @@ public class nodeSensorH {
 							System.out.println(message);
 							send(message,fio);
 						} else if (str.equalsIgnoreCase("ON")) {
-							System.out.println(str);
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
 							System.out.println(message);
 							send(message,fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end = Time.currentTimeMillis() + 8000;
+							end = Time.currentTimeMillis() + 3000;
 							System.out.println(str);
 							String message = "";
 							int i = 0;
-							while (i <= 5 && exit == false) {
+							while (i <= 1 && exit == false) {
 								try {
-									if (i == 5) {
-										message = "END";
+									if (i == 1) {
+										message = "END "+sn;
 									} else {
-										message = "SENSE " + ADDR_NODE2 + " " + sn + " "
+										message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?"
 												+ Time.currentTimeMillis() + " " + s.sense();
 										sn++;
 									}
 									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
 											| Frame.SRC_ADDR_16;
 									final Frame testFrame = new Frame(frameControl);
-									if (!message.equals("END")) {
-										testFrame.setSequenceNumber(sn);
-									}
 									testFrame.setDestPanId(COMMON_PANID);
 									testFrame.setDestAddr(ADDR_NODE1);
 									testFrame.setSrcAddr(ADDR_NODE2);
 									testFrame.setPayload(message.getBytes());
 									System.out.println(message);
-									hmap.put(i, testFrame);
+									hmap.put(i, message);
 									try {
 										fio.transmit(testFrame);
 										Thread.sleep(50);
@@ -111,13 +108,9 @@ public class nodeSensorH {
 								isSensing = false;
 							} else {
 								for (int j = 0; j < hmap.size(); j++) {
-									final Frame testFrame = hmap.get(j);
-									Thread.sleep(50);
-									try {
-										fio.transmit(testFrame);
-										Thread.sleep(50);
-									} catch (Exception e) {
-									}
+									String s = hmap.get(j);
+									System.out.println(s);
+									send(s,fio);
 								}
 							}
 						}
@@ -132,15 +125,11 @@ public class nodeSensorH {
 				if (Time.currentTimeMillis() > end) {
 					System.out.println("Timeout");
 					for (int i = 0; i < hmap.size(); i++) {
-						final Frame testFrame = hmap.get(i);
-						Thread.sleep(50);
-						try {
-							fio.transmit(testFrame);
-							Thread.sleep(50);
-						} catch (Exception e) {
-						}
+						String s = hmap.get(i);
+						System.out.println(s);
+						send(s,fio);
 					}
-					end = Time.currentTimeMillis() + 8000;
+					end = Time.currentTimeMillis() + 3000;
 				}
 			}
 		}
