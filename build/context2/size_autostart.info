@@ -554,8 +554,8 @@
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 
-681		nodeSensor$1
-	671		run()V
+688		nodeSensor$1
+	678		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 650		com/virtenio/driver/device/ADT7410
@@ -741,12 +741,12 @@
 	5		hasMoreElements()Z
 	5		nextElement()Ljava/lang/Object;
 
-396		nodeSensor
+401		nodeSensor
 	159		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	83		send(Ljava/lang/String;Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	70		runs()V
+	14		main([Ljava/lang/String;)V
 	12		access$508()I
-	9		main([Ljava/lang/String;)V
 	8		access$402(J)J
 	7		access$102(Z)Z
 	7		access$202(Z)Z

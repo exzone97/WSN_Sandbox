@@ -35,7 +35,7 @@ public class BaseStation extends Thread {
 	private static HashMap<Integer, String> hmap3 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap4 = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> hmap5 = new HashMap<Integer, String>();
-	private static int a, b, c, d, e;
+	private static int curr_a, curr_b, curr_c, curr_d, curr_e;
 	private static USART usart;
 	private static OutputStream out;
 	private static boolean exit;
@@ -80,11 +80,6 @@ public class BaseStation extends Thread {
 							e1.printStackTrace();
 						}
 						exit = true;
-						a = 1;
-						b = 1;
-						c = 1;
-						d = 1;
-						e = 1;
 						firstSense = false;
 						hmapCOUNT.clear();
 						hmap1.clear();
@@ -154,46 +149,38 @@ public class BaseStation extends Thread {
 							}
 						} else if (str.charAt(0) == 'S') {
 							if (frame.getSrcAddr() == node_list[1]) {
-								hmapCOUNT.put(frame.getSrcAddr(), a);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap1.put(a, st);
-								a++;
+								hmap1.put(1, st);
 							} else if (frame.getSrcAddr() == node_list[2]) {
-								hmapCOUNT.put(frame.getSrcAddr(), b);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap2.put(b, st);
-								b++;
+								hmap2.put(1, st);
 							} else if (frame.getSrcAddr() == node_list[3]) {
-								hmapCOUNT.put(frame.getSrcAddr(), c);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap3.put(c, st);
-								c++;
+								hmap3.put(1, st);
 							} else if (frame.getSrcAddr() == node_list[4]) {
-								hmapCOUNT.put(frame.getSrcAddr(), d);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap4.put(d, st);
-								d++;
+								hmap4.put(1, st);
 							} else if (frame.getSrcAddr() == node_list[5]) {
-								hmapCOUNT.put(frame.getSrcAddr(), e);
+								hmapCOUNT.put(frame.getSrcAddr(), 1);
 								byte[] s = frame.getPayload();
 								String st = new String(s, 0, s.length);
-								hmap5.put(e, st);
-								e++;
+								hmap5.put(1, st);
 							}
-						} else if (str.charAt(0) == 'E') {
+						} else if (str.startsWith("END")) {
 							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
-								try {
-									send("ACK", frame.getSrcAddr(), fio);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
 								if (frame.getSrcAddr() == node_list[1]) {
-									for (int i = 1; i <= 1; i++) {
-										String s = hmap1.get(i);
+									if (curr_a == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+//										Thread.sleep(100);
+										String s = hmap1.get(1);
 										String msg = "#" + s + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length()); //
@@ -201,16 +188,15 @@ public class BaseStation extends Thread {
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
-									}
-									a = 1;
-									hmap1.clear();
-									try {
+										hmap1.clear();
 										send("DETECT", node_list[1], fio);
-									} catch (Exception e) {
+										curr_a++;
 									}
 								} else if (frame.getSrcAddr() == node_list[2]) {
-									for (int i = 1; i <= 1; i++) {
-										String s = hmap2.get(i);
+									if (curr_b == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+//										Thread.sleep(100);
+										String s = hmap2.get(1);
 										String msg = "#" + s + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length()); //
@@ -218,16 +204,15 @@ public class BaseStation extends Thread {
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
-									}
-									b = 1;
-									hmap2.clear();
-									try {
+										hmap2.clear();
 										send("DETECT", node_list[2], fio);
-									} catch (Exception e) {
+										curr_b++;
 									}
 								} else if (frame.getSrcAddr() == node_list[3]) {
-									for (int i = 1; i <= 1; i++) {
-										String s = hmap3.get(i);
+									if (curr_c == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+//										Thread.sleep(200);
+										String s = hmap3.get(1);
 										String msg = "#" + s + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length()); //
@@ -235,16 +220,15 @@ public class BaseStation extends Thread {
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
-									}
-									c = 1;
-									hmap3.clear();
-									try {
+										hmap3.clear();
 										send("DETECT", node_list[3], fio);
-									} catch (Exception e) {
+										curr_c++;
 									}
 								} else if (frame.getSrcAddr() == node_list[4]) {
-									for (int i = 1; i <= 1; i++) {
-										String s = hmap4.get(i);
+									if (curr_d == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+//										Thread.sleep(200);
+										String s = hmap4.get(1);
 										String msg = "#" + s + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length()); //
@@ -252,16 +236,15 @@ public class BaseStation extends Thread {
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
-									}
-									d = 1;
-									hmap4.clear();
-									try {
+										hmap4.clear();
 										send("DETECT", node_list[4], fio);
-									} catch (Exception e) {
+										curr_d++;
 									}
 								} else if (frame.getSrcAddr() == node_list[5]) {
-									for (int i = 1; i <= 1; i++) {
-										String s = hmap5.get(i);
+									if (curr_e == Integer.parseInt(str.substring(4))) {
+										send("ACK", frame.getSrcAddr(), fio);
+//										Thread.sleep(200);
+										String s = hmap5.get(1);
 										String msg = "#" + s + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
@@ -270,31 +253,18 @@ public class BaseStation extends Thread {
 											Thread.sleep(50);
 										} catch (Exception e) {
 										}
-									}
-									e = 1;
-									hmap5.clear();
-									try {
+										hmap5.clear();
 										send("DETECT", node_list[5], fio);
-									} catch (Exception e) {
+										curr_e++;
 									}
 								}
 								hmapCOUNT.put(frame.getSrcAddr(), 0);
 							} else {
 								try {
+//									Thread.sleep(200);
 									send("NACK", frame.getSrcAddr(), fio);
 								} catch (Exception e) {
 									e.printStackTrace();
-								}
-								if (frame.getSrcAddr() == node_list[1]) {
-									a = 1;
-								} else if (frame.getSrcAddr() == node_list[2]) {
-									b = 1;
-								} else if (frame.getSrcAddr() == node_list[3]) {
-									c = 1;
-								} else if (frame.getSrcAddr() == node_list[4]) {
-									d = 1;
-								} else if (frame.getSrcAddr() == node_list[5]) {
-									e = 1;
 								}
 							}
 						}
@@ -337,11 +307,11 @@ public class BaseStation extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
-		a = 1;
-		b = 1;
-		c = 1;
-		d = 1;
-		e = 1;
+		curr_a = 1;
+		curr_b = 1;
+		curr_c = 1;
+		curr_d = 1;
+		curr_e = 1;
 		try {
 			startUSART();
 			out = usart.getOutputStream();
