@@ -50,7 +50,7 @@ public class HandlerHierarki {
 
 	public void init() throws Exception {
 		try {
-			Preon32Helper nodeHelper = new Preon32Helper("COM3", 115200);
+			Preon32Helper nodeHelper = new Preon32Helper("COM4", 115200);
 			DataConnection conn = nodeHelper.runModule("basestation");
 			BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 
@@ -77,6 +77,7 @@ public class HandlerHierarki {
 				}
 				case 1: {
 					byte[] buffer = new byte[1024];
+					Thread.sleep(500);
 					while (in.available() > 0) {
 						in.read(buffer);
 						conn.flush();
@@ -95,7 +96,8 @@ public class HandlerHierarki {
 				}
 				case 3: {
 					byte[] buffer = new byte[1024];
-					while (in.available() > 0) {
+					Thread.sleep(500);
+					while (in.available() > 0) {	
 						in.read(buffer);
 						conn.flush();
 						s = new String(buffer);

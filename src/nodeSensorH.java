@@ -17,9 +17,9 @@ public class nodeSensorH {
 			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xCAAA),
 			PropertyHelper.getInt("radio.panid", 0xDABA), PropertyHelper.getInt("radio.panid", 0xDABB),
 			PropertyHelper.getInt("radio.panid", 0xCABA) };
-	
+
 	private static int ADDR_NODE1 = node_list[1]; // NODE DIATASNYA (1/2)
-	private static int ADDR_NODE2 = node_list[5]; // NODE DIRINYA (3-4 / 5)
+	private static int ADDR_NODE2 = node_list[5]; // NODE DIRINYA (3 / 5)
 	private static sensing s = new sensing();
 	private static int sn = 1;
 	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
@@ -63,11 +63,11 @@ public class nodeSensorH {
 						} else if (str.equalsIgnoreCase("WAKTU")) {
 							String message = "Time " + Integer.toHexString(ADDR_NODE2) + " " + Time.currentTimeMillis();
 							System.out.println(message);
-							send(message,fio);
+							send(message, fio);
 						} else if (str.equalsIgnoreCase("ON")) {
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + " ONLINE";
 							System.out.println(message);
-							send(message,fio);
+							send(message, fio);
 						} else if (str.equalsIgnoreCase("DETECT")) {
 							end = Time.currentTimeMillis() + 3000;
 							System.out.println(str);
@@ -76,10 +76,10 @@ public class nodeSensorH {
 							while (i <= 1 && exit == false) {
 								try {
 									if (i == 1) {
-										message = "END "+sn;
+										message = "END " + (sn-1);
 									} else {
-										message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?"
-												+ Time.currentTimeMillis() + " " + s.sense();
+										message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?" + Time.currentTimeMillis()
+												+ " " + s.sense();
 										sn++;
 									}
 									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
@@ -110,7 +110,7 @@ public class nodeSensorH {
 								for (int j = 0; j < hmap.size(); j++) {
 									String s = hmap.get(j);
 									System.out.println(s);
-									send(s,fio);
+									send(s, fio);
 								}
 							}
 						}
@@ -127,7 +127,7 @@ public class nodeSensorH {
 					for (int i = 0; i < hmap.size(); i++) {
 						String s = hmap.get(i);
 						System.out.println(s);
-						send(s,fio);
+						send(s, fio);
 					}
 					end = Time.currentTimeMillis() + 3000;
 				}

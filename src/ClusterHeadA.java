@@ -1,4 +1,3 @@
-
 //CLUSTER HEAD A
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
@@ -76,33 +75,37 @@ public class ClusterHeadA extends Thread {
 							hmap1.clear();
 							break;
 						} else if (str.equalsIgnoreCase("WAKTU")) {
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("WAKTU", ADDR_NODE3, fio);
 							String message = "Time " + Integer.toHexString(ADDR_NODE2) + "(CH) "
 									+ Time.currentTimeMillis();
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send(message, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("ON")) {
 							send("ON", ADDR_NODE3, fio);
 							String message = "Node " + Integer.toHexString(ADDR_NODE2) + "(CH) ONLINE";
-							Thread.sleep(400);
+							Thread.sleep(100);
 							send(message, ADDR_NODE1, fio);
+							System.out.println(message);
 						} else if (str.equalsIgnoreCase("DETECT")) {
-							end_0 = Time.currentTimeMillis() + 4000;
-							end_1 = Time.currentTimeMillis() + 4000;
+							System.out.println("Detect");
+							end_0 = Time.currentTimeMillis() + 3000;
+							end_1 = Time.currentTimeMillis() + 3000;
 							send("DETECT", ADDR_NODE3, fio);
 							String message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?" + Time.currentTimeMillis() + " "
 									+ s.sense();
 							sn++;
-							Thread.sleep(400);
+							Thread.sleep(100);
 							send(message, ADDR_NODE1, fio);
-							System.out.println(message);
 							hmap.put(1, message);
-							Thread.sleep(400);
+							System.out.println("Send Detect to NS");
+							Thread.sleep(100);
 							send("END1", ADDR_NODE1, fio);
+							System.out.println("END1");
 							isSensing = true;
 						} else if (str.charAt(str.length() - 1) == 'E') {
 							send(str, ADDR_NODE1, fio);
+							System.out.println(str);
 						} else if (str.charAt(0) == 'S') {
 							hmapCOUNT.put(frame.getSrcAddr(), 1);
 							byte[] s = frame.getPayload();
@@ -110,15 +113,19 @@ public class ClusterHeadA extends Thread {
 							hmap1.put(1, st);
 							System.out.println(hmap1.get(1));
 						} else if (str.startsWith("END")) {
+							System.out.println(str);
 							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
+								System.out.println(a);
+								System.out.println(Integer.parseInt(str.substring(4)));
 								if (a == Integer.parseInt(str.substring(4))) {
 									send("ACK", frame.getSrcAddr(), fio);
-									Thread.sleep(200);
+									System.out.println("ACK");
+									Thread.sleep(100);
 									String s = hmap1.get(1);
 									send(s, ADDR_NODE1, fio);
-									Thread.sleep(200);
+									Thread.sleep(100);
 									send("END2", ADDR_NODE1, fio);
-									end_1 = Time.currentTimeMillis() + 4000;
+									end_1 = Time.currentTimeMillis() + 3000;
 									a++;
 								}
 							} else {
@@ -133,25 +140,29 @@ public class ClusterHeadA extends Thread {
 							sn++;
 							hmap.put(1, message);
 							send(message, ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END1", ADDR_NODE1, fio);
-							end_0 = Time.currentTimeMillis() + 4000;
+							end_0 = Time.currentTimeMillis() + 3000;
+							System.out.println("ACK1");
 						} else if (str.equalsIgnoreCase("ACK2")) {
 							hmap1.clear();
 							hmapCOUNT.put((long) ADDR_NODE3, 0);
 							send("DETECT", ADDR_NODE3, fio);
-							end_1 = Time.currentTimeMillis() + 4000;
+							end_1 = Time.currentTimeMillis() + 3000;
+							System.out.println("ACK2");
 						}
 						else if (str.equalsIgnoreCase("NACK1")) {
 							send(hmap.get(1), ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END1", ADDR_NODE1, fio);
-							end_0 = Time.currentTimeMillis() + 4000;
+							end_0 = Time.currentTimeMillis() + 3000;
+							System.out.println("NACK1");
 						} else if (str.equalsIgnoreCase("NACK2")) {
 							send(hmap1.get(1), ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END2", ADDR_NODE1, fio);
-							end_1 = Time.currentTimeMillis() + 4000;
+							end_1 = Time.currentTimeMillis() + 3000;
+							System.out.println("NACK2");
 						}
 					} catch (Exception e) {
 					}
@@ -163,19 +174,19 @@ public class ClusterHeadA extends Thread {
 			if (isSensing == true && exit == false) {
 				if (Time.currentTimeMillis() > end_0) {
 					if (hmap.get(1) != null) {
-						// System.out.println("Timeout END_0");
+						 System.out.println("Timeout END_0");
 						send(hmap.get(1), ADDR_NODE1, fio);
-						Thread.sleep(200);
+						Thread.sleep(100);
 						send("END1", ADDR_NODE1, fio);
-						end_0 = Time.currentTimeMillis() + 4000;
+						end_0 = Time.currentTimeMillis() + 3000;
 					}
 				} else if (Time.currentTimeMillis() > end_1) {
 					if (hmap1.get(1) != null) {
-//					System.out.println("Timeout END_1");
+					System.out.println("Timeout END_1");
 						send(hmap1.get(1), ADDR_NODE1, fio);
-						Thread.sleep(200);
+						Thread.sleep(100);
 						send("END2", ADDR_NODE1, fio);
-						end_1 = Time.currentTimeMillis() + 4000;
+						end_1 = Time.currentTimeMillis() + 3000;
 					}
 				}
 			}

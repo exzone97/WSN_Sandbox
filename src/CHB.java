@@ -1,4 +1,3 @@
-
 //CLUSTER HEAD B
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
@@ -12,7 +11,7 @@ import com.virtenio.radio.ieee_802_15_4.RadioDriver;
 import com.virtenio.radio.ieee_802_15_4.RadioDriverFrameIO;
 import java.util.HashMap;
 
-public class ClusterHeadB extends Thread {
+public class CHB extends Thread {
 	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
 	private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
 			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xCAAA),
@@ -66,6 +65,7 @@ public class ClusterHeadB extends Thread {
 							Time.setCurrentTimeMillis(currTime);
 							send(("T" + currTime), ADDR_NODE3, fio);
 						} else if (str.charAt(0) == 'T') {
+							System.out.println(str);
 							send(str, ADDR_NODE1, fio);
 						} else if (str.equalsIgnoreCase("EXIT")) {
 							send("EXIT", ADDR_NODE3, fio);
@@ -76,15 +76,16 @@ public class ClusterHeadB extends Thread {
 							hmap1.clear();
 							break;
 						} else if (str.equalsIgnoreCase("WAKTU")) {
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("WAKTU", ADDR_NODE3, fio);
-							Thread.sleep(200);
 							String msg = "Time " + Integer.toHexString(ADDR_NODE2) + "(CH) " + Time.currentTimeMillis();
+							Thread.sleep(100);
 							send(msg, ADDR_NODE1, fio);
+							System.out.println(msg);
 						} else if (str.equalsIgnoreCase("ON")) {
 							send("ON", ADDR_NODE3, fio);
 							String msg = "Node " + Integer.toHexString(ADDR_NODE2) + "(CH) ONLINE";
-							Thread.sleep(400);
+							Thread.sleep(100);
 							send(msg, ADDR_NODE1, fio);
 							System.out.println(msg);
 						} else if (str.equalsIgnoreCase("DETECT")) {
@@ -94,35 +95,38 @@ public class ClusterHeadB extends Thread {
 							String message = "SENSE<" + ADDR_NODE2 + ">" + sn + "?" + Time.currentTimeMillis() + " "
 									+ s.sense();
 							sn++;
-							Thread.sleep(400);
+							Thread.sleep(100);
 							send(message, ADDR_NODE1, fio);
 							System.out.println(message);
 							hmap.put(1, message);
-							Thread.sleep(400);
+							Thread.sleep(100);
 							send("END4", ADDR_NODE1, fio);
 							isSensing = true;
 						} else if (str.charAt(str.length() - 1) == 'E') {
 							send(str, ADDR_NODE1, fio);
+							System.out.println(str);
 						} else if (str.charAt(0) == 'S') {
 							hmapCOUNT.put(frame.getSrcAddr(), 1);
 							byte[] s = frame.getPayload();
 							String st = new String(s, 0, s.length);
-							System.out.println(st);
+//							System.out.println(st);
 							hmap1.put(1, st);
 						} else if (str.startsWith("END")) {
 							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
 								if (a == Integer.parseInt(str.substring(4))) {
 									send("ACK", frame.getSrcAddr(), fio);
-									Thread.sleep(200);
+									Thread.sleep(100);
 									String s = hmap1.get(1);
 									send(s, ADDR_NODE1, fio);
-									Thread.sleep(200);
+									Thread.sleep(100);
 									send("END5", ADDR_NODE1, fio);
 									end_1 = Time.currentTimeMillis() + 3000;
 									a++;
+									System.out.println(s);
 								}
 							} else {
 								send("NACK", frame.getSrcAddr(), fio);
+								System.out.println("NACK");
 							}
 						}
 						if (str.equalsIgnoreCase("ACK4")) {
@@ -133,24 +137,28 @@ public class ClusterHeadB extends Thread {
 							sn++;
 							hmap.put(1, message);
 							send(message, ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END4", ADDR_NODE1, fio);
 							end_0 = Time.currentTimeMillis() + 3000;
+							System.out.println("ACK4");
 						} else if (str.equalsIgnoreCase("ACK5")) {
 							hmap1.clear();
 							hmapCOUNT.put((long) ADDR_NODE3, 0);
 							send("DETECT", ADDR_NODE3, fio);
 							end_1 = Time.currentTimeMillis() + 3000;
+							System.out.println("ACK5");
 						} else if (str.equalsIgnoreCase("NACK4")) {
 							send(hmap.get(1), ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END4", ADDR_NODE1, fio);
 							end_0 = Time.currentTimeMillis() + 3000;
+							System.out.println("NACK4");
 						} else if (str.equalsIgnoreCase("NACK5")) {
 							send(hmap1.get(1), ADDR_NODE1, fio);
-							Thread.sleep(200);
+							Thread.sleep(100);
 							send("END5", ADDR_NODE1, fio);
 							end_1 = Time.currentTimeMillis() + 3000;
+							System.out.println("NACK5");
 						}
 					} catch (Exception e) {
 					}
@@ -161,16 +169,18 @@ public class ClusterHeadB extends Thread {
 		while (reader.isAlive()) {
 			if (isSensing == true && exit == false) {
 				if (Time.currentTimeMillis() > end_0) {
+					System.out.println("Timeout END_0");
 					if (hmap.get(1) != null) {
 						send(hmap.get(1), ADDR_NODE1, fio);
-						Thread.sleep(200);
+						Thread.sleep(100);
 						send("END4", ADDR_NODE1, fio);
 						end_0 = Time.currentTimeMillis() + 3000;
 					}
 				} else if (Time.currentTimeMillis() > end_1) {
+					System.out.println("Timeout END_1");
 					if (hmap1.get(1) != null) {
 						send(hmap1.get(1), ADDR_NODE1, fio);
-						Thread.sleep(200);
+						Thread.sleep(100);
 						send("END5", ADDR_NODE1, fio);
 						end_1 = Time.currentTimeMillis() + 3000;
 					}
@@ -194,6 +204,7 @@ public class ClusterHeadB extends Thread {
 	}
 
 	public static void main(String[] arg) throws Exception {
+		System.out.println("ASDF");
 		a = 1;
 		sn = 1; //
 		exit = false;

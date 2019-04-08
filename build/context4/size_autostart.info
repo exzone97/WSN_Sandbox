@@ -386,6 +386,10 @@
 	7		<init>()V
 	2		size()I
 
+1383		CHB$1
+	1373		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
 	145		programPage(I[BII)V
@@ -421,10 +425,6 @@
 	2		getPageSize()I
 	2		getSectorSize()I
 	2		getBlockSize()I
-
-1155		ClusterHeadB$1
-	1145		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1091		java/util/HashMap
 	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
@@ -659,6 +659,29 @@
 	0		getSourceCount()I
 	0		fire(I)V
 
+543		CHB
+	252		receive_send(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	70		runs()V
+	29		main([Ljava/lang/String;)V
+	12		access$208()I
+	12		access$1208()I
+	8		access$802(J)J
+	8		access$902(J)J
+	7		access$202(I)I
+	7		access$302(Z)Z
+	7		access$1102(Z)Z
+	6		<init>()V
+	5		access$000()I
+	5		access$100()I
+	5		access$400()Ljava/util/HashMap;
+	5		access$500()Ljava/util/HashMap;
+	5		access$600()Ljava/util/HashMap;
+	5		access$700()I
+	5		access$200()I
+	5		access$1000()Lsensing;
+	5		access$1200()I
+
 528		java/util/AbstractList$SubAbstractList
 	70		addAll(ILjava/util/Collection;)Z
 	64		add(ILjava/lang/Object;)V
@@ -687,29 +710,6 @@
 	13		isEmpty()Z
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
-
-487		ClusterHeadB
-	206		receive_send(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	70		runs()V
-	19		main([Ljava/lang/String;)V
-	12		access$208()I
-	12		access$1208()I
-	8		access$802(J)J
-	8		access$902(J)J
-	7		access$202(I)I
-	7		access$302(Z)Z
-	7		access$1102(Z)Z
-	6		<init>()V
-	5		access$000()I
-	5		access$100()I
-	5		access$400()Ljava/util/HashMap;
-	5		access$500()Ljava/util/HashMap;
-	5		access$600()Ljava/util/HashMap;
-	5		access$700()I
-	5		access$200()I
-	5		access$1000()Lsensing;
-	5		access$1200()I
 
 452		java/util/AbstractList
 	89		equals(Ljava/lang/Object;)Z

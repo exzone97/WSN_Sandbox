@@ -147,7 +147,7 @@ public class BaseStationH extends Thread {
 						if (str.charAt(str.length() - 1) == 'E') {
 							String msg = "#" + str + "#";
 							try {
-								Thread.sleep(900);
+//								Thread.sleep(900);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {
@@ -157,7 +157,7 @@ public class BaseStationH extends Thread {
 						} else if (str.charAt(0) == 'T') {
 							String msg = "#" + str + "#";
 							try {
-								Thread.sleep(900);
+//								Thread.sleep(900);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {
@@ -195,15 +195,15 @@ public class BaseStationH extends Thread {
 									int akhir = ss.indexOf(">");
 									int akhir_sn = ss.indexOf("?");
 									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
-									if (curr_SN_a < seq) {
+									if (curr_SN_a == seq) {
 										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											usart.flush();
-											Thread.sleep(200);
+											Thread.sleep(100);
 										} catch (Exception e) {
 										}
-										curr_SN_a = seq;
+										curr_SN_a++;
 //										System.out.println(ss);
 									}
 									hmap1.clear();
@@ -219,15 +219,15 @@ public class BaseStationH extends Thread {
 									int akhir = ss.indexOf(">");
 									int akhir_sn = ss.indexOf("?");
 									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
-									if (curr_SN_b < seq) {
+									if (curr_SN_b == seq) {
 										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
-											Thread.sleep(200);
+											Thread.sleep(100);
 										} catch (Exception e) {
 										}
-										curr_SN_b = seq;
+										curr_SN_b++;
 //										System.out.println(ss);
 									}
 									hmap2.clear();
@@ -243,15 +243,15 @@ public class BaseStationH extends Thread {
 									int akhir = ss.indexOf(">");
 									int akhir_sn = ss.indexOf("?");
 									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
-									if (curr_SN_d < seq) {
+									if (curr_SN_d == seq) {
 										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
-											Thread.sleep(200);
+											Thread.sleep(100);
 										} catch (Exception e) {
 										}
-										curr_SN_d = seq;
+										curr_SN_d++;
 									}
 									hmap4.clear();
 									sends("ACK4", node_list[2], fio);
@@ -265,15 +265,15 @@ public class BaseStationH extends Thread {
 									int akhir = ss.indexOf(">");
 									int akhir_sn = ss.indexOf("?");
 									int seq = Integer.parseInt(ss.substring(akhir + 1, akhir_sn));
-									if (curr_SN_e < seq) {
+									if (curr_SN_e == seq) {
 										String msg = "#" + ss + "#";
 										try {
 											out.write(msg.getBytes(), 0, msg.length());
 											out.flush();
-											Thread.sleep(200);
+											Thread.sleep(100);
 										} catch (Exception e) {
 										}
-										curr_SN_e = seq;
+										curr_SN_e++;
 									}
 									hmap5.clear();
 									sends("ACK5", node_list[2], fio);
@@ -323,10 +323,10 @@ public class BaseStationH extends Thread {
 
 	public static void main(String[] args) throws Exception {
 
-		curr_SN_a = 0;
-		curr_SN_b = 0;
-		curr_SN_d = 0;
-		curr_SN_e = 0;
+		curr_SN_a = 1;
+		curr_SN_b = 1;
+		curr_SN_d = 1;
+		curr_SN_e = 1;
 
 		try {
 			startUSART();
