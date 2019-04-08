@@ -69,7 +69,7 @@ public class ClusterHeadA extends Thread {
 						fio.receive(frame);
 						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
-						System.out.println("Receive " + str);
+//						System.out.println("Receive " + str);
 						if (str.charAt(0) == 'Q') {
 							String tm = str.substring(1);
 							long currTime = Long.parseLong(tm);
@@ -135,7 +135,6 @@ public class ClusterHeadA extends Thread {
 								String st = new String(s, 0, s.length);
 								hmap2.put(1, st);
 							}
-//						} else if (str.equalsIgnoreCase("END")) {
 						} else if (str.startsWith("END")) {
 							if (hmapCOUNT.get(frame.getSrcAddr()) == 1) {
 								long temp = frame.getSrcAddr();
@@ -172,16 +171,16 @@ public class ClusterHeadA extends Thread {
 							send(message, ADDR_NODE1, fio);
 							send("END1", ADDR_NODE1, fio);
 							end_0 = Time.currentTimeMillis() + 3000;
-//							System.out.println("END1");
-//							System.out.println(message);
 						} else if (str.equalsIgnoreCase("ACK2")) {
 							hmap1.clear();
 							hmapCOUNT.put((long) ADDR_NODE3[0], 0);
 							send("DETECT", ADDR_NODE3[0], fio);
+							end_1 = Time.currentTimeMillis() + 3000;
 						} else if (str.equalsIgnoreCase("ACK3")) {
 							hmap2.clear();
 							hmapCOUNT.put((long) ADDR_NODE3[1], 0);
 							send("DETECT", ADDR_NODE3[1], fio);
+							end_2 = Time.currentTimeMillis() + 3000;
 						} else if (str.equalsIgnoreCase("NACK1")) {
 							send(hmap.get(1), ADDR_NODE1, fio);
 							send("END1", ADDR_NODE1, fio);
@@ -205,22 +204,26 @@ public class ClusterHeadA extends Thread {
 		while (reader.isAlive()) {
 			if (isSensing == true && exit == false) {
 				if (Time.currentTimeMillis() > end_0) {
-					System.out.println("Timeout END_0");
-					send(hmap.get(1), ADDR_NODE1, fio);
-					send("END1", ADDR_NODE1, fio);
-					end_0 = Time.currentTimeMillis() + 3000;
+					if (hmap.get(1) != null) {
+						// System.out.println("Timeout END_0");
+						send(hmap.get(1), ADDR_NODE1, fio);
+						send("END1", ADDR_NODE1, fio);
+						end_0 = Time.currentTimeMillis() + 3000;
+					}
 				} else if (Time.currentTimeMillis() > end_1) {
-					System.out.println("Timeout END_1");
-					send(hmap1.get(1), ADDR_NODE1, fio);
-					send("END2", ADDR_NODE1, fio);
-					end_1 = Time.currentTimeMillis() + 3000;
+					if (hmap1.get(1) != null) {
+//					System.out.println("Timeout END_1");
+						send(hmap1.get(1), ADDR_NODE1, fio);
+						send("END2", ADDR_NODE1, fio);
+						end_1 = Time.currentTimeMillis() + 3000;
+					}
+				} else if (Time.currentTimeMillis() > end_2) {
+					if (hmap2.get(1) != null) {
+						send(hmap2.get(1), ADDR_NODE1, fio);
+						send("END3", ADDR_NODE1, fio);
+						end_2 = Time.currentTimeMillis() + 3000;
+					}
 				}
-//				else if (Time.currentTimeMillis() > end_2) {
-//					//System.out.println("Timeout END_2");
-//					end_2 = Time.currentTimeMillis() + 3000;
-//						send(hmap2.get(i), ADDR_NODE1, fio);
-//				send("END3",ADDR_NODE1,fio);
-//				}
 			}
 		}
 	}

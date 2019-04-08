@@ -83,9 +83,6 @@ public class nodeSensor {
 									int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN
 											| Frame.SRC_ADDR_16;
 									final Frame testFrame = new Frame(frameControl);
-									if (!message.equals("END")) {
-										testFrame.setSequenceNumber(sn);
-									}
 									testFrame.setDestPanId(COMMON_PANID);
 									testFrame.setDestAddr(ADDR_NODE1);
 									testFrame.setSrcAddr(ADDR_NODE2);

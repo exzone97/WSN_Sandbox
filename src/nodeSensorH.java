@@ -19,7 +19,7 @@ public class nodeSensorH {
 			PropertyHelper.getInt("radio.panid", 0xCABA) };
 	
 	private static int ADDR_NODE1 = node_list[1]; // NODE DIATASNYA (1/2)
-	private static int ADDR_NODE2 = node_list[3]; // NODE DIRINYA (3-4 / 5)
+	private static int ADDR_NODE2 = node_list[4]; // NODE DIRINYA (3-4 / 5)
 	private static sensing s = new sensing();
 	private static int sn = 1;
 	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>();
