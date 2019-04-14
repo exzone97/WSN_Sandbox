@@ -15,21 +15,84 @@ public class NodeSensor {
 			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xDAAB),
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
-
-	// ADDR_NODE1 = Node diatas
-	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE1 = node_list[1];
-
-	// ADDR_NODE2 = Node dibawah
-//	 kalau tidak ada node dibawahnya = new int[0]
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB) };
-	private static int ADDR_NODE2[] = new int[0];
-
-//	 ADDR_NODE3 = Node dirinya
-//	private static int ADDR_NODE3 = node_list[1];
-//	private static int ADDR_NODE3 = node_list[2];
-	private static int ADDR_NODE3 = node_list[1];
 	
+// ADDR_NODE1 = NODE DIATAS, ADDR_NODE2 = NODE DIBAWAH, ADDR_NODE3 = NODE DIRINYA
+// =================================================================================================		
+// TYPE D
+	//1
+	private static int ADDR_NODE1 = node_list[0];
+	private static int ADDR_NODE2[] = new int[] { PropertyHelper.getInt("radio.panid", 0xDAAB),
+			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD) };
+	private static int ADDR_NODE3 = node_list[1];
+	//2
+//	private static int ADDR_NODE1 = node_list[1];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[2];
+	//3
+//	private static int ADDR_NODE1 = node_list[1];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[3];
+	//4
+//	private static int ADDR_NODE1 = node_list[1];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[4];
+// =================================================================================================	
+// TYPE F
+	//1
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[1];
+	//2
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[2];
+	//3
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD) };
+//	private static int ADDR_NODE3 = node_list[3];
+	//4
+//	private static int ADDR_NODE1 = node_list[3];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[4];
+// =================================================================================================		
+// TYPE G
+	//1
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = {PropertyHelper.getInt("radio.panid", 0xDAAC};
+//	private static int ADDR_NODE3 = node_list[1];
+	//2
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = {PropertyHelper.getInt("radio.panid", 0xDAAD};
+//	private static int ADDR_NODE3 = node_list[2];
+	//3
+//	private static int ADDR_NODE1 = node_list[1];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[3];
+	//4
+//	private static int ADDR_NODE1 = node_list[2];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[4];
+// =================================================================================================		
+// TYPE H
+	//1
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[1];
+	//2
+//	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAC),
+//			PropertyHelper.getInt("radio.panid", 0xDAAD) };
+//	private static int ADDR_NODE3 = node_list[2];
+	//3
+//	private static int ADDR_NODE1 = node_list[2];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[3];
+	//4
+//	private static int ADDR_NODE1 = node_list[2];
+//	private static int ADDR_NODE2[] = new int[0];
+//	private static int ADDR_NODE3 = node_list[4];
+// =================================================================================================		
+
 
 	private static sensing s = new sensing();
 	private static int sn = 1; // sequence number

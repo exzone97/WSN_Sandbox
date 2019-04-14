@@ -27,13 +27,26 @@ public class BaseStation extends Thread {
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
 	private static int ADDR_NODE3 = node_list[0]; // NODE DIRINYA (BS)
-
-	// A
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) }; // node dibwhnya
-
-	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
-			PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
-			PropertyHelper.getInt("radio.panid", 0xDAAD) }; // node dibwhnya
+// =================================================================================================	
+	// D
+	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
+// =================================================================================================	
+	// F
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+//			PropertyHelper.getInt("radio.panid", 0xDAAB),
+//			PropertyHelper.getInt("radio.panid", 0xDAAC)
+//			};
+// =================================================================================================		
+	// G
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+//			PropertyHelper.getInt("radio.panid", 0xDAAB)
+//			};
+// =================================================================================================
+	// H
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+//			PropertyHelper.getInt("radio.panid", 0xDAAB)
+//			};
+// =================================================================================================
 
 	private static HashMap<Integer, Integer> hmap = new HashMap<Integer, Integer>();
 	private static HashMap<Integer, String> hmapTemp = new HashMap<Integer, String>();
