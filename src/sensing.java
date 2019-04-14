@@ -1,6 +1,6 @@
 import sensors.AccelerationSensor;
 import sensors.HumiditySensor;
-import sensors.PressureSensor;
+//import sensors.PressureSensor;
 import sensors.TemperatureSensor;
 
 import com.virtenio.driver.i2c.I2C;

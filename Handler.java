@@ -17,6 +17,7 @@ public class Handler {
 	private Scanner scanner;
 	private volatile static boolean exit = false;
 	private BufferedWriter writer;
+	private static boolean isSensing;
 
 	private static DefaultLogger getConsoleLogger() {
 		DefaultLogger consoleLogger = new DefaultLogger();
@@ -50,7 +51,7 @@ public class Handler {
 
 	public void init() throws Exception {
 		try {
-			Preon32Helper nodeHelper = new Preon32Helper("COM3", 115200);
+			Preon32Helper nodeHelper = new Preon32Helper("COM4", 115200);
 			DataConnection conn = nodeHelper.runModule("basestation");
 			BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 
@@ -77,8 +78,8 @@ public class Handler {
 				}
 				case 1: {
 					byte[] buffer = new byte[1024];
-					Thread.sleep(500);
 					while (in.available() > 0) {
+						Thread.sleep(500);
 						in.read(buffer);
 						conn.flush();
 						s = new String(buffer);
@@ -96,8 +97,8 @@ public class Handler {
 				}
 				case 3: {
 					byte[] buffer = new byte[1024];
-					Thread.sleep(500);
-					while (in.available() > 0) {	
+					while (in.available() > 0) {
+						Thread.sleep(2000);
 						in.read(buffer);
 						conn.flush();
 						s = new String(buffer);
@@ -114,10 +115,16 @@ public class Handler {
 					break;
 				}
 				case 4: {
-					String fName = System.currentTimeMillis() + "";
-					fName = "Pengujian_" + fName + ".txt";
-					writeToFile(fName, "Tester", in);
-
+					if(isSensing == false) {
+						String fName = System.currentTimeMillis() + "";
+						fName = "Pengujian_" + fName + ".txt";
+						writeToFile(fName, "Tester", in);
+						isSensing = true;
+					}
+					else {
+						Thread.sleep(1500);
+						System.out.println("Already Sensing....");
+					}
 					break;
 				}
 				}
@@ -216,8 +223,8 @@ public class Handler {
 
 	public static void main(String[] args) throws Exception {
 		Handler handler = new Handler();
-//		System.setProperty("purejavacomm.loglevel","6");
-		handler.context_set("context.set.3");
+		isSensing = false;
+		handler.context_set("context.set.1");
 		handler.time_synchronize();
 		handler.init();
 	}

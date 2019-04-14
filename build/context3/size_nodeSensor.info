@@ -357,6 +357,10 @@
 	3		isDataPending()Z
 	2		getBuffer()[B
 
+1875		Test$1
+	1865		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 1645		java/util/ArrayList
 	214		addAll(ILjava/util/Collection;)Z
 	175		add(ILjava/lang/Object;)V
@@ -554,10 +558,6 @@
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 
-681		nodeSensor$1
-	671		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 650		com/virtenio/driver/device/ADT7410
 	121		readValue(II)I
 	74		writeValue(III)V
@@ -596,25 +596,6 @@
 	46		indexOfChars(Ljava/lang/String;Ljava/lang/String;I)I
 	9		join(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
-
-619		com/virtenio/driver/device/MPL115A2
-	275		compensate(II)F
-	69		getValueRaw(I)I
-	51		startConversion(I)V
-	35		isOpened()Z
-	30		getCoefficients()[B
-	29		open()V
-	24		<init>(Lcom/virtenio/driver/i2c/I2C;Lcom/virtenio/driver/gpio/GPIO;Lcom/virtenio/driver/gpio/GPIO;)V
-	19		convertRawTemperatureToCelsius(I)F
-	17		close()V
-	14		setReset(Z)V
-	14		setShutdown(Z)V
-	9		getTemperatureCelsius()F
-	7		startPressureConversion()V
-	7		startTemperatureConversion()V
-	7		startBothConversion()V
-	6		getPressureRaw()I
-	6		getTemperatureRaw()I
 
 604		com/virtenio/radio/ieee_802_15_4/RadioDriverFrameIO
 	245		receive(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
@@ -741,23 +722,27 @@
 	5		hasMoreElements()Z
 	5		nextElement()Ljava/lang/Object;
 
-396		nodeSensor
-	159		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	83		send(Ljava/lang/String;Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+409		Test
+	146		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	70		runs()V
-	12		access$508()I
-	9		main([Ljava/lang/String;)V
-	8		access$402(J)J
-	7		access$102(Z)Z
+	17		main([Ljava/lang/String;)V
+	12		access$608()I
+	8		access$502(J)J
 	7		access$202(Z)Z
+	7		access$302(Z)Z
+	7		access$802(Ljava/lang/String;)Ljava/lang/String;
+	7		access$902(Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
-	5		access$000()Ljava/util/HashMap;
-	5		access$300()I
-	5		access$200()Z
-	5		access$500()I
-	5		access$600()Lsensing;
-	5		access$700()I
-	5		access$800()I
+	5		access$000()[I
+	5		access$100()I
+	5		access$400()I
+	5		access$600()I
+	5		access$700()Lsensing;
+	5		access$900()Ljava/lang/String;
+	5		access$1000()Ljava/util/HashMap;
+	5		access$1100()Ljava/util/HashMap;
+	5		access$800()Ljava/lang/String;
 
 395		com/virtenio/preon32/node/Node
 	141		getInstance()Lcom/virtenio/preon32/node/Node;
@@ -919,10 +904,6 @@
 	7		prepareFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
 	3		getTransceiver()Lcom/virtenio/driver/device/at86rf231/AT86RF231;
 
-226		sensing
-	173		sense()Ljava/lang/String;
-	53		<init>()V
-
 226		com/virtenio/driver/gpio/NativeGPIO
 	39		open(II)V
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
@@ -1015,6 +996,10 @@
 	24		<init>(Ljava/util/AbstractList;)V
 	16		hasNext()Z
 
+175		sensing
+	132		sense()Ljava/lang/String;
+	43		<init>()V
+
 164		java/util/AbstractList$SubAbstractList$SubAbstractListIterator
 	26		<init>(Ljava/util/ListIterator;Ljava/util/AbstractList$SubAbstractList;II)V
 	21		next()Ljava/lang/Object;
@@ -1036,11 +1021,6 @@
 	5		clear()V
 	4		size()I
 	2		hashMap()Ljava/util/HashMap;
-
-132		sensors/PressureSensor
-	124		run(Lcom/virtenio/driver/i2c/NativeI2C;)V
-	6		<init>()V
-	2		getTemp()Ljava/lang/String;
 
 131		com/virtenio/driver/flash/FlashInputStream
 	57		read([BII)I
@@ -1159,10 +1139,6 @@
 	14		next()Ljava/lang/Object;
 	9		remove()V
 
-50		com/virtenio/driver/device/M25P80
-	44		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
-	6		eraseSector(I)V
-
 50		java/util/HashMap$1
 	16		remove(Ljava/lang/Object;)Z
 	9		<init>(Ljava/util/HashMap;)V
@@ -1170,6 +1146,10 @@
 	6		contains(Ljava/lang/Object;)Z
 	5		size()I
 	5		clear()V
+
+50		com/virtenio/driver/device/M25P80
+	44		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
+	6		eraseSector(I)V
 
 46		java/util/AbstractMap$2$1
 	24		<init>(Ljava/util/AbstractMap$2;)V
@@ -1225,12 +1205,6 @@
 	0		compute(I[BIII)I
 	0		computeReverse(I[BIII)I
 
-27		com/virtenio/driver/gpio/NativeGPIO$1
-	10		createInstance(I)Lcom/virtenio/driver/gpio/NativeGPIO;
-	6		getInstanceCount()I
-	6		createInstance(I)Ljava/lang/Object;
-	5		<init>()V
-
 27		com/virtenio/driver/i2c/NativeI2C$1
 	10		createInstance(I)Lcom/virtenio/driver/i2c/NativeI2C;
 	6		getInstanceCount()I
@@ -1239,6 +1213,12 @@
 
 27		com/virtenio/driver/spi/NativeSPI$1
 	10		createInstance(I)Lcom/virtenio/driver/spi/NativeSPI;
+	6		getInstanceCount()I
+	6		createInstance(I)Ljava/lang/Object;
+	5		<init>()V
+
+27		com/virtenio/driver/gpio/NativeGPIO$1
+	10		createInstance(I)Lcom/virtenio/driver/gpio/NativeGPIO;
 	6		getInstanceCount()I
 	6		createInstance(I)Ljava/lang/Object;
 	5		<init>()V
@@ -1302,11 +1282,11 @@
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
-12		com/virtenio/driver/gpio/GPIOException
+12		com/virtenio/driver/i2c/I2CException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 
-12		com/virtenio/driver/i2c/I2CException
+12		com/virtenio/driver/gpio/GPIOException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 

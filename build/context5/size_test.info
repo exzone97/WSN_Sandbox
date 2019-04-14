@@ -287,8 +287,8 @@
 	17		pushRun(II)V
 	8		sort([Ljava/lang/Object;)V
 
-1958		Test2$1
-	1948		run()V
+1932		Test4$1
+	1922		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1911		com/virtenio/radio/ieee_802_15_4/Frame
@@ -669,31 +669,6 @@
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
 
-465		Test2
-	146		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	70		runs()V
-	56		main([Ljava/lang/String;)V
-	12		access$608()I
-	8		access$502(J)J
-	7		access$202(Z)Z
-	7		access$302(Z)Z
-	7		access$802(Ljava/lang/String;)Ljava/lang/String;
-	7		access$902(Ljava/lang/String;)Ljava/lang/String;
-	7		access$1002(Ljava/lang/String;)Ljava/lang/String;
-	6		<init>()V
-	5		access$000()[I
-	5		access$100()I
-	5		access$400()I
-	5		access$600()I
-	5		access$700()Lsensing;
-	5		access$900()Ljava/lang/String;
-	5		access$1000()Ljava/lang/String;
-	5		access$1100()Ljava/util/HashMap;
-	5		access$1200()Ljava/util/HashMap;
-	5		access$1300()Ljava/util/HashMap;
-	5		access$800()Ljava/lang/String;
-
 452		java/util/AbstractList
 	89		equals(Ljava/lang/Object;)Z
 	66		subList(II)Ljava/util/List;
@@ -746,6 +721,28 @@
 	8		<init>(Ljava/lang/String;Ljava/lang/String;)V
 	5		hasMoreElements()Z
 	5		nextElement()Ljava/lang/Object;
+
+409		Test4
+	146		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	70		runs()V
+	17		main([Ljava/lang/String;)V
+	12		access$608()I
+	8		access$502(J)J
+	7		access$202(Z)Z
+	7		access$302(Z)Z
+	7		access$802(Ljava/lang/String;)Ljava/lang/String;
+	7		access$902(Ljava/lang/String;)Ljava/lang/String;
+	6		<init>()V
+	5		access$000()[I
+	5		access$100()I
+	5		access$400()I
+	5		access$600()I
+	5		access$700()Lsensing;
+	5		access$900()Ljava/lang/String;
+	5		access$1000()Ljava/util/HashMap;
+	5		access$1100()Ljava/util/HashMap;
+	5		access$800()Ljava/lang/String;
 
 395		com/virtenio/preon32/node/Node
 	141		getInstance()Lcom/virtenio/preon32/node/Node;
