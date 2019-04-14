@@ -18,9 +18,6 @@
 		<switchContext to="config/context1.properties" />
 	</target>
 
-	<target name="context.set.5">
-				<switchContext to="config/context5.properties" />
-			</target>
 	<target name="context.set.6">
 			<switchContext to="config/context6.properties" />
 		</target>

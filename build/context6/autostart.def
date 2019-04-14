@@ -1,4 +1,4 @@
-name ns
+name autostart
 import [
 	rt
 ]

@@ -17,17 +17,19 @@ public class NodeSensor {
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
 	// ADDR_NODE1 = Node diatas
-//	private static int ADDR_NODE1 = node_list[0];
-	private static int ADDR_NODE1 = node_list[1];
+	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE1 = node_list[1];
 
 	// ADDR_NODE2 = Node dibawah
 //	 kalau tidak ada node dibawahnya = new int[0]
 //	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB) };
 	private static int ADDR_NODE2[] = new int[0];
 
-	// ADDR_NODE3 = Node dirinya
+//	 ADDR_NODE3 = Node dirinya
 //	private static int ADDR_NODE3 = node_list[1];
-	private static int ADDR_NODE3 = node_list[2];
+//	private static int ADDR_NODE3 = node_list[2];
+	private static int ADDR_NODE3 = node_list[1];
+	
 
 	private static sensing s = new sensing();
 	private static int sn = 1; // sequence number
@@ -161,12 +163,16 @@ public class NodeSensor {
 									send("DETECT", ADDR_NODE3, ADDR_NODE2[i], fio);
 									Thread.sleep(50);
 								}
+							} else {
+								send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+								Thread.sleep(200);
+								send(myTempEnd, ADDR_NODE3, ADDR_NODE1, fio);
 							}
 							if (ADDR_NODE1 == node_list[0]) {
 								isSensing = false;
 							} else {
 								send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
-								Thread.sleep(500);
+								Thread.sleep(200);
 								send(myTempEnd, ADDR_NODE3, ADDR_NODE1, fio);
 								isSensing = true;
 							}
@@ -179,12 +185,12 @@ public class NodeSensor {
 							hmapTemp.put(node, str);
 							System.out.println("Receive data");
 							System.out.println(hmap.get(node));
-							
+
 						} else if (str.startsWith("END")) {
 //							int startIndex = str.indexOf('<');
 							int endIndex = str.indexOf('>');
 							int node = Integer.parseInt(str.substring(endIndex + 1));
-							System.out.println("Node E:"+hmap.get(node));
+							System.out.println("Node E:" + hmap.get(node));
 //							int seq = Integer.parseInt(str.substring(startIndex + 1, endIndex));
 							System.out.println("END");
 							if (hmapTemp.get(node) != null) {
@@ -197,9 +203,29 @@ public class NodeSensor {
 								System.out.println("Send NACK ke bwh");
 							}
 						} else if (str.equalsIgnoreCase("ACK")) {
+							System.out.println("ACK");
 							hmapTemp.clear();
 							isSensing = false;
-							System.out.println("ACK");
+							if (ADDR_NODE1 == node_list[0] && ADDR_NODE2.length == 0) {
+								end = Time.currentTimeMillis() + 2000;
+								String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis() + " "
+										+ s.sense();
+								myTemp = message;
+								hmap.put(ADDR_NODE3, message);
+
+								Thread.sleep(50);
+								myTempEnd = "END<" + sn + ">" + ADDR_NODE3;
+								hmapEnd.put(ADDR_NODE3, myTempEnd);
+								System.out.println("MY SENSE");
+								System.out.println(hmap.get(ADDR_NODE3));
+								System.out.println(myTempEnd);
+								System.out.println("=========================");
+								sn++;
+								send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+								Thread.sleep(200);
+								send(myTempEnd, ADDR_NODE3, ADDR_NODE1, fio);
+								isSensing = true;
+							}
 						} else if (str.equalsIgnoreCase("NACK")) {
 							System.out.println("NACK");
 							send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);

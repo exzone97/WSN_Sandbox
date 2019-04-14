@@ -474,6 +474,10 @@
 	5		computeHashCode(Ljava/lang/Object;)I
 	2		size()I
 
+826		BaseStation$3
+	816		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
 	158		toString()Ljava/lang/String;
@@ -508,10 +512,6 @@
 	16		getInt(Ljava/lang/String;I)I
 	14		getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
-
-667		BaseStation$3
-	657		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 639		com/virtenio/misc/StringUtils
 	116		split(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
@@ -659,6 +659,31 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
+392		BaseStation
+	98		main([Ljava/lang/String;)V
+	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	79		runs()V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	8		startUSART()V
+	7		access$002(Lcom/virtenio/io/Console;)Lcom/virtenio/io/Console;
+	7		access$302(Z)Z
+	7		access$402(Z)Z
+	6		<init>()V
+	5		access$100()Lcom/virtenio/driver/usart/USART;
+	5		access$200()[I
+	5		access$500()Ljava/io/OutputStream;
+	5		access$600()Ljava/util/HashMap;
+	5		access$700()Ljava/util/HashMap;
+	5		access$800()Ljava/util/HashMap;
+	5		access$900()Ljava/util/HashMap;
+	5		access$1000()Ljava/util/HashMap;
+
+367		BaseStation$2
+	357		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 365		com/virtenio/radio/ieee_802_15_4/RadioDriver
 	95		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;J)Z
 	47		transmitFrame()V
@@ -689,30 +714,6 @@
 	2		getShortAddress()I
 	2		getChannel()I
 	2		available()I
-
-364		BaseStation
-	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	79		runs()V
-	75		main([Ljava/lang/String;)V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	8		startUSART()V
-	7		access$002(Lcom/virtenio/io/Console;)Lcom/virtenio/io/Console;
-	7		access$202(Z)Z
-	7		access$302(Z)Z
-	6		<init>()V
-	5		access$000()Lcom/virtenio/io/Console;
-	5		access$100()[I
-	5		access$400()Ljava/io/OutputStream;
-	5		access$500()Lcom/virtenio/driver/usart/USART;
-	5		access$600()Ljava/util/HashMap;
-	5		access$700()Ljava/util/HashMap;
-	5		access$800()Ljava/util/HashMap;
-
-349		BaseStation$2
-	339		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 345		com/virtenio/driver/usart/NativeUSART
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
