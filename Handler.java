@@ -117,7 +117,7 @@ public class Handler {
 				case 4: {
 					if(isSensing == false) {
 						String fName = System.currentTimeMillis() + "";
-						fName = "Pengujian_" + fName + ".txt";
+						fName = "MultiHop_D_" + fName + ".txt";
 						writeToFile(fName, "Tester", in);
 						isSensing = true;
 					}
