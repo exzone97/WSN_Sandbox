@@ -422,8 +422,8 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
-1267		NS$1
-	1257		run()V
+1306		NS$1
+	1296		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1091		java/util/HashMap

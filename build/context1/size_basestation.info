@@ -592,6 +592,10 @@
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
 
+495		BS$3
+	485		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 452		java/util/AbstractList
 	89		equals(Ljava/lang/Object;)Z
 	66		subList(II)Ljava/util/List;
@@ -655,6 +659,10 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
+367		BS$2
+	357		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 365		com/virtenio/radio/ieee_802_15_4/RadioDriver
 	95		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;J)Z
 	47		transmitFrame()V
@@ -686,9 +694,22 @@
 	2		getChannel()I
 	2		available()I
 
-349		BS$2
-	339		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+349		BS
+	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	79		runs()V
+	75		main([Ljava/lang/String;)V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	8		startUSART()V
+	7		access$002(Lcom/virtenio/io/Console;)Lcom/virtenio/io/Console;
+	7		access$302(Z)Z
+	7		access$402(Z)Z
+	6		<init>()V
+	5		access$100()Lcom/virtenio/driver/usart/USART;
+	5		access$200()[I
+	5		access$500()Ljava/io/OutputStream;
+	5		access$600()Ljava/util/HashMap;
 
 345		com/virtenio/driver/usart/NativeUSART
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
@@ -730,21 +751,6 @@
 	6		print(Ljava/lang/String;)V
 	6		println(Ljava/lang/String;)V
 
-339		BS
-	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	79		runs()V
-	75		main([Ljava/lang/String;)V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	8		startUSART()V
-	7		access$002(Lcom/virtenio/io/Console;)Lcom/virtenio/io/Console;
-	7		access$202(Z)Z
-	7		access$302(Z)Z
-	6		<init>()V
-	5		access$000()Lcom/virtenio/io/Console;
-	5		access$100()[I
-
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
 	61		get(I)Ljava/lang/Object;
@@ -780,10 +786,6 @@
 	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
 	15		<init>(Ljava/io/InputStream;)V
 	10		isOpen()Z
-
-259		BS$3
-	249		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
@@ -1226,6 +1228,10 @@
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
+12		com/virtenio/driver/usart/USARTException
+	6		<init>(I)V
+	6		<init>(Ljava/lang/Throwable;)V
+
 12		com/virtenio/driver/cpu/CPUException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
@@ -1243,10 +1249,6 @@
 	6		<init>(Ljava/lang/Throwable;)V
 
 12		com/virtenio/driver/spi/SPIException
-	6		<init>(I)V
-	6		<init>(Ljava/lang/Throwable;)V
-
-12		com/virtenio/driver/usart/USARTException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 

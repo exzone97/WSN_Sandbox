@@ -51,7 +51,7 @@ public class Handler {
 
 	public void init() throws Exception {
 		try {
-			Preon32Helper nodeHelper = new Preon32Helper("COM4", 115200);
+			Preon32Helper nodeHelper = new Preon32Helper("COM8", 115200);
 			DataConnection conn = nodeHelper.runModule("basestation");
 			BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 
@@ -117,7 +117,7 @@ public class Handler {
 				case 4: {
 					if(isSensing == false) {
 						String fName = System.currentTimeMillis() + "";
-						fName = "MultiHop_D_" + fName + ".txt";
+						fName = "Multihop_" + fName + ".txt";
 						writeToFile(fName, "Tester", in);
 						isSensing = true;
 					}

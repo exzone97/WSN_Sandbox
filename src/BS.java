@@ -29,8 +29,7 @@ public class BS extends Thread {
 // =================================================================================================	
 	private static int ADDR_NODE3 = node_list[0]; // NODE DIRINYA (BS)
 // =================================================================================================	
-	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
-			PropertyHelper.getInt("radio.panid", 0xDAAB) };
+	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
 // =================================================================================================
 
 	private static HashMap<Integer, Integer> hmapSN = new HashMap<Integer, Integer>();
@@ -68,13 +67,13 @@ public class BS extends Thread {
 			public void run() {
 				while (true) {
 					console = new Console();
-					int temp = console.readInt("Input");
-//					int temp = 100;
-//					try {
-//						temp = usart.read();
-//					} catch (USARTException e1) {
-//						e1.printStackTrace();
-//					}
+//					int temp = console.readInt("Input");
+					int temp = 100;
+					try {
+						temp = usart.read();
+					} catch (USARTException e1) {
+						e1.printStackTrace();
+					}
 					if (temp == 0) {
 						try {
 							for (int i = 0; i < ADDR_NODE2.length; i++) {
@@ -139,49 +138,54 @@ public class BS extends Thread {
 //						System.out.println(str);
 						// DPT NODE YANG ONLINE
 						if (str.charAt(str.length() - 1) == 'E') {
-							System.out.println(str);
-//							String msg = "#" + str + "#";
-//							try {
-//								out.write(msg.getBytes(), 0, msg.length());
-//								usart.flush();
-//								Thread.sleep(500);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
+//							System.out.println(str);
+							String msg = "#" + str + "#";
+							try {
+								out.write(msg.getBytes(), 0, msg.length());
+								usart.flush();
+								Thread.sleep(500);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 						// DPT WAKTU DR SETIAP NODE
 						else if (str.charAt(0) == 'T') {
-							System.out.println(str);
-//							String msg = "#" + str + "#";
-//							try {
-//								out.write(msg.getBytes(), 0, msg.length());
-//								usart.flush();
-//								Thread.sleep(500);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
+//							System.out.println(str);
+							String msg = "#" + str + "#";
+							try {
+								out.write(msg.getBytes(), 0, msg.length());
+								usart.flush();
+								Thread.sleep(500);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						} else if (str.startsWith("SENSE")) {
+
 							int beginNode = str.indexOf('<');
 							int beginSN = str.indexOf('>');
 							int endSN = str.indexOf('?');
 							int node = Integer.parseInt(str.substring(beginNode + 1, beginSN));
 							int sn = Integer.parseInt(str.substring(beginSN + 1, endSN));
+//							System.out.println(node + " " + (int) frame.getSrcAddr());
+//							System.out.println(node + " " + sn);
+//							System.out.println(hmapSN.get(node));
+							if (hmapSN.get(node) < sn) {
+//								System.out.println("Here!");//
+								hmapSN.put(node, sn);
+//								System.out.println(str);
 
-							if (hmapSN.get((int) frame.getSrcAddr()) < sn) {
-								System.out.println("Here!");//
-								hmapSN.put((int) frame.getSrcAddr(), sn);
-								System.out.println(str);
+								String msg = "#" + str + "#";
+								try {
+									out.write(msg.getBytes(), 0, msg.length());
+									usart.flush();
+									Thread.sleep(50);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
-							send("ACK" + node, frame.getSrcAddr(), fio);//
 							
-//								String msg = "#" + str + "#";
-//								try {
-//									out.write(msg.getBytes(), 0, msg.length());
-//									usart.flush();
-//									Thread.sleep(50);
-//								} catch (Exception e) {
-//									e.printStackTrace();
-//								}
+							send("ACK" + node, frame.getSrcAddr(), fio);//
+
 						}
 					} catch (Exception e) {
 					}
@@ -223,8 +227,8 @@ public class BS extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < ADDR_NODE2.length; i++) {
-			hmapSN.put(ADDR_NODE2[i], 0);
+		for (int i = 1; i < node_list.length; i++) {
+			hmapSN.put(node_list[i], 0);
 		}
 		try {
 			startUSART();

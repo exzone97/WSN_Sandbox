@@ -16,12 +16,12 @@ public class NS {
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
-	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE1 = node_list[0];
-	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
-	private static int ADDR_NODE3 = node_list[2];
-//	private static int ADDR_NODE3 = node_list[1];
+//	private static int ADDR_NODE1 = node_list[1];
+	private static int ADDR_NODE1 = node_list[0];
+//	private static int ADDR_NODE2[] = new int[0];
+	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB) };
+//	private static int ADDR_NODE3 = node_list[2];
+	private static int ADDR_NODE3 = node_list[1];
 
 	private static sensing s = new sensing();
 	private static int sn = 1; // sequence number
@@ -148,12 +148,14 @@ public class NS {
 							send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
 							Thread.sleep(50);
 							isSensing = true;
-						} else if (str.startsWith("SENSE")) {
+						} else if (str.charAt(0) == 'S') {
 							System.out.println("Receive SENSE");
 							System.out.println(str);
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
+							System.out.println("SEND " + str);
 						} else if (str.startsWith("ACK")) {
 							int node = Integer.parseInt(str.substring(3));
+							System.out.println(node);
 							if (node == ADDR_NODE3) {
 								System.out.println("RECEIVE ACK");
 								isSensing = false;
