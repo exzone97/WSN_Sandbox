@@ -32,10 +32,6 @@ public class NS_Testing {
 
 	private static boolean exit = false;
 
-//	harus bikin penyimpanan sebanyak jumlah node di bwhnya.
-	private static HashMap<Integer, String> hmap = new HashMap<Integer, String>(); // penyimpanan sementara
-	private static HashMap<Integer, String> hmapEnd = new HashMap<Integer, String>(); // penyimpanan sementara
-
 	public static void runs() {
 		try {
 			AT86RF231 t = Node.getInstance().getTransceiver();
@@ -135,7 +131,8 @@ public class NS_Testing {
 	}
 
 	public static void send(String message, int source, int destination, final FrameIO fio) {
-		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.ACK_REQUEST
+				| Frame.SRC_ADDR_16;
 		final Frame testFrame = new Frame(frameControl);
 		testFrame.setDestPanId(COMMON_PANID);
 		testFrame.setDestAddr(destination);
@@ -150,11 +147,6 @@ public class NS_Testing {
 
 	public static void main(String[] args) throws Exception {
 		exit = false;
-		if (ADDR_NODE2.length > 0) {
-//			for (int i = 0; i < ADDR_NODE2.length; i++) {
-//				hmapCurr_SN.put(ADDR_NODE2[i], 1);
-//			}
-		}
 		runs();
 	}
 

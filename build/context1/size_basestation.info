@@ -386,22 +386,6 @@
 	7		<init>()V
 	2		size()I
 
-1532		java/io/BufferedReader
-	475		readLine()Ljava/lang/String;
-	226		skip(J)J
-	221		read([CII)I
-	155		fillBuf()I
-	86		read()I
-	74		mark(I)V
-	72		reset()V
-	66		ready()Z
-	50		close()V
-	38		<init>(Ljava/io/Reader;I)V
-	30		chompNewline()V
-	27		<init>(Ljava/io/Reader;)V
-	10		isClosed()Z
-	2		markSupported()Z
-
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
 	145		programPage(I[BII)V
@@ -438,60 +422,6 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
-1091		java/util/HashMap
-	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
-	120		putImpl(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	89		containsValue(Ljava/lang/Object;)Z
-	84		rehash(I)V
-	64		removeEntry(Ljava/util/HashMap$Entry;)V
-	62		calculateCapacity(I)I
-	58		putAllImpl(Ljava/util/Map;)V
-	56		<init>(IF)V
-	42		clone()Ljava/lang/Object;
-	36		getEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
-	34		findNonNullKeyEntry(Ljava/lang/Object;II)Ljava/util/HashMap$Entry;
-	24		createEntry(Ljava/lang/Object;ILjava/lang/Object;)Ljava/util/HashMap$Entry;
-	24		createHashedEntry(Ljava/lang/Object;II)Ljava/util/HashMap$Entry;
-	23		findNullKeyEntry()Ljava/util/HashMap$Entry;
-	22		clear()V
-	19		areEqualKeys(Ljava/lang/Object;Ljava/lang/Object;)Z
-	19		areEqualValues(Ljava/lang/Object;Ljava/lang/Object;)Z
-	17		<init>(Ljava/util/Map;)V
-	17		keySet()Ljava/util/Set;
-	17		values()Ljava/util/Collection;
-	16		containsKey(Ljava/lang/Object;)Z
-	16		get(Ljava/lang/Object;)Ljava/lang/Object;
-	16		remove(Ljava/lang/Object;)Ljava/lang/Object;
-	13		putAll(Ljava/util/Map;)V
-	12		computeThreshold()V
-	11		<init>(I)V
-	10		isEmpty()Z
-	9		entrySet()Ljava/util/Set;
-	9		rehash()V
-	7		<init>()V
-	7		put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	6		newElementArray(I)[Ljava/util/HashMap$Entry;
-	5		computeHashCode(Ljava/lang/Object;)I
-	2		size()I
-
-807		java/util/AbstractMap
-	178		equals(Ljava/lang/Object;)Z
-	158		toString()Ljava/lang/String;
-	88		remove(Ljava/lang/Object;)Ljava/lang/Object;
-	80		get(Ljava/lang/Object;)Ljava/lang/Object;
-	64		containsKey(Ljava/lang/Object;)Z
-	64		containsValue(Ljava/lang/Object;)Z
-	41		putAll(Ljava/util/Map;)V
-	36		hashCode()I
-	20		clone()Ljava/lang/Object;
-	17		keySet()Ljava/util/Set;
-	17		values()Ljava/util/Collection;
-	13		isEmpty()Z
-	9		put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	8		clear()V
-	8		size()I
-	6		<init>()V
-
 740		com/virtenio/misc/PropertyHelper
 	122		makeKey(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
 	114		getBool(Ljava/lang/String;)Z
@@ -519,6 +449,18 @@
 	46		indexOfChars(Ljava/lang/String;Ljava/lang/String;I)I
 	9		join(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
+
+613		BS_Testing
+	346		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	79		runs()V
+	36		main([Ljava/lang/String;)V
+	34		configUSART()Lcom/virtenio/driver/usart/USART;
+	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	8		startUSART()V
+	6		<init>()V
+	5		access$000()Ljava/io/OutputStream;
+	5		access$100()Lcom/virtenio/driver/usart/USART;
 
 604		com/virtenio/radio/ieee_802_15_4/RadioDriverFrameIO
 	245		receive(Lcom/virtenio/radio/ieee_802_15_4/Frame;)V
@@ -592,10 +534,6 @@
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
 
-495		BS$3
-	485		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 452		java/util/AbstractList
 	89		equals(Ljava/lang/Object;)Z
 	66		subList(II)Ljava/util/List;
@@ -659,10 +597,6 @@
 	4		getRevisionId()I
 	2		getRevision()Ljava/lang/String;
 
-367		BS$2
-	357		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 365		com/virtenio/radio/ieee_802_15_4/RadioDriver
 	95		waitForFrame(Lcom/virtenio/radio/ieee_802_15_4/Frame;J)Z
 	47		transmitFrame()V
@@ -694,23 +628,6 @@
 	2		getChannel()I
 	2		available()I
 
-349		BS
-	80		send(Ljava/lang/String;JLcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	79		runs()V
-	75		main([Ljava/lang/String;)V
-	34		configUSART()Lcom/virtenio/driver/usart/USART;
-	14		receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	12		sender(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	8		startUSART()V
-	7		access$002(Lcom/virtenio/io/Console;)Lcom/virtenio/io/Console;
-	7		access$302(Z)Z
-	7		access$402(Z)Z
-	6		<init>()V
-	5		access$100()Lcom/virtenio/driver/usart/USART;
-	5		access$200()[I
-	5		access$500()Ljava/io/OutputStream;
-	5		access$600()Ljava/util/HashMap;
-
 345		com/virtenio/driver/usart/NativeUSART
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
 	26		read([BII)I
@@ -738,19 +655,6 @@
 	2		getReceiveTimeout()I
 	0		command(Lcom/virtenio/driver/usart/NativeUSART;I)I
 
-341		com/virtenio/io/Console
-	77		readLong(Ljava/lang/String;)J
-	67		readLine(Ljava/lang/String;)Ljava/lang/String;
-	37		<init>(Ljava/io/Reader;Ljava/io/PrintStream;)V
-	34		<init>()V
-	30		readInt(Ljava/lang/String;II)I
-	29		readLong(Ljava/lang/String;JJ)J
-	27		readBool(Ljava/lang/String;)Z
-	21		readLine(Ljava/lang/String;Z)Ljava/lang/String;
-	7		readInt(Ljava/lang/String;)I
-	6		print(Ljava/lang/String;)V
-	6		println(Ljava/lang/String;)V
-
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z
 	61		get(I)Ljava/lang/Object;
@@ -761,6 +665,10 @@
 	11		toArray()[Ljava/lang/Object;
 	10		set(ILjava/lang/Object;)Ljava/lang/Object;
 	3		size()I
+
+337		BS_Testing$2
+	327		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 335		com/virtenio/misc/FixedFifo
 	132		remove(I)Ljava/lang/Object;
@@ -778,15 +686,6 @@
 	3		capacity()I
 	2		size()I
 
-283		java/io/InputStreamReader
-	78		read()I
-	55		read([CII)I
-	49		ready()Z
-	47		close()V
-	29		<init>(Ljava/io/InputStream;Ljava/lang/String;)V
-	15		<init>(Ljava/io/InputStream;)V
-	10		isOpen()Z
-
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
 	29		removeHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V
@@ -799,13 +698,6 @@
 	9		bindTo(I)V
 	9		unbindTo(I)V
 	8		unbind()V
-
-242		java/util/HashMap$AbstractMapIterator
-	84		remove()V
-	81		makeNext()V
-	37		hasNext()Z
-	24		<init>(Ljava/util/HashMap;)V
-	16		checkConcurrentMod()V
 
 235		java/util/AbstractList$FullListIterator
 	76		add(Ljava/lang/Object;)V
@@ -902,43 +794,6 @@
 	2		getInputBufferSize()I
 	2		getOutputBufferSize()I
 
-191		java/util/AbstractSet
-	86		removeAll(Ljava/util/Collection;)Z
-	61		equals(Ljava/lang/Object;)Z
-	39		hashCode()I
-	5		<init>()V
-
-190		java/util/MapEntry
-	79		equals(Ljava/lang/Object;)Z
-	30		toString()Ljava/lang/String;
-	26		hashCode()I
-	19		clone()Ljava/lang/Object;
-	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
-	10		<init>(Ljava/lang/Object;)V
-	8		setValue(Ljava/lang/Object;)Ljava/lang/Object;
-	2		getKey()Ljava/lang/Object;
-	2		getValue()Ljava/lang/Object;
-
-182		java/util/AbstractMap$SimpleImmutableEntry
-	79		equals(Ljava/lang/Object;)Z
-	30		toString()Ljava/lang/String;
-	26		hashCode()I
-	20		<init>(Ljava/util/Map$Entry;)V
-	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
-	9		setValue(Ljava/lang/Object;)Ljava/lang/Object;
-	2		getKey()Ljava/lang/Object;
-	2		getValue()Ljava/lang/Object;
-
-181		java/util/AbstractMap$SimpleEntry
-	79		equals(Ljava/lang/Object;)Z
-	30		toString()Ljava/lang/String;
-	26		hashCode()I
-	20		<init>(Ljava/util/Map$Entry;)V
-	14		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
-	8		setValue(Ljava/lang/Object;)Ljava/lang/Object;
-	2		getKey()Ljava/lang/Object;
-	2		getValue()Ljava/lang/Object;
-
 179		java/util/AbstractList$SimpleListIterator
 	83		remove()V
 	56		next()Ljava/lang/Object;
@@ -956,16 +811,6 @@
 	14		hasPrevious()Z
 	7		nextIndex()I
 	6		set(Ljava/lang/Object;)V
-
-139		java/util/HashMap$HashMapEntrySet
-	40		remove(Ljava/lang/Object;)Z
-	39		valuesEq(Ljava/util/HashMap$Entry;Ljava/util/Map$Entry;)Z
-	31		contains(Ljava/lang/Object;)Z
-	9		<init>(Ljava/util/HashMap;)V
-	9		iterator()Ljava/util/Iterator;
-	5		clear()V
-	4		size()I
-	2		hashMap()Ljava/util/HashMap;
 
 133		com/virtenio/driver/usart/USARTInputStream
 	71		read([BII)I
@@ -1050,11 +895,6 @@
 	26		read()I
 	10		<init>(Lcom/virtenio/driver/spi/SPI;)V
 
-61		java/util/HashMap$Entry
-	28		clone()Ljava/lang/Object;
-	22		<init>(Ljava/lang/Object;Ljava/lang/Object;)V
-	11		<init>(Ljava/lang/Object;I)V
-
 58		com/virtenio/driver/spi/SPIChipSelector
 	14		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
 	14		open()V
@@ -1085,37 +925,6 @@
 	44		<init>(Lcom/virtenio/driver/spi/SPI;Lcom/virtenio/driver/gpio/GPIO;)V
 	6		eraseSector(I)V
 
-50		java/util/HashMap$1
-	16		remove(Ljava/lang/Object;)Z
-	9		<init>(Ljava/util/HashMap;)V
-	9		iterator()Ljava/util/Iterator;
-	6		contains(Ljava/lang/Object;)Z
-	5		size()I
-	5		clear()V
-
-46		java/util/AbstractMap$2$1
-	24		<init>(Ljava/util/AbstractMap$2;)V
-	12		next()Ljava/lang/Object;
-	5		hasNext()Z
-	5		remove()V
-
-46		java/util/AbstractMap$1$1
-	24		<init>(Ljava/util/AbstractMap$1;)V
-	12		next()Ljava/lang/Object;
-	5		hasNext()Z
-	5		remove()V
-
-35		BS$1
-	25		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
-34		java/util/HashMap$2
-	9		<init>(Ljava/util/HashMap;)V
-	9		iterator()Ljava/util/Iterator;
-	6		contains(Ljava/lang/Object;)Z
-	5		size()I
-	5		clear()V
-
 31		com/virtenio/radio/ieee_802_15_4/FrameIO
 	18		<init>()V
 	6		setReceiveTimeout(J)V
@@ -1132,17 +941,9 @@
 	2		getInstanceId()I
 	2		getLastError()I
 
-29		java/util/AbstractMap$2
-	9		<init>(Ljava/util/AbstractMap;)V
-	9		iterator()Ljava/util/Iterator;
-	6		contains(Ljava/lang/Object;)Z
-	5		size()I
-
-29		java/util/AbstractMap$1
-	9		<init>(Ljava/util/AbstractMap;)V
-	9		iterator()Ljava/util/Iterator;
-	6		contains(Ljava/lang/Object;)Z
-	5		size()I
+30		BS_Testing$1
+	20		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 28		com/virtenio/misc/CRC16
 	11		compute(I[BI)I
@@ -1197,40 +998,23 @@
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 
-17		java/util/HashMap$EntryIterator
-	6		<init>(Ljava/util/HashMap;)V
-	6		next()Ljava/util/Map$Entry;
-	5		next()Ljava/lang/Object;
-
 16		com/virtenio/preon32/node/Node14
 	16		<init>(Ljava/lang/String;)V
 
 16		com/virtenio/preon32/node/Node13
 	16		<init>(Ljava/lang/String;)V
 
-14		java/util/HashMap$ValueIterator
-	8		next()Ljava/lang/Object;
-	6		<init>(Ljava/util/HashMap;)V
-
-14		java/util/HashMap$KeyIterator
-	8		next()Ljava/lang/Object;
-	6		<init>(Ljava/util/HashMap;)V
-
-13		java/util/NoSuchElementException
+13		java/util/ConcurrentModificationException
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
-13		java/util/ConcurrentModificationException
+13		java/util/NoSuchElementException
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
 
 13		com/virtenio/io/TimeoutException
 	7		<init>(Ljava/lang/String;)V
 	6		<init>()V
-
-12		com/virtenio/driver/usart/USARTException
-	6		<init>(I)V
-	6		<init>(Ljava/lang/Throwable;)V
 
 12		com/virtenio/driver/cpu/CPUException
 	6		<init>(I)V
@@ -1249,6 +1033,10 @@
 	6		<init>(Ljava/lang/Throwable;)V
 
 12		com/virtenio/driver/spi/SPIException
+	6		<init>(I)V
+	6		<init>(Ljava/lang/Throwable;)V
+
+12		com/virtenio/driver/usart/USARTException
 	6		<init>(I)V
 	6		<init>(Ljava/lang/Throwable;)V
 

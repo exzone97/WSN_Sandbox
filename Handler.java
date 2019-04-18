@@ -79,7 +79,7 @@ public class Handler {
 				case 1: {
 					byte[] buffer = new byte[1024];
 					while (in.available() > 0) {
-						Thread.sleep(500);
+						Thread.sleep(2000);
 						in.read(buffer);
 						conn.flush();
 						s = new String(buffer);
@@ -93,6 +93,7 @@ public class Handler {
 					break;
 				}
 				case 2: {
+					Thread.sleep(500);
 					System.out.println("Done Synchronize");
 				}
 				case 3: {
@@ -115,13 +116,12 @@ public class Handler {
 					break;
 				}
 				case 4: {
-					if(isSensing == false) {
+					if (isSensing == false) {
 						String fName = System.currentTimeMillis() + "";
-						fName = "Multihop_" + fName + ".txt";
+						fName = "TEST" + fName + ".txt";
 						writeToFile(fName, "Tester", in);
 						isSensing = true;
-					}
-					else {
+					} else {
 						Thread.sleep(1500);
 						System.out.println("Already Sensing....");
 					}
@@ -143,7 +143,7 @@ public class Handler {
 
 	public void writeToFile(String fName, String folName, BufferedInputStream in) throws Exception {
 		Thread t = new Thread() {
-			byte[] buffer = new byte[2048];
+			byte[] buffer = new byte[1024];
 			String s;
 			long count = 0;
 			File newFolder = new File(folName);
@@ -171,11 +171,19 @@ public class Handler {
 									String temp3 = temp2.replace('?', ' ');
 									String[] ss = temp3.split(" ");
 									long val = Long.parseLong(ss[3]);
-									String newString = ss[0] + " " + Integer.toHexString(Integer.parseInt(ss[1])) + " " + ss[2] + " " + stringFormat(val) + " "
-											+ ss[4] + " " + ss[5] + " " + ss[6] + " " + ss[7] + " " + ss[8] + " "
-											+ ss[9] + " " + ss[10] + " " + ss[11];
+									String newString = ss[0] + " " + Integer.toHexString(Integer.parseInt(ss[1])) + " "
+											+ ss[2] + " " + stringFormat(val) + " " + ss[4] + " " + ss[5] + " " + ss[6]
+											+ " " + ss[7] + " " + ss[8] + " " + ss[9] + " " + ss[10] + " " + ss[11];
 									writer.write(newString, 0, newString.length());
 									writer.newLine();
+//									Thread.sleep(200);
+								} else if (w.startsWith("Node")) {
+									System.out.println(w);
+								}
+								else if(w.startsWith("Time")) {
+									String[] fin = w.split(" ");
+									long time = Long.parseLong(fin[2]);
+									System.out.println(fin[0] + " " + fin[1] + " " + stringFormat(time));
 								}
 							}
 							count++;

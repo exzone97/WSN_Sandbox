@@ -251,10 +251,6 @@
 	5		sort([S)V
 	5		sort([Ljava/lang/Object;)V
 
-2220		NodeSensor$1
-	2210		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 2082		java/util/TimSort
 	453		mergeHi(IIII)V
 	399		mergeLo(IIII)V
@@ -426,6 +422,10 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
+1306		NS$1
+	1296		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 1091		java/util/HashMap
 	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;
 	120		putImpl(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -522,32 +522,6 @@
 	5		open()V
 	5		close()V
 	2		getConversionScale()F
-
-1035		NodeSensor
-	737		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-	70		runs()V
-	30		main([Ljava/lang/String;)V
-	12		access$608()I
-	8		access$502(J)J
-	7		access$202(Z)Z
-	7		access$302(Z)Z
-	7		access$802(Ljava/lang/String;)Ljava/lang/String;
-	7		access$1002(Ljava/lang/String;)Ljava/lang/String;
-	7		access$1502(I)I
-	6		<init>()V
-	5		access$000()[I
-	5		access$100()I
-	5		access$400()I
-	5		access$600()I
-	5		access$700()Lsensing;
-	5		access$900()Ljava/util/HashMap;
-	5		access$1000()Ljava/lang/String;
-	5		access$1100()Ljava/util/HashMap;
-	5		access$1200()Ljava/util/HashMap;
-	5		access$800()Ljava/lang/String;
-	5		access$1300()[I
-	5		access$1400()Ljava/util/HashMap;
 
 807		java/util/AbstractMap
 	178		equals(Ljava/lang/Object;)Z
@@ -809,6 +783,25 @@
 	2		getShortAddress()I
 	2		getChannel()I
 	2		available()I
+
+344		NS
+	106		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+	70		runs()V
+	12		access$608()I
+	9		main([Ljava/lang/String;)V
+	8		access$502(J)J
+	7		access$302(Z)Z
+	7		access$402(Z)Z
+	7		access$802(Ljava/lang/String;)Ljava/lang/String;
+	6		<init>()V
+	5		access$000()[I
+	5		access$100()I
+	5		access$200()I
+	5		access$600()I
+	5		access$700()Lsensing;
+	5		access$900()Ljava/util/HashMap;
+	5		access$800()Ljava/lang/String;
 
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z

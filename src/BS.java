@@ -17,7 +17,7 @@ import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
 import com.virtenio.driver.usart.USARTException;
 import com.virtenio.driver.usart.USARTParams;
-import com.virtenio.io.Console;
+//import com.virtenio.io.Console;
 
 public class BS extends Thread {
 	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
@@ -31,6 +31,16 @@ public class BS extends Thread {
 // =================================================================================================	
 	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
 // =================================================================================================
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
+// =================================================================================================
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
+// =================================================================================================
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAc)};
+// =================================================================================================
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB)};
+// =================================================================================================
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB),PropertyHelper.getInt("radio.panid", 0xDAAC)};
+// =================================================================================================
 
 	private static HashMap<Integer, Integer> hmapSN = new HashMap<Integer, Integer>();
 	private static USART usart;
@@ -38,7 +48,7 @@ public class BS extends Thread {
 	private static boolean exit;
 	private static boolean firstSense;
 
-	private static Console console;
+//	private static Console console;
 
 	public static void runs() {
 		try {
@@ -51,7 +61,7 @@ public class BS extends Thread {
 				public void run() {
 					try {
 						sender(fio);
-						receive(fio);
+//						receive(fio);
 					} catch (Exception e) {
 					}
 				}
@@ -63,67 +73,68 @@ public class BS extends Thread {
 	}
 
 	public static void sender(final FrameIO fio) throws Exception {
-		new Thread() {
-			public void run() {
-				while (true) {
-					console = new Console();
-//					int temp = console.readInt("Input");
-					int temp = 100;
-					try {
-						temp = usart.read();
-					} catch (USARTException e1) {
-						e1.printStackTrace();
+//		new Thread() {
+//			public void run() {
+		while (true) {
+//			console = new Console();
+//			int temp = console.readInt("Input");
+			int temp = 100;
+			try {
+				temp = usart.read();
+			} catch (USARTException e1) {
+				e1.printStackTrace();
+			}
+			if (temp == 0) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("EXIT", ADDR_NODE2[i], fio);
 					}
-					if (temp == 0) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("EXIT", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-						exit = true;
-						firstSense = false;
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				exit = true;
+				firstSense = false;
 
-						break;
-					} else if (temp == 1) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("ON", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 2) {
-						long currTime = Time.currentTimeMillis();
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send(("Q" + currTime), ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 3) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("WAKTU", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 4) {
-						firstSense = true;
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("DETECT", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+				break;
+			} else if (temp == 1) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("ON", ADDR_NODE2[i], fio);
 					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 2) {
+				long currTime = Time.currentTimeMillis();
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send(("Q" + currTime), ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 3) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("WAKTU", ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 4) {
+				firstSense = true;
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("DETECT", ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
-		}.start();
+			receive(fio);
+		}
+//			}
+//		}.start();
 	}
 
 	public static void receive(final FrameIO fio) throws Exception {
@@ -178,12 +189,12 @@ public class BS extends Thread {
 								try {
 									out.write(msg.getBytes(), 0, msg.length());
 									usart.flush();
-									Thread.sleep(50);
+									Thread.sleep(200);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 							}
-							
+
 							send("ACK" + node, frame.getSrcAddr(), fio);//
 
 						}

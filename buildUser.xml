@@ -19,6 +19,14 @@
 	</target>
 
 	<target name="context.set.6">
-			<switchContext to="config/context6.properties" />
-		</target>
+		<switchContext to="config/context6.properties" />
+	</target>
+	
+	<target name="context.set.7">
+		<switchContext to="config/context7.properties" />
+	</target>
+	
+	<target name="context.set.8">
+		<switchContext to="config/context8.properties" />
+	</target>
 </project>

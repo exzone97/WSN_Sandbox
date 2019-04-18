@@ -46,7 +46,6 @@ public class BS_Testing extends Thread {
 				public void run() {
 					try {
 						sender(fio);
-						receive(fio);
 					} catch (Exception e) {
 					}
 				}
@@ -58,62 +57,59 @@ public class BS_Testing extends Thread {
 	}
 
 	public static void sender(final FrameIO fio) throws Exception {
-		new Thread() {
-			public void run() {
-				while (true) {
-					int temp = 100;
-					try {
-						temp = usart.read();
-					} catch (USARTException e1) {
-						e1.printStackTrace();
+		while (true) {
+			int temp = 100;
+			try {
+				temp = usart.read();
+			} catch (USARTException e1) {
+				e1.printStackTrace();
+			}
+			if (temp == 0) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("EXIT", ADDR_NODE2[i], fio);
 					}
-					if (temp == 0) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("EXIT", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-						exit = true;
-						break;
-					} else if (temp == 1) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("ON", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 2) {
-						long currTime = Time.currentTimeMillis();
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send(("T" + currTime), ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 3) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("WAKTU", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					} else if (temp == 4) {
-						try {
-							for (int i = 0; i < ADDR_NODE2.length; i++) {
-								send("DETECT", ADDR_NODE2[i], fio);
-							}
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				exit = true;
+				break;
+			} else if (temp == 1) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("ON", ADDR_NODE2[i], fio);
 					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 2) {
+				long currTime = Time.currentTimeMillis();
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send(("T" + currTime), ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 3) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("WAKTU", ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} else if (temp == 4) {
+				try {
+					for (int i = 0; i < ADDR_NODE2.length; i++) {
+						send("DETECT", ADDR_NODE2[i], fio);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
-		}.start();
+			receive(fio);
+		}
 	}
 
 	public static void receive(final FrameIO fio) throws Exception {
@@ -129,9 +125,9 @@ public class BS_Testing extends Thread {
 						if (str.charAt(str.length() - 1) == 'E') {
 							String msg = "#" + str + "#";
 							try {
+								Thread.sleep(200);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
-								Thread.sleep(200);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -151,7 +147,7 @@ public class BS_Testing extends Thread {
 							try {
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
-								Thread.sleep(50);
+//								Thread.sleep(200);
 							} catch (Exception e) {
 							}
 						}
