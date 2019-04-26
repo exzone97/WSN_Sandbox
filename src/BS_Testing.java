@@ -27,9 +27,22 @@ public class BS_Testing extends Thread {
 
 	private static int ADDR_NODE3 = node_list[0]; // NODE DIRINYA (BS)
 
-	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
-			PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
-			PropertyHelper.getInt("radio.panid", 0xDAAD) }; // node dibwhnya
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+//	PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
+//	PropertyHelper.getInt("radio.panid", 0xDAAD) };
+//=================================================================================================	
+//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
+//=================================================================================================
+//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
+//=================================================================================================
+//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
+//=================================================================================================
+//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAc)};
+//=================================================================================================
+//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB)};
+//=================================================================================================
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB),PropertyHelper.getInt("radio.panid", 0xDAAC)};
+//=================================================================================================
 
 	private static USART usart;
 	private static OutputStream out;
@@ -45,6 +58,7 @@ public class BS_Testing extends Thread {
 			Thread thread = new Thread() {
 				public void run() {
 					try {
+						receive(fio);
 						sender(fio);
 					} catch (Exception e) {
 					}
@@ -100,15 +114,17 @@ public class BS_Testing extends Thread {
 					e1.printStackTrace();
 				}
 			} else if (temp == 4) {
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send("DETECT", ADDR_NODE2[i], fio);
+				while (exit != true) {
+					try {
+						for (int i = 0; i < ADDR_NODE2.length; i++) {
+							send("DETECT", ADDR_NODE2[i], fio);
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
+					Thread.sleep(50);
 				}
 			}
-			receive(fio);
 		}
 	}
 
@@ -160,7 +176,8 @@ public class BS_Testing extends Thread {
 	}
 
 	public static void send(String msg, long address, final FrameIO fio) throws Exception {
-		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.SRC_ADDR_16;
+		int frameControl = Frame.TYPE_DATA | Frame.DST_ADDR_16 | Frame.INTRA_PAN | Frame.ACK_REQUEST
+				| Frame.SRC_ADDR_16;
 		final Frame testFrame = new Frame(frameControl);
 		testFrame.setDestPanId(COMMON_PANID);
 		testFrame.setDestAddr(address);

@@ -16,107 +16,28 @@ public class NS {
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
-// =======================================================================================================
-	private static int ADDR_NODE1 = node_list[0];
-	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB) };
-	private static int ADDR_NODE3 = node_list[1];
-
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAC) };
-//	private static int ADDR_NODE3 = node_list[2];
-//
-//	private static int ADDR_NODE1 = node_list[2];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD) };
-//	private static int ADDR_NODE3 = node_list[3];
-//
-//	private static int ADDR_NODE1 = node_list[3];
+//	private static int ADDR_NODE1 = node_list[0];
 //	private static int ADDR_NODE2[] = new int[0];
 //	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB) };
-//	private static int ADDR_NODE3 = node_list[1];
+	// =======================================================================================================
+		private static int ADDR_NODE1 = node_list[0];
+		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
+		private static int ADDR_NODE3 = node_list[1];
 
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAC), 
-//										PropertyHelper.getInt("radio.panid", 0xDAAD) };
-//	private static int ADDR_NODE3 = node_list[2];
+//		private static int ADDR_NODE1 = node_list[1];
+//		private static int ADDR_NODE2[] = new int[0];
+//		private static int ADDR_NODE3 = node_list[2];
 
-//	private static int ADDR_NODE1 = node_list[2];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[3];
+//		private static int ADDR_NODE1 = node_list[0];
+//		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
+//		private static int ADDR_NODE3 = node_list[3];
 
-//	private static int ADDR_NODE1 = node_list[2];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB),
-//										PropertyHelper.getInt("radio.panid", 0xDAAC),	
-//										PropertyHelper.getInt("radio.panid", 0xDAAD)};
-//	private static int ADDR_NODE3 = node_list[1];
+//		private static int ADDR_NODE1 = node_list[3];
+//		private static int ADDR_NODE2[] = new int[0];
+//		private static int ADDR_NODE3 = node_list[4];
+	// =======================================================================================================
 
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[2];
 
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[3];
-
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
-//	private static int ADDR_NODE3 = node_list[1];
-
-//	private static int ADDR_NODE1 = node_list[1];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[2];
-
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
-//	private static int ADDR_NODE3 = node_list[3];
-
-//	private static int ADDR_NODE1 = node_list[3];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[1];
-
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAC),
-//										PropertyHelper.getInt("radio.panid", 0xDAAD)};
-//	private static int ADDR_NODE3 = node_list[2];
-
-//	private static int ADDR_NODE1 = node_list[2];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[3];
-
-//	private static int ADDR_NODE1 = node_list[2];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[1];
-
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[2];
-
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
-//	private static int ADDR_NODE3 = node_list[3];
-
-//	private static int ADDR_NODE1 = node_list[3];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
-// =======================================================================================================
 	private static sensing s = new sensing();
 	private static int sn = 1; // sequence number
 
@@ -219,7 +140,7 @@ public class NS {
 						// kirim 'DETECT' ke node di bwhnya
 						else if (str.equalsIgnoreCase("DETECT")) {
 							System.out.println("DETECT");
-							end = Time.currentTimeMillis() + 5000;
+							end = Time.currentTimeMillis() + 4000;
 							String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis() + " "
 									+ s.sense();
 							myTemp = message;
@@ -248,24 +169,34 @@ public class NS {
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
 							System.out.println("SEND " + str);
 						} else if (str.startsWith("ACK")) {
-							int node = Integer.parseInt(str.substring(3));
+							int indexDot = str.indexOf(".");
+							int node = Integer.parseInt(str.substring(3, indexDot));
 							System.out.println(node);
 							if (node == ADDR_NODE3) {
-								System.out.println("RECEIVE ACK");
-								isSensing = false;
-								end = Time.currentTimeMillis() + 5000;
-								String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis() + " "
-										+ s.sense();
-								myTemp = message;
-								hmap.put(ADDR_NODE3, message);
-								Thread.sleep(50);
-								System.out.println("MY SENSE");
-								System.out.println(hmap.get(ADDR_NODE3));
-								System.out.println("=========================");
-								sn++;
-								send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
-								Thread.sleep(50);
-								isSensing = true;
+
+								int se = Integer.parseInt(str.substring(indexDot + 1));
+								if (se == sn - 1) {
+									System.out.println("RECEIVE ACK");
+									isSensing = false;
+									end = Time.currentTimeMillis() + 4000;
+									String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis()
+											+ " " + s.sense();
+									myTemp = message;
+									hmap.put(ADDR_NODE3, message);
+									Thread.sleep(50);
+									System.out.println("MY SENSE");
+									System.out.println(hmap.get(ADDR_NODE3));
+									System.out.println("=========================");
+									sn++;
+									send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+									Thread.sleep(50);
+									isSensing = true;
+								}
+								else {
+									send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+
+									end = Time.currentTimeMillis() + 4000;
+								}
 							} else {
 								for (int i = 0; i < ADDR_NODE2.length; i++) {
 									send(str, ADDR_NODE3, ADDR_NODE2[i], fio);
@@ -287,7 +218,7 @@ public class NS {
 
 					send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
 					System.out.println(myTemp);
-					end = Time.currentTimeMillis() + 5000;
+					end = Time.currentTimeMillis() + 4000;
 				}
 			}
 		}

@@ -386,6 +386,10 @@
 	7		<init>()V
 	2		size()I
 
+1373		NS$1
+	1363		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
 	145		programPage(I[BII)V
@@ -421,10 +425,6 @@
 	2		getPageSize()I
 	2		getSectorSize()I
 	2		getBlockSize()I
-
-1306		NS$1
-	1296		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1091		java/util/HashMap
 	125		removeEntry(Ljava/lang/Object;)Ljava/util/HashMap$Entry;

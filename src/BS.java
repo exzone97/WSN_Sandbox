@@ -26,21 +26,13 @@ public class BS extends Thread {
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
 
-// =================================================================================================	
 	private static int ADDR_NODE3 = node_list[0]; // NODE DIRINYA (BS)
-// =================================================================================================	
-	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
-// =================================================================================================
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
-// =================================================================================================
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
-// =================================================================================================
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAc)};
-// =================================================================================================
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB)};
-// =================================================================================================
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB),PropertyHelper.getInt("radio.panid", 0xDAAC)};
-// =================================================================================================
+
+//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+//	PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
+//	PropertyHelper.getInt("radio.panid", 0xDAAD) };
+//=================================================================================================
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAC)};
 
 	private static HashMap<Integer, Integer> hmapSN = new HashMap<Integer, Integer>();
 	private static USART usart;
@@ -61,7 +53,7 @@ public class BS extends Thread {
 				public void run() {
 					try {
 						sender(fio);
-//						receive(fio);
+						receive(fio);
 					} catch (Exception e) {
 					}
 				}
@@ -73,68 +65,68 @@ public class BS extends Thread {
 	}
 
 	public static void sender(final FrameIO fio) throws Exception {
-//		new Thread() {
-//			public void run() {
-		while (true) {
+		new Thread() {
+			public void run() {
+				while (true) {
 //			console = new Console();
 //			int temp = console.readInt("Input");
-			int temp = 100;
-			try {
-				temp = usart.read();
-			} catch (USARTException e1) {
-				e1.printStackTrace();
-			}
-			if (temp == 0) {
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send("EXIT", ADDR_NODE2[i], fio);
+					int temp = 100;
+					try {
+						temp = usart.read();
+					} catch (USARTException e1) {
+						e1.printStackTrace();
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				exit = true;
-				firstSense = false;
+					if (temp == 0) {
+						try {
+							for (int i = 0; i < ADDR_NODE2.length; i++) {
+								send("EXIT", ADDR_NODE2[i], fio);
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						exit = true;
+						firstSense = false;
 
-				break;
-			} else if (temp == 1) {
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send("ON", ADDR_NODE2[i], fio);
+						break;
+					} else if (temp == 1) {
+						try {
+							for (int i = 0; i < ADDR_NODE2.length; i++) {
+								send("ON", ADDR_NODE2[i], fio);
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					} else if (temp == 2) {
+						long currTime = Time.currentTimeMillis();
+						try {
+							for (int i = 0; i < ADDR_NODE2.length; i++) {
+								send(("Q" + currTime), ADDR_NODE2[i], fio);
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					} else if (temp == 3) {
+						try {
+							for (int i = 0; i < ADDR_NODE2.length; i++) {
+								send("WAKTU", ADDR_NODE2[i], fio);
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					} else if (temp == 4) {
+						firstSense = true;
+						try {
+							for (int i = 0; i < ADDR_NODE2.length; i++) {
+								send("DETECT", ADDR_NODE2[i], fio);
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			} else if (temp == 2) {
-				long currTime = Time.currentTimeMillis();
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send(("Q" + currTime), ADDR_NODE2[i], fio);
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			} else if (temp == 3) {
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send("WAKTU", ADDR_NODE2[i], fio);
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			} else if (temp == 4) {
-				firstSense = true;
-				try {
-					for (int i = 0; i < ADDR_NODE2.length; i++) {
-						send("DETECT", ADDR_NODE2[i], fio);
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
+//			receive(fio);
 				}
 			}
-			receive(fio);
-		}
-//			}
-//		}.start();
+		}.start();
 	}
 
 	public static void receive(final FrameIO fio) throws Exception {
@@ -152,9 +144,9 @@ public class BS extends Thread {
 //							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
+								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
-								Thread.sleep(500);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -164,9 +156,9 @@ public class BS extends Thread {
 //							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
+								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
-								Thread.sleep(500);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -180,23 +172,24 @@ public class BS extends Thread {
 //							System.out.println(node + " " + (int) frame.getSrcAddr());
 //							System.out.println(node + " " + sn);
 //							System.out.println(hmapSN.get(node));
-							if (hmapSN.get(node) < sn) {
+							//Nulis sekali.. biar ga duplikat data
+							if (hmapSN.get(node) == sn) {
 //								System.out.println("Here!");//
-								hmapSN.put(node, sn);
+//								hmapSN.put(node, sn);
 //								System.out.println(str);
 
 								String msg = "#" + str + "#";
 								try {
 									out.write(msg.getBytes(), 0, msg.length());
 									usart.flush();
-									Thread.sleep(200);
+									Thread.sleep(50);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
+								
+								hmapSN.put(node, sn+1);
 							}
-
-							send("ACK" + node, frame.getSrcAddr(), fio);//
-
+							send("ACK" + node+"."+sn, frame.getSrcAddr(), fio);//
 						}
 					} catch (Exception e) {
 					}
@@ -239,7 +232,7 @@ public class BS extends Thread {
 
 	public static void main(String[] args) throws Exception {
 		for (int i = 1; i < node_list.length; i++) {
-			hmapSN.put(node_list[i], 0);
+			hmapSN.put(node_list[i], 1);
 		}
 		try {
 			startUSART();

@@ -11,6 +11,7 @@ import java.util.Scanner;
 import org.apache.tools.ant.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
 
 public class Handler {
 
@@ -51,86 +52,151 @@ public class Handler {
 
 	public void init() throws Exception {
 		try {
-			Preon32Helper nodeHelper = new Preon32Helper("COM8", 115200);
+			Preon32Helper nodeHelper = new Preon32Helper("COM4", 115200);
 			DataConnection conn = nodeHelper.runModule("basestation");
 			BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 
-			int choiceentry;
+			int choiceentry = -1;
 			String s;
 			scanner = new Scanner(System.in);
 			conn.flush();
+			System.out.println("MENU");
+			System.out.println("1. Check Online");
+			System.out.println("2. Synchronize Time");
+			System.out.println("3. Get Time");
+			System.out.println("4. Start Sensing !");
+			System.out.println("0. Exit");
+			System.out.println("Choice: ");
 			do {
-				System.out.println("MENU");
-				System.out.println("1. Check Online");
-				System.out.println("2. Synchronize Time");
-				System.out.println("3. What's Your Time");
-				System.out.println("4. Start Sensing !");
-				System.out.println("0. Exit");
-				System.out.println("Choice: ");
+				try {
+					choiceentry = scanner.nextInt();
+					conn.write(choiceentry);
+					Thread.sleep(200);
+					switch (choiceentry) {
+					case 0: {
+						System.out.println("Exit Program ...");
+						exit = true;
+						break;
+					}
+					case 1: {
+						if (isSensing == false) {
+							byte[] buffer = new byte[1024];
+							while (in.available() > 0) {
+								in.read(buffer);
+								conn.flush();
+								s = new String(buffer);
+								String[] ss = s.split("#");
+								for (String res : ss) {
+									if (res.startsWith("Node")) {
+										System.out.println(res);
+									}
+								}
+								Thread.sleep(1000);
+							}
+							System.out.println("MENU");
+							System.out.println("1. Check Online");
+							System.out.println("2. Synchronize Time");
+							System.out.println("3. Get Time");
+							System.out.println("4. Start Sensing !");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						} else {
+							System.out.println("MENU");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						}
+						break;
+					}
+					case 2: {
+						Thread.sleep(500);
+						if (isSensing == false) {
+							System.out.println("Done Synchronize");
+							System.out.println("MENU");
+							System.out.println("1. Check Online");
+							System.out.println("2. Synchronize Time");
+							System.out.println("3. Get Time");
+							System.out.println("4. Start Sensing !");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						} else {
+							System.out.println("MENU");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						}
+						break;
+					}
+					case 3: {
+						if (isSensing == false) {
+							byte[] buffer = new byte[1024];
+							while (in.available() > 0) {
+								in.read(buffer);
+								conn.flush();
+								s = new String(buffer);
+								String[] ss = s.split("#");
+								for (String res : ss) {
+									if (res.startsWith("Time")) {
+										String[] fin = res.split(" ");
+//										System.out.println(res);
+										long time = Long.parseLong(fin[2]);
+										System.out.println(fin[0] + " " + fin[1] + " " + stringFormat(time));
+									}
+								}
 
-				choiceentry = scanner.nextInt();
-				conn.write(choiceentry);
-				Thread.sleep(200);
-				switch (choiceentry) {
-				case 0: {
-					exit = true;
-					break;
-				}
-				case 1: {
-					byte[] buffer = new byte[1024];
-					while (in.available() > 0) {
-						Thread.sleep(2000);
-						in.read(buffer);
-						conn.flush();
-						s = new String(buffer);
-						String[] ss = s.split("#");
-						for (String res : ss) {
-							if (res.startsWith("Node")) {
-								System.out.println(res);
+								Thread.sleep(1000);
 							}
+							System.out.println("MENU");
+							System.out.println("1. Check Online");
+							System.out.println("2. Synchronize Time");
+							System.out.println("3. Get Time");
+							System.out.println("4. Start Sensing !");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						} else {
+							System.out.println("MENU");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
 						}
+						break;
 					}
-					break;
-				}
-				case 2: {
-					Thread.sleep(500);
-					System.out.println("Done Synchronize");
-				}
-				case 3: {
-					byte[] buffer = new byte[1024];
-					while (in.available() > 0) {
-						Thread.sleep(2000);
-						in.read(buffer);
-						conn.flush();
-						s = new String(buffer);
-						String[] ss = s.split("#");
-						for (String res : ss) {
-							if (res.startsWith("Time")) {
-								String[] fin = res.split(" ");
-//								System.out.println(res);
-								long time = Long.parseLong(fin[2]);
-								System.out.println(fin[0] + " " + fin[1] + " " + stringFormat(time));
-							}
+					case 4: {
+						if (isSensing == false) {
+							System.out.println("Sensing...");
+							String fName = System.currentTimeMillis() + "";
+							fName = "MH4 OUT NR" + fName + ".txt";
+							writeToFile(fName, "Tester", in);
+							isSensing = true;
+							System.out.println("MENU");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
+						} else {
+							System.out.println("Already Sensing....");
+							System.out.println("MENU");
+							System.out.println("0. Exit");
+							System.out.println("Choice: ");
 						}
+						break;
 					}
-					break;
-				}
-				case 4: {
+					}
+				} catch (InputMismatchException e) {
+					String input = scanner.next();
+					System.out.println("Input salah..");
 					if (isSensing == false) {
-						String fName = System.currentTimeMillis() + "";
-						fName = "TEST" + fName + ".txt";
-						writeToFile(fName, "Tester", in);
-						isSensing = true;
+						System.out.println("MENU");
+						System.out.println("1. Check Online");
+						System.out.println("2. Synchronize Time");
+						System.out.println("3. Get Time");
+						System.out.println("4. Start Sensing !");
+						System.out.println("0. Exit");
+						System.out.println("Choice: ");
 					} else {
-						Thread.sleep(1500);
-						System.out.println("Already Sensing....");
+						System.out.println("MENU");
+						System.out.println("0. Exit");
+						System.out.println("Choice: ");
 					}
-					break;
-				}
+					continue;
 				}
 			} while (choiceentry != 0);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -143,7 +209,7 @@ public class Handler {
 
 	public void writeToFile(String fName, String folName, BufferedInputStream in) throws Exception {
 		Thread t = new Thread() {
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[2048];
 			String s;
 			long count = 0;
 			File newFolder = new File(folName);
@@ -177,22 +243,22 @@ public class Handler {
 									writer.write(newString, 0, newString.length());
 									writer.newLine();
 //									Thread.sleep(200);
-								} else if (w.startsWith("Node")) {
-									System.out.println(w);
-								}
-								else if(w.startsWith("Time")) {
-									String[] fin = w.split(" ");
-									long time = Long.parseLong(fin[2]);
-									System.out.println(fin[0] + " " + fin[1] + " " + stringFormat(time));
+									count++;
+									if (count == 10) {
+										writer.close();
+										FileWriter fw = new FileWriter(path, true);
+										writer = new BufferedWriter(fw);
+										count = 0;
+									}
 								}
 							}
-							count++;
-							if (count == 10) {
-								writer.close();
-								FileWriter fw = new FileWriter(path, true);
-								writer = new BufferedWriter(fw);
-								count = 0;
-							}
+//							count++;
+//							if (count == 10) {
+//								writer.close();
+//								FileWriter fw = new FileWriter(path, true);
+//								writer = new BufferedWriter(fw);
+//								count = 0;
+//							}
 						}
 					} catch (Exception e) {
 					}
