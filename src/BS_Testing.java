@@ -31,19 +31,8 @@ public class BS_Testing extends Thread {
 //	PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
 //	PropertyHelper.getInt("radio.panid", 0xDAAD) };
 //=================================================================================================	
-//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAc)};
 //=================================================================================================
-//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
-//=================================================================================================
-//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)};
-//=================================================================================================
-//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAc)};
-//=================================================================================================
-//private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB)};
-//=================================================================================================
-private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB),PropertyHelper.getInt("radio.panid", 0xDAAC)};
-//=================================================================================================
-
 	private static USART usart;
 	private static OutputStream out;
 	private static boolean exit;
