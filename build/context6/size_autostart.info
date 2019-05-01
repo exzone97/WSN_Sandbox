@@ -386,6 +386,10 @@
 	7		<init>()V
 	2		size()I
 
+1328		NS$1
+	1318		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
+
 1323		com/virtenio/driver/flash/GenericSPIFlash
 	173		read(I[BII)I
 	145		programPage(I[BII)V
@@ -421,10 +425,6 @@
 	2		getPageSize()I
 	2		getSectorSize()I
 	2		getBlockSize()I
-
-1315		NS$1
-	1305		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1058		com/virtenio/driver/device/ADXL345
 	122		reset()V

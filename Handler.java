@@ -80,8 +80,12 @@ public class Handler {
 					}
 					case 1: {
 						if (isSensing == false) {
+
 							byte[] buffer = new byte[1024];
+
 							while (in.available() > 0) {
+
+								Thread.sleep(2000);
 								in.read(buffer);
 								conn.flush();
 								s = new String(buffer);
@@ -89,9 +93,9 @@ public class Handler {
 								for (String res : ss) {
 									if (res.startsWith("Node")) {
 										System.out.println(res);
+										Thread.sleep(1000);
 									}
 								}
-								Thread.sleep(1000);
 							}
 							System.out.println("MENU");
 							System.out.println("1. Check Online");
@@ -127,6 +131,7 @@ public class Handler {
 					}
 					case 3: {
 						if (isSensing == false) {
+							Thread.sleep(2000);
 							byte[] buffer = new byte[1024];
 							while (in.available() > 0) {
 								in.read(buffer);
@@ -139,10 +144,10 @@ public class Handler {
 //										System.out.println(res);
 										long time = Long.parseLong(fin[2]);
 										System.out.println(fin[0] + " " + fin[1] + " " + stringFormat(time));
+										Thread.sleep(1000);
 									}
 								}
 
-								Thread.sleep(1000);
 							}
 							System.out.println("MENU");
 							System.out.println("1. Check Online");
@@ -162,7 +167,7 @@ public class Handler {
 						if (isSensing == false) {
 							System.out.println("Sensing...");
 							String fName = System.currentTimeMillis() + "";
-							fName = "MH4 OUT NR" + fName + ".txt";
+							fName = "Testing_" + fName + ".txt";
 							writeToFile(fName, "Tester", in);
 							isSensing = true;
 							System.out.println("MENU");

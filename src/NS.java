@@ -18,19 +18,19 @@ public class NS {
 
 //	private static int ADDR_NODE1 = node_list[0];
 //	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[4];
+//	private static int ADDR_NODE3 = node_list[2];
 	// =======================================================================================================
-//		private static int ADDR_NODE1 = node_list[0];
-//		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
-//		private static int ADDR_NODE3 = node_list[1];
+		private static int ADDR_NODE1 = node_list[0];
+		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
+		private static int ADDR_NODE3 = node_list[1];
 
 //		private static int ADDR_NODE1 = node_list[1];
 //		private static int ADDR_NODE2[] = new int[0];
 //		private static int ADDR_NODE3 = node_list[2];
 
-		private static int ADDR_NODE1 = node_list[0];
-		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
-		private static int ADDR_NODE3 = node_list[3];
+//		private static int ADDR_NODE1 = node_list[0];
+//		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
+//		private static int ADDR_NODE3 = node_list[3];
 //
 //		private static int ADDR_NODE1 = node_list[3];
 //		private static int ADDR_NODE2[] = new int[0];
@@ -129,7 +129,7 @@ public class NS {
 						// Kalau dpt akhiran 'E' (status online dr node di bwhnya) terusin ke node
 						// diatasnya.
 						else if (str.charAt(str.length() - 1) == 'E') {
-							Thread.sleep(200);
+//							Thread.sleep(200);
 							System.out.println("Node bwh : " + str);
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
 						}

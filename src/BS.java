@@ -17,7 +17,7 @@ import com.virtenio.driver.usart.NativeUSART;
 import com.virtenio.driver.usart.USART;
 import com.virtenio.driver.usart.USARTException;
 import com.virtenio.driver.usart.USARTParams;
-//import com.virtenio.io.Console;
+import com.virtenio.io.Console;
 
 public class BS extends Thread {
 	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
@@ -40,7 +40,7 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 	private static boolean exit;
 	private static boolean firstSense;
 
-//	private static Console console;
+	private static Console console;
 
 	public static void runs() {
 		try {
@@ -138,13 +138,14 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 						fio.receive(frame);
 						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
-//						System.out.println(str);
+//						System.out.println("ASD"+str);
 						// DPT NODE YANG ONLINE
 						if (str.charAt(str.length() - 1) == 'E') {
 //							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
-								Thread.sleep(500);
+//								System.out.println(msg);
+//								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {
@@ -156,7 +157,8 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 //							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
-								Thread.sleep(500);
+//								System.out.println(msg);
+//								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {

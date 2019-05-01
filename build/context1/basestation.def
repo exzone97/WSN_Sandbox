@@ -13,12 +13,12 @@ header {
 	stringPoolOffset 13400
 	mainMethodIndex 0
 	staticPrimitiveFieldCount 5
-	staticReferenceFieldCount 17
+	staticReferenceFieldCount 18
 	classCount 95
 	interfaceCount 23
 	implementsCount 30
 	methodCount 1034
-	codePoolSize 42205
+	codePoolSize 42187
 	stringCount 58
 }
 classes [
@@ -4789,8 +4789,8 @@ methods [
 		]
 		pcToLine {
 			0 133
-			9 199
-			13 200
+			9 201
+			13 202
 		}
 		pcTranslation {
 			0 0
@@ -4855,17 +4855,17 @@ methods [
 			}
 		]
 		pcToLine {
-			0 203
-			6 205
-			15 206
-			23 207
-			29 208
-			38 209
-			47 211
-			52 212
-			65 214
-			68 213
-			69 215
+			0 205
+			6 207
+			15 208
+			23 209
+			29 210
+			38 211
+			47 213
+			52 214
+			65 216
+			68 215
+			69 217
 		}
 		pcTranslation {
 			0 0
@@ -4937,13 +4937,13 @@ methods [
 			}
 		]
 		pcToLine {
-			0 218
-			5 219
-			10 221
-			14 222
-			19 223
-			21 224
-			22 225
+			0 220
+			5 221
+			10 223
+			14 224
+			19 225
+			21 226
+			22 227
 		}
 		pcTranslation {
 			0 0
@@ -4978,8 +4978,8 @@ methods [
 		getter1For -1
 		getter2For -1
 		pcToLine {
-			0 230
-			7 231
+			0 232
+			7 233
 		}
 		pcTranslation {
 			0 0
@@ -5025,16 +5025,16 @@ methods [
 			}
 		]
 		pcToLine {
-			0 234
-			11 235
-			34 234
-			39 238
-			42 239
-			53 242
-			56 240
-			57 241
-			61 243
-			64 244
+			0 236
+			11 237
+			34 236
+			39 240
+			42 241
+			53 244
+			56 242
+			57 243
+			61 245
+			64 246
 		}
 		pcTranslation {
 			0 0
@@ -55265,13 +55265,13 @@ methods [
 		exceptionCount 4
 		argsFieldCount 1
 		flags 131112
-		codeLength 443
+		codeLength 425
 		codeOffset 41762
 		getter1For -1
 		getter2For -1
 		localVars [
 			{
-				startPC 117
+				startPC 104
 				length 5
 				name e
 				descriptor Ljava/lang/Exception;
@@ -55279,69 +55279,69 @@ methods [
 			}
 			{
 				startPC 79
-				length 41
+				length 35
 				name msg
 				descriptor Ljava/lang/String;
 				index 4
 			}
 			{
-				startPC 205
+				startPC 187
 				length 5
 				name e
 				descriptor Ljava/lang/Exception;
 				index 5
 			}
 			{
-				startPC 167
-				length 41
+				startPC 154
+				length 43
 				name msg
 				descriptor Ljava/lang/String;
 				index 4
 			}
 			{
-				startPC 367
+				startPC 349
 				length 5
 				name e
 				descriptor Ljava/lang/Exception;
 				index 10
 			}
 			{
-				startPC 328
+				startPC 310
 				length 60
 				name msg
 				descriptor Ljava/lang/String;
 				index 9
 			}
 			{
-				startPC 231
+				startPC 213
 				length 195
 				name beginNode
 				descriptor I
 				index 4
 			}
 			{
-				startPC 239
+				startPC 221
 				length 187
 				name beginSN
 				descriptor I
 				index 5
 			}
 			{
-				startPC 247
+				startPC 229
 				length 179
 				name endSN
 				descriptor I
 				index 6
 			}
 			{
-				startPC 261
+				startPC 243
 				length 164
 				name node
 				descriptor I
 				index 7
 			}
 			{
-				startPC 275
+				startPC 257
 				length 149
 				name sn
 				descriptor I
@@ -55349,28 +55349,28 @@ methods [
 			}
 			{
 				startPC 19
-				length 389
+				length 385
 				name dg
 				descriptor "[B"
 				index 2
 			}
 			{
 				startPC 32
-				length 377
+				length 373
 				name str
 				descriptor Ljava/lang/String;
 				index 3
 			}
 			{
 				startPC 0
-				length 417
+				length 413
 				name this
 				descriptor LBS$3;
 				index 0
 			}
 			{
 				startPC 8
-				length 409
+				length 405
 				name frame
 				descriptor Lcom/virtenio/radio/ieee_802_15_4/Frame;
 				index 1
@@ -55383,40 +55383,39 @@ methods [
 			19 140
 			32 143
 			47 145
-			79 147
-			92 148
-			107 149
-			113 152
-			116 150
-			117 151
-			121 153
-			124 155
-			135 157
-			167 159
-			180 160
-			195 161
-			201 164
-			204 162
-			205 163
-			209 165
-			223 167
-			231 168
-			239 169
-			247 170
-			261 171
-			275 176
-			296 181
-			328 183
-			343 184
-			349 185
-			362 188
-			365 186
-			367 187
-			372 190
-			391 192
-			436 195
-			439 194
-			440 195
+			79 149
+			94 150
+			100 153
+			103 151
+			104 152
+			108 154
+			111 156
+			122 158
+			154 160
+			162 162
+			177 163
+			183 166
+			186 164
+			187 165
+			191 167
+			205 169
+			213 170
+			221 171
+			229 172
+			243 173
+			257 178
+			278 183
+			310 185
+			325 186
+			331 187
+			344 190
+			347 188
+			349 189
+			354 192
+			373 194
+			418 197
+			421 196
+			422 197
 		}
 		pcTranslation {
 			0 0
@@ -55458,148 +55457,147 @@ methods [
 			69 74
 			72 78
 			74 79
-			77 88
-			80 92
-			83 95
-			85 96
-			88 100
-			89 101
-			91 102
-			94 104
-			97 107
-			100 110
-			105 113
-			108 116
-			110 117
-			112 118
-			115 121
-			118 124
-			119 125
-			120 126
-			123 130
-			125 132
-			128 135
-			131 135
-			132 139
-			135 143
-			137 146
-			140 150
-			141 151
-			144 155
-			146 158
-			149 162
-			152 166
-			154 167
-			157 176
-			160 180
-			163 183
-			165 184
-			168 188
-			169 189
-			171 190
-			174 192
-			177 195
-			180 198
-			185 201
-			188 204
-			190 205
-			192 206
-			195 209
-			198 212
-			199 213
-			201 216
-			204 220
-			207 223
-			208 224
-			210 226
-			213 230
-			215 231
-			216 232
-			218 234
-			221 238
-			223 239
-			224 240
-			226 242
-			229 246
-			231 247
-			232 247
-			234 249
-			235 250
-			236 251
-			238 252
-			241 256
-			244 260
-			246 261
-			247 261
-			249 263
-			250 264
-			251 265
-			253 266
-			256 270
-			259 274
-			261 275
-			264 278
-			266 279
-			269 283
-			272 286
-			275 290
-			278 292
-			280 293
-			283 296
-			286 296
-			287 300
-			290 304
-			292 307
-			295 311
-			296 312
-			299 316
-			301 319
-			304 323
-			307 327
-			309 328
-			312 331
-			314 332
-			317 336
-			318 337
-			320 338
-			323 340
-			326 343
-			329 346
-			334 349
-			337 358
-			340 362
-			343 365
-			345 367
-			347 369
-			350 372
-			353 375
-			355 376
-			358 380
-			360 381
-			361 382
-			362 383
-			365 387
-			368 390
-			369 391
-			372 391
-			373 395
-			376 399
-			378 402
-			381 406
-			383 407
-			386 411
-			388 414
-			391 418
-			393 419
-			396 423
-			399 427
-			400 428
-			403 431
-			404 431
-			407 433
-			410 436
-			413 439
-			414 440
+			77 82
+			79 83
+			82 87
+			83 88
+			85 89
+			88 91
+			91 94
+			94 97
+			99 100
+			102 103
+			104 104
+			106 105
+			109 108
+			112 111
+			113 112
+			114 113
+			117 117
+			119 119
+			122 122
+			125 122
+			126 126
+			129 130
+			131 133
+			134 137
+			135 138
+			138 142
+			140 145
+			143 149
+			146 153
+			148 154
+			151 158
+			153 159
+			156 162
+			159 165
+			161 166
+			164 170
+			165 171
+			167 172
+			170 174
+			173 177
+			176 180
+			181 183
+			184 186
+			186 187
+			188 188
+			191 191
+			194 194
+			195 195
+			197 198
+			200 202
+			203 205
+			204 206
+			206 208
+			209 212
+			211 213
+			212 214
+			214 216
+			217 220
+			219 221
+			220 222
+			222 224
+			225 228
+			227 229
+			228 229
+			230 231
+			231 232
+			232 233
+			234 234
+			237 238
+			240 242
+			242 243
+			243 243
+			245 245
+			246 246
+			247 247
+			249 248
+			252 252
+			255 256
+			257 257
+			260 260
+			262 261
+			265 265
+			268 268
+			271 272
+			274 274
+			276 275
+			279 278
+			282 278
+			283 282
+			286 286
+			288 289
+			291 293
+			292 294
+			295 298
+			297 301
+			300 305
+			303 309
+			305 310
+			308 313
+			310 314
+			313 318
+			314 319
+			316 320
+			319 322
+			322 325
+			325 328
+			330 331
+			333 340
+			336 344
+			339 347
+			341 349
+			343 351
+			346 354
+			349 357
+			351 358
+			354 362
+			356 363
+			357 364
+			358 365
+			361 369
+			364 372
+			365 373
+			368 373
+			369 377
+			372 381
+			374 384
+			377 388
+			379 389
+			382 393
+			384 396
+			387 400
+			389 401
+			392 405
+			395 409
+			396 410
+			399 413
+			400 413
+			403 415
+			406 418
+			409 421
+			410 422
 		}
 	}
 ]
@@ -56607,72 +56605,78 @@ staticReferenceFields [
 	}
 	{
 		index 5
+		name console
+		descriptor Lcom/virtenio/io/Console;
+		definedIn BS
+	}
+	{
+		index 6
 		name instance
 		descriptor Lcom/virtenio/preon32/node/Node;
 		definedIn com/virtenio/preon32/node/Node
 	}
 	{
-		index 6
+		index 7
 		name instance
 		descriptor Lcom/virtenio/driver/cpu/NativeCPU;
 		definedIn com/virtenio/driver/cpu/NativeCPU
 	}
 	{
-		index 7
+		index 8
 		name instanceManager
 		descriptor Lcom/virtenio/driver/InstanceManager;
 		definedIn com/virtenio/driver/irq/NativeIRQ
 	}
 	{
-		index 8
+		index 9
 		name instance
 		descriptor Lcom/virtenio/vm/event/AsyncEvents;
 		definedIn com/virtenio/vm/event/AsyncEvents
 	}
 	{
-		index 9
+		index 10
 		name instanceManager
 		descriptor Lcom/virtenio/driver/InstanceManager;
 		definedIn com/virtenio/driver/gpio/NativeGPIO
 	}
 	{
-		index 10
+		index 11
 		name instanceManager
 		descriptor Lcom/virtenio/driver/InstanceManager;
 		definedIn com/virtenio/driver/spi/NativeSPI
 	}
 	{
-		index 11
+		index 12
 		name PARAMS_09600
 		descriptor Lcom/virtenio/driver/usart/USARTParams;
 		definedIn com/virtenio/preon32/examples/common/USARTConstants
 	}
 	{
-		index 12
+		index 13
 		name PARAMS_19200
 		descriptor Lcom/virtenio/driver/usart/USARTParams;
 		definedIn com/virtenio/preon32/examples/common/USARTConstants
 	}
 	{
-		index 13
+		index 14
 		name PARAMS_38400
 		descriptor Lcom/virtenio/driver/usart/USARTParams;
 		definedIn com/virtenio/preon32/examples/common/USARTConstants
 	}
 	{
-		index 14
+		index 15
 		name PARAMS_115200
 		descriptor Lcom/virtenio/driver/usart/USARTParams;
 		definedIn com/virtenio/preon32/examples/common/USARTConstants
 	}
 	{
-		index 15
+		index 16
 		name PARAMS_250000
 		descriptor Lcom/virtenio/driver/usart/USARTParams;
 		definedIn com/virtenio/preon32/examples/common/USARTConstants
 	}
 	{
-		index 16
+		index 17
 		name instanceManager
 		descriptor Lcom/virtenio/driver/InstanceManager;
 		definedIn com/virtenio/driver/usart/NativeUSART
