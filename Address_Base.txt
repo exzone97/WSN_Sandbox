@@ -1,0 +1,28 @@
+1. NODE LIST:
+private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
+			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xDAAB),
+			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
+			PropertyHelper.getInt("radio.panid", 0xDAAE) };
+
+
+2. Alamat ADDR_NODE2:
+SINGLE HOP
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
+PropertyHelper.getInt("radio.panid", 0xDAAD) };
+
+MULTI HOP
+1. Tipe 1:
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
+
+2. Tipe 2:
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAC)};
+
+3. Tipe 3:
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB)};
+
+4. Tipe 4:
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA) };
+
+5. Tipe 5:
+private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAB),PropertyHelper.getInt("radio.panid", 0xDAAC)};
