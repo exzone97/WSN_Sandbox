@@ -21,18 +21,23 @@ import com.virtenio.io.Console;
 
 public class BS extends Thread {
 	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
+	// Daftar Node pada Jaringan	
 	private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
 			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xDAAB),
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
+	
+	// NODE DIRINYA (BS)
+	private static int ADDR_NODE3 = node_list[0]; 
+	
+	// NODE YANG TERHUBUNG LANGSUNG DENGAN BASE STATION
+	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+			PropertyHelper.getInt("radio.panid", 0xDAAC)};
 
-	private static int ADDR_NODE3 = node_list[0]; // NODE DIRINYA (BS)
-
-//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
-//	PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
-//	PropertyHelper.getInt("radio.panid", 0xDAAD) };
+	//	private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),
+	//	PropertyHelper.getInt("radio.panid", 0xDAAB), PropertyHelper.getInt("radio.panid", 0xDAAC),
+	//	PropertyHelper.getInt("radio.panid", 0xDAAD) };
 //=================================================================================================
-private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA),PropertyHelper.getInt("radio.panid", 0xDAAC)};
 
 	private static HashMap<Integer, Integer> hmapSN = new HashMap<Integer, Integer>();
 	private static USART usart;
@@ -68,13 +73,10 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 		new Thread() {
 			public void run() {
 				while (true) {
-//			console = new Console();
-//			int temp = console.readInt("Input");
 					int temp = 100;
 					try {
 						temp = usart.read();
 					} catch (USARTException e1) {
-						e1.printStackTrace();
 					}
 					if (temp == 0) {
 						try {
@@ -82,11 +84,9 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 								send("EXIT", ADDR_NODE2[i], fio);
 							}
 						} catch (Exception e1) {
-							e1.printStackTrace();
 						}
 						exit = true;
 						firstSense = false;
-
 						break;
 					} else if (temp == 1) {
 						try {
@@ -94,7 +94,6 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 								send("ON", ADDR_NODE2[i], fio);
 							}
 						} catch (Exception e1) {
-							e1.printStackTrace();
 						}
 					} else if (temp == 2) {
 						long currTime = Time.currentTimeMillis();
@@ -103,7 +102,6 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 								send(("Q" + currTime), ADDR_NODE2[i], fio);
 							}
 						} catch (Exception e1) {
-							e1.printStackTrace();
 						}
 					} else if (temp == 3) {
 						try {
@@ -111,7 +109,6 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 								send("WAKTU", ADDR_NODE2[i], fio);
 							}
 						} catch (Exception e1) {
-							e1.printStackTrace();
 						}
 					} else if (temp == 4) {
 						firstSense = true;
@@ -120,10 +117,8 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 								send("DETECT", ADDR_NODE2[i], fio);
 							}
 						} catch (Exception e1) {
-							e1.printStackTrace();
 						}
 					}
-//			receive(fio);
 				}
 			}
 		}.start();
@@ -135,62 +130,47 @@ private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAA)
 				Frame frame = new Frame();
 				while (true) {
 					try {
-						fio.receive(frame);
+						fio.receive(frame); // Menerima Frame
 						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
-//						System.out.println("ASD"+str);
-						// DPT NODE YANG ONLINE
+						// Dispatch
+						// Kalau Akhiran 'E', Maka Isinya Status Online Node.. Kirim Ke USART
 						if (str.charAt(str.length() - 1) == 'E') {
-//							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
-//								System.out.println(msg);
-//								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {
-								e.printStackTrace();
 							}
 						}
-						// DPT WAKTU DR SETIAP NODE
+						// Kalau Dapat Awalan 'T', Maka Isinya Waktu Node.. Kirim Ke USART
 						else if (str.charAt(0) == 'T') {
-//							System.out.println(str);
 							String msg = "#" + str + "#";
 							try {
-//								System.out.println(msg);
-//								Thread.sleep(500);
 								out.write(msg.getBytes(), 0, msg.length());
 								usart.flush();
 							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						} else if (str.startsWith("SENSE")) {
-
+							}							
+						} 
+						// Kalau Awalan "SENSE" adalah data Sensing
+						else if (str.startsWith("SENSE")) {
 							int beginNode = str.indexOf('<');
 							int beginSN = str.indexOf('>');
 							int endSN = str.indexOf('?');
 							int node = Integer.parseInt(str.substring(beginNode + 1, beginSN));
 							int sn = Integer.parseInt(str.substring(beginSN + 1, endSN));
-//							System.out.println(node + " " + (int) frame.getSrcAddr());
-//							System.out.println(node + " " + sn);
-//							System.out.println(hmapSN.get(node));
-							//Nulis sekali.. biar ga duplikat data
+							// Mengatur agar tidak duplikat yang ditulis
 							if (hmapSN.get(node) == sn) {
-//								System.out.println("Here!");//
-//								hmapSN.put(node, sn);
-//								System.out.println(str);
-
 								String msg = "#" + str + "#";
 								try {
 									out.write(msg.getBytes(), 0, msg.length());
 									usart.flush();
 									Thread.sleep(50);
 								} catch (Exception e) {
-									e.printStackTrace();
 								}
-								
 								hmapSN.put(node, sn+1);
 							}
+							// Setelah dapat data, maka akan dikirim ACK
 							send("ACK" + node+"."+sn, frame.getSrcAddr(), fio);//
 						}
 					} catch (Exception e) {

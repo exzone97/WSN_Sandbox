@@ -422,8 +422,8 @@
 	2		getSectorSize()I
 	2		getBlockSize()I
 
-1315		NS$1
-	1305		run()V
+1110		NS$1
+	1100		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 1058		com/virtenio/driver/device/ADXL345
@@ -734,19 +734,19 @@
 	106		send_receive(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	77		send(Ljava/lang/String;IILcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 	70		runs()V
-	12		access$608()I
+	12		access$508()I
 	9		main([Ljava/lang/String;)V
-	8		access$502(J)J
+	8		access$802(J)J
 	7		access$302(Z)Z
 	7		access$402(Z)Z
-	7		access$802(Ljava/lang/String;)Ljava/lang/String;
+	7		access$702(Ljava/lang/String;)Ljava/lang/String;
 	6		<init>()V
 	5		access$000()[I
 	5		access$100()I
 	5		access$200()I
-	5		access$600()I
-	5		access$700()Lsensing;
-	5		access$800()Ljava/lang/String;
+	5		access$500()I
+	5		access$600()Lsensing;
+	5		access$700()Ljava/lang/String;
 
 339		java/util/Arrays$ArrayList
 	67		contains(Ljava/lang/Object;)Z

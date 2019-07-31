@@ -576,8 +576,8 @@
 	9		add(Ljava/lang/Object;)Z
 	6		<init>()V
 
-475		BS$3
-	465		run()V
+454		BS$3
+	444		run()V
 	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 452		java/util/AbstractList
@@ -674,10 +674,6 @@
 	2		getChannel()I
 	2		available()I
 
-356		BS$2
-	346		run()V
-	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
-
 345		com/virtenio/driver/usart/NativeUSART
 	32		getManager()Lcom/virtenio/driver/InstanceManager;
 	26		read([BII)I
@@ -747,6 +743,10 @@
 	4		access$000(Lcom/virtenio/misc/FixedFifo;)I
 	3		capacity()I
 	2		size()I
+
+332		BS$2
+	322		run()V
+	10		<init>(Lcom/virtenio/radio/ieee_802_15_4/FrameIO;)V
 
 255		com/virtenio/vm/event/AsyncEvent
 	68		addHandler(Lcom/virtenio/vm/event/AsyncEventHandler;)V

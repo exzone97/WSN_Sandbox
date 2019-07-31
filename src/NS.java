@@ -1,6 +1,5 @@
 import com.virtenio.radio.ieee_802_15_4.Frame;
 import com.virtenio.vm.Time;
-import java.util.HashMap;
 import com.virtenio.misc.PropertyHelper;
 import com.virtenio.driver.device.at86rf231.AT86RF231;
 import com.virtenio.driver.device.at86rf231.AT86RF231RadioDriver;
@@ -11,32 +10,34 @@ import com.virtenio.radio.ieee_802_15_4.RadioDriverFrameIO;
 
 public class NS {
 	private static int COMMON_PANID = PropertyHelper.getInt("radio.panid", 0xCAFF);
+	// Daftar Node pada Jaringan
 	private static int[] node_list = new int[] { PropertyHelper.getInt("radio.panid", 0xABFE),
 			PropertyHelper.getInt("radio.panid", 0xDAAA), PropertyHelper.getInt("radio.panid", 0xDAAB),
 			PropertyHelper.getInt("radio.panid", 0xDAAC), PropertyHelper.getInt("radio.panid", 0xDAAD),
 			PropertyHelper.getInt("radio.panid", 0xDAAE) };
-
-//	private static int ADDR_NODE1 = node_list[0];
-//	private static int ADDR_NODE2[] = new int[0];
-//	private static int ADDR_NODE3 = node_list[2];
-	// =======================================================================================================
-		private static int ADDR_NODE1 = node_list[0];
-		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
-		private static int ADDR_NODE3 = node_list[1];
-
+		
+		//NODE1
+//		private static int ADDR_NODE1 = node_list[0];
+//		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAB)};
+//		private static int ADDR_NODE3 = node_list[1];
+		//NODE2
 //		private static int ADDR_NODE1 = node_list[1];
 //		private static int ADDR_NODE2[] = new int[0];
 //		private static int ADDR_NODE3 = node_list[2];
-
-//		private static int ADDR_NODE1 = node_list[0];
-//		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
-//		private static int ADDR_NODE3 = node_list[3];
-//
+		//NODE3
+		private static int ADDR_NODE1 = node_list[0];
+		private static int ADDR_NODE2[] = { PropertyHelper.getInt("radio.panid", 0xDAAD)};
+		private static int ADDR_NODE3 = node_list[3];
+		//NODE4
 //		private static int ADDR_NODE1 = node_list[3];
 //		private static int ADDR_NODE2[] = new int[0];
 //		private static int ADDR_NODE3 = node_list[4];
+		
 	// =======================================================================================================
-
+//		private static int ADDR_NODE1 = node_list[0];
+//		private static int ADDR_NODE2[] = new int[0];
+//		private static int ADDR_NODE3 = node_list[2];
+	// =======================================================================================================
 
 	private static sensing s = new sensing();
 	private static int sn = 1; // sequence number
@@ -68,7 +69,6 @@ public class NS {
 						fio.receive(frame);
 						byte[] dg = frame.getPayload();
 						String str = new String(dg, 0, dg.length);
-						System.out.println(str);
 						// Kalau dpt yang awalan 'T' berarti isinya waktu dari node diatasnya
 						// set waktu dirinya.
 						if (str.charAt(0) == 'Q') {
@@ -84,7 +84,6 @@ public class NS {
 							}
 						} else if (str.charAt(0) == 'T') {
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
-							System.out.println(str);
 						}
 						// Kalau dpt 'EXIT' stop dirinya dan kirim 'EXIT' ke node di bwhnya
 						else if (str.equalsIgnoreCase("EXIT")) {
@@ -111,14 +110,12 @@ public class NS {
 									Thread.sleep(50);
 								}
 							}
-							System.out.println(msg);
 						}
 						// Kalau dpt 'ON' kirim status ke node diatasnya dan kirim "ON" ke node di
 						// bwhnya
 						else if (str.equalsIgnoreCase("ON")) {
 							String msg = "Node " + Integer.toHexString(ADDR_NODE3) + " ONLINE";
 							send(msg, ADDR_NODE3, ADDR_NODE1, fio);
-							System.out.println("Dirinya : " + msg);
 							if (ADDR_NODE2.length > 0) {
 								for (int i = 0; i < ADDR_NODE2.length; i++) {
 									send("ON", ADDR_NODE3, ADDR_NODE2[i], fio);
@@ -129,8 +126,6 @@ public class NS {
 						// Kalau dpt akhiran 'E' (status online dr node di bwhnya) terusin ke node
 						// diatasnya.
 						else if (str.charAt(str.length() - 1) == 'E') {
-//							Thread.sleep(200);
-							System.out.println("Node bwh : " + str);
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
 						}
 						// kalau dpt 'Detect', dia set end, sensing, sn++, simpen ke myTemp, kirim ke
@@ -138,17 +133,11 @@ public class NS {
 						// kirim juga END+ ADDR_NODE3
 						// kirim 'DETECT' ke node di bwhnya
 						else if (str.equalsIgnoreCase("DETECT")) {
-							System.out.println("DETECT");
-							end = Time.currentTimeMillis() + 4000;
 							String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis() + " "
 									+ s.sense();
 							myTemp = message;
 							Thread.sleep(50);
-							System.out.println("MY SENSE");
-							System.out.println(myTemp);
-							System.out.println("=========================");
 							sn++;
-							// Send to anak-anaknya
 							if (ADDR_NODE2.length > 0) {
 								System.out.println("Send DETECT ke ADDR_NODE2[]");
 								for (int i = 0; i < ADDR_NODE2.length; i++) {
@@ -156,41 +145,34 @@ public class NS {
 									Thread.sleep(50);
 								}
 							}
-							System.out.println("SEND DATA & END TO ADDR_NODE1");
 							send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+							System.out.println(myTemp);
+							end = Time.currentTimeMillis() + 4000;
 							Thread.sleep(50);
 							isSensing = true;
 						} else if (str.charAt(0) == 'S') {
-							System.out.println("Receive SENSE");
-							System.out.println(str);
 							send(str, ADDR_NODE3, ADDR_NODE1, fio);
-							System.out.println("SEND " + str);
 						} else if (str.startsWith("ACK")) {
 							int indexDot = str.indexOf(".");
 							int node = Integer.parseInt(str.substring(3, indexDot));
 							System.out.println(node);
 							if (node == ADDR_NODE3) {
-
 								int se = Integer.parseInt(str.substring(indexDot + 1));
 								if (se == sn - 1) {
-									System.out.println("RECEIVE ACK");
 									isSensing = false;
-									end = Time.currentTimeMillis() + 4000;
 									String message = "SENSE<" + ADDR_NODE3 + ">" + sn + "?" + Time.currentTimeMillis()
 											+ " " + s.sense();
 									myTemp = message;
 									Thread.sleep(50);
-									System.out.println("MY SENSE");
-									System.out.println(myTemp);
-									System.out.println("=========================");
 									sn++;
 									send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
+									System.out.println(myTemp);
+									end = Time.currentTimeMillis() + 4000;
 									Thread.sleep(50);
 									isSensing = true;
 								}
 								else {
 									send(myTemp, ADDR_NODE3, ADDR_NODE1, fio);
-
 									end = Time.currentTimeMillis() + 4000;
 								}
 							} else {
@@ -234,7 +216,7 @@ public class NS {
 		} catch (Exception e) {
 		}
 	}
-
+ 
 	public static void main(String[] args) throws Exception {
 		exit = false;
 		runs();
